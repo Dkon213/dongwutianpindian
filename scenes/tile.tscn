@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjuujophdmpr7"]
+
+[ext_resource type="Script" uid="uid://8q54h2ga21c8" path="res://scripts/tile.gd" id="1_ywnoi"]
+[ext_resource type="Texture2D" uid="uid://cpywixxjtjywv" path="res://assets/Match_three_game/yellow.png" id="2_ywnoi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uiyn6"]
+size = Vector2(3.86351, 3.7084)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_ywnoi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_ywnoi")
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(16.875, 16.5625)
+scale = Vector2(8.865, 8.865)
+shape = SubResource("RectangleShape2D_uiyn6")
