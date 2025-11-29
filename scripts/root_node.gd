@@ -53,7 +53,7 @@ func _ready() -> void:
 	# 用来设置【右】菜单的：位置、大小、缩放。不要直接设置固定数值，不然电脑分辨率调整后游戏比例会失调
 	menu_right = $menu_right # 菜单窗口
 	#menu_right.size = Vector2(screen_width/2,viewport_height) #右菜单大小
-	menu_right.position = Vector2(screen_width + 300,0) #右菜单位置
+	menu_right.position = Vector2(viewport_width + 300,0) #右菜单位置
 	
 	# 初始设定不展示菜单
 	menu_show = false
@@ -65,8 +65,8 @@ func _ready() -> void:
 	print("视口宽度: ", get_viewport().get_visible_rect().size.x)
 	print("左菜单初始位置: ", menu_left.position )
 	print("右菜单初始位置: ", menu_right.position )
-	print("左菜单居中位置：", screen_width/2-menu_left.size.x)
-	print("右菜单居中位置（也是屏幕正中间）: ", screen_width/2)
+	print("左菜单居中位置：", viewport_width/2-menu_left.size.x)
+	print("右菜单居中位置（也是屏幕正中间）: ", viewport_width/2)
 
 
 
@@ -76,25 +76,25 @@ func _process(_delta: float) -> void:
 
 	# 用来弹出和收起菜单
 	if menu_show == true: # 点了按钮之后menu_show变成true，执行接下来的操作
-		if menu_left.position.x < screen_width/2-menu_left.size.x : # 在【左菜单】的【最左点】抵达屏幕【最左边】之前
+		if menu_left.position.x < viewport_width/2-menu_left.size.x : # 在【左菜单】的【最左点】抵达屏幕【最左边】之前
 			menu_left.position += Vector2(50,0)  # 每帧向右50像素
 		else :  # 抵达屏幕最左边之后
-			menu_left.position = Vector2(screen_width/2-menu_left.size.x,0) # 横坐标跑到屏幕中间，纵坐标0
+			menu_left.position = Vector2(viewport_width/2-menu_left.size.x,0) # 横坐标跑到屏幕中间，纵坐标0
 		# 和上面同理
-		if menu_right.position.x > screen_width/2: # 在【右菜单】的【最左点】抵达屏幕【中点】之前
+		if menu_right.position.x > viewport_width/2: # 在【右菜单】的【最左点】抵达屏幕【中点】之前
 			menu_right.position += Vector2(-50,0) # 每帧向右50像素
 		else :
-			menu_right.position = Vector2(screen_width/2,0) # 横坐标跑到屏幕中间，纵坐标0
+			menu_right.position = Vector2(viewport_width/2,0) # 横坐标跑到屏幕中间，纵坐标0
 	else:
 		if menu_left.position.x > -menu_left.size.x-300: # 在【左菜单】的【最左点】抵达屏幕x轴【-1600】之前
 			menu_left.position += Vector2(-50,0)  # 每帧向左50像素
 		else:
 			menu_left.position = Vector2(-menu_left.size.x-300,0) # 把位置固定在横坐标-1600，纵坐标大致高于游戏主界面
 		# 和上面同理
-		if menu_right.position.x < screen_width+300: # 在【右菜单】的【最左点】抵达屏幕【屏幕外10像素】之前
+		if menu_right.position.x < viewport_width+300: # 在【右菜单】的【最左点】抵达屏幕【屏幕外10像素】之前
 			menu_right.position += Vector2(50,0) # 每帧向右50像素
 		else :
-			menu_right.position = Vector2(screen_width+300,0) # 把位置固定在横坐标1，纵坐标大致高于游戏主界面
+			menu_right.position = Vector2(viewport_width+300,0) # 把位置固定在横坐标1，纵坐标大致高于游戏主界面
 
 # 用来弹出和收起菜单的函数，接收到信号后自动调用
 func _show_menu() -> void:
