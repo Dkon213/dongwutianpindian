@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://bvx5xobt1mbos"]
+[gd_scene load_steps=71 format=3 uid="uid://bvx5xobt1mbos"]
 
 [ext_resource type="Script" uid="uid://7y23aqm45dwe" path="res://scripts/root_node.gd" id="1_ynfbw"]
 [ext_resource type="PackedScene" uid="uid://debnntbvhv8hu" path="res://scenes/map_forest.tscn" id="2_65evt"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://p3nrfx4hte13" path="res://assets/Menu_cloud/cloud_3.png" id="5_jfjke"]
 [ext_resource type="Texture2D" uid="uid://bmmpjj3fbvnec" path="res://assets/Menu_cloud/cloud_4.png" id="6_l3gbx"]
 [ext_resource type="Texture2D" uid="uid://c1spcv8lrmwny" path="res://assets/Menu_cloud/cloud_x.png" id="7_l3gbx"]
+[ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="8_d78ui"]
+[ext_resource type="Texture2D" uid="uid://w4xwlyt64xsd" path="res://assets/Things/LuPai.png" id="8_vhsfa"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l3gbx"]
 
@@ -435,16 +437,6 @@ animations = [{
 [node name="RootNode" type="Node2D"]
 script = ExtResource("1_ynfbw")
 
-[node name="menu_Button" type="Button" parent="."]
-offset_left = 64.0
-offset_top = 133.0
-offset_right = 239.0
-offset_bottom = 188.0
-toggle_mode = true
-text = "菜单"
-icon_alignment = 1
-expand_icon = true
-
 [node name="map_forest" parent="." instance=ExtResource("2_65evt")]
 position = Vector2(-5, -170)
 
@@ -456,6 +448,7 @@ offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_l3gbx")
+metadata/_edit_use_anchors_ = true
 
 [node name="1" type="AnimatedSprite2D" parent="menu_left"]
 position = Vector2(104, 166)
@@ -486,6 +479,7 @@ custom_minimum_size = Vector2(1300, 250)
 offset_right = 1395.0
 offset_bottom = 300.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_d78ui")
+metadata/_edit_use_anchors_ = true
 
 [node name="x" type="AnimatedSprite2D" parent="menu_right"]
 position = Vector2(1250, 63)
@@ -500,6 +494,7 @@ offset_top = -41.0
 offset_right = 57.0
 offset_bottom = 50.0
 flat = true
+metadata/_edit_use_anchors_ = true
 
 [node name="4" type="AnimatedSprite2D" parent="menu_right"]
 position = Vector2(607.00006, 84)
@@ -522,5 +517,33 @@ sprite_frames = SubResource("SpriteFrames_m0wh4")
 autoplay = "default"
 frame_progress = 0.78963
 
-[connection signal="pressed" from="menu_Button" to="." method="_show_menu"]
+[node name="Guide" type="TextureRect" parent="."]
+offset_left = 3132.0
+offset_top = 135.7143
+offset_right = 3309.0
+offset_bottom = 388.57144
+texture = ExtResource("8_vhsfa")
+expand_mode = 1
+
+[node name="menu_Button" type="Button" parent="Guide"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.31634417
+anchor_top = -0.023728814
+anchor_right = 0.37849107
+anchor_bottom = 0.07909604
+offset_left = 0.007080078
+offset_top = 15.285706
+offset_right = 81.00708
+offset_bottom = 76.285706
+toggle_mode = true
+flat = true
+icon_alignment = 1
+expand_icon = true
+metadata/_edit_use_anchors_ = true
+
+[node name="JiChi" parent="." instance=ExtResource("8_d78ui")]
+position = Vector2(1571, 305)
+
 [connection signal="pressed" from="menu_right/x/Button" to="." method="_show_menu"]
+[connection signal="pressed" from="Guide/menu_Button" to="." method="_show_menu"]

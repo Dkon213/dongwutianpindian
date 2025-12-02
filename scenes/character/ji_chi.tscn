@@ -1,0 +1,110 @@
+[gd_scene load_steps=16 format=3 uid="uid://cenbtsvh11dp5"]
+
+[ext_resource type="Texture2D" uid="uid://dnmxl7nk684e7" path="res://assets/Characters/JiChi/jichi-idel.png" id="1_iwkqx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwkqx"]
+size = Vector2(144.5, 167)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4clm3"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(0, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b33mt"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(360, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5a0p"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(720, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6f2q"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1080, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uo73w"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1440, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_702t7"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1800, 0, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_apvqh"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(0, 410, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mo744"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(360, 410, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dpusf"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(720, 410, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avfy3"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1080, 410, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldjs3"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1440, 410, 360, 410)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7q6ub"]
+atlas = ExtResource("1_iwkqx")
+region = Rect2(1800, 410, 360, 410)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8hpvm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4clm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b33mt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5a0p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f6f2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uo73w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_702t7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_apvqh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mo744")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dpusf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avfy3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldjs3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7q6ub")
+}],
+"loop": true,
+"name": &"jichi_idel",
+"speed": 6.0
+}]
+
+[node name="JiChi" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_iwkqx")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2.2500114, 1.0902939)
+scale = Vector2(0.39861107, 0.39861104)
+sprite_frames = SubResource("SpriteFrames_8hpvm")
+animation = &"jichi_idel"
+autoplay = "jichi_idel"
