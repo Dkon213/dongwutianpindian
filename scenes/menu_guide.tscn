@@ -1,0 +1,154 @@
+[gd_scene load_steps=22 format=3 uid="uid://p7xg2b3fodxu"]
+
+[ext_resource type="Script" uid="uid://delb5shx7nv8c" path="res://scripts/menu_guide.gd" id="1_aanoi"]
+[ext_resource type="Texture2D" uid="uid://bnm4kligj55e" path="res://assets/Things/GanZi.png" id="1_o1axv"]
+[ext_resource type="Texture2D" uid="uid://cbf2lmmu7ork8" path="res://assets/Things/LuPai_Fan.png" id="2_bxkb8"]
+[ext_resource type="Texture2D" uid="uid://b4elo8qdflrka" path="res://assets/Things/LuPai_Fan_Selected.png" id="3_aanoi"]
+[ext_resource type="Texture2D" uid="uid://dfr8nk3ypivis" path="res://assets/Things/LuPai_FanZhuan.png" id="3_c4von"]
+[ext_resource type="Texture2D" uid="uid://dw5ir6qf6ryfc" path="res://assets/Things/LuPai_Zheng.png" id="4_aanoi"]
+[ext_resource type="Texture2D" uid="uid://deymg0u1aoq76" path="res://assets/Things/LuPai_Zheng_Selected.png" id="6_77rf7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_77rf7"]
+atlas = ExtResource("2_bxkb8")
+region = Rect2(0, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trtpa"]
+atlas = ExtResource("3_aanoi")
+region = Rect2(0, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns0ig"]
+atlas = ExtResource("3_c4von")
+region = Rect2(0, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qi1rn"]
+atlas = ExtResource("3_c4von")
+region = Rect2(700, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xux5m"]
+atlas = ExtResource("3_c4von")
+region = Rect2(1400, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5y3w1"]
+atlas = ExtResource("3_c4von")
+region = Rect2(2100, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfmj6"]
+atlas = ExtResource("3_c4von")
+region = Rect2(2800, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bghv7"]
+atlas = ExtResource("3_c4von")
+region = Rect2(3500, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgu17"]
+atlas = ExtResource("3_c4von")
+region = Rect2(4200, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7uexa"]
+atlas = ExtResource("3_c4von")
+region = Rect2(4900, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78fcg"]
+atlas = ExtResource("3_c4von")
+region = Rect2(5600, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6cx4b"]
+atlas = ExtResource("4_aanoi")
+region = Rect2(0, 0, 700, 1000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gd3l3"]
+atlas = ExtResource("6_77rf7")
+region = Rect2(0, 0, 700, 1000)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_trtpa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_77rf7")
+}],
+"loop": true,
+"name": &"fan",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trtpa")
+}],
+"loop": true,
+"name": &"fan_selected",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_ns0ig")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_qi1rn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xux5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5y3w1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hfmj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bghv7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgu17")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_7uexa")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_78fcg")
+}],
+"loop": true,
+"name": &"fanzhuan",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6cx4b")
+}],
+"loop": true,
+"name": &"zheng",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gd3l3")
+}],
+"loop": true,
+"name": &"zheng_selected",
+"speed": 5.0
+}]
+
+[node name="menu_guide" type="Node2D"]
+script = ExtResource("1_aanoi")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 700.0
+offset_bottom = 1000.0
+texture = ExtResource("1_o1axv")
+
+[node name="LuPai" type="Node2D" parent="."]
+
+[node name="Button" type="Button" parent="LuPai"]
+offset_left = 214.0
+offset_top = 19.0
+offset_right = 585.0
+offset_bottom = 384.0
+focus_mode = 0
+flat = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="LuPai"]
+sprite_frames = SubResource("SpriteFrames_trtpa")
+animation = &"zheng"
+autoplay = "zheng"
+centered = false
+
+[connection signal="pressed" from="LuPai/Button" to="." method="_on_button_pressed"]

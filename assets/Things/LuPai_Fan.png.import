@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://w4xwlyt64xsd"
-path="res://.godot/imported/LuPai.png-9f0dfe6b8129b8c6c36dfeaa1412918a.ctex"
+uid="uid://cbf2lmmu7ork8"
+path="res://.godot/imported/LuPai_Fan.png-760d04d856846d10454b95172aa0741b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/LuPai.png"
-dest_files=["res://.godot/imported/LuPai.png-9f0dfe6b8129b8c6c36dfeaa1412918a.ctex"]
+source_file="res://assets/Things/LuPai_Fan.png"
+dest_files=["res://.godot/imported/LuPai_Fan.png-760d04d856846d10454b95172aa0741b.ctex"]
 
 [params]
 

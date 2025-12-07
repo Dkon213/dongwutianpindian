@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bmmpjj3fbvnec" path="res://assets/Menu_cloud/cloud_4.png" id="6_l3gbx"]
 [ext_resource type="Texture2D" uid="uid://c1spcv8lrmwny" path="res://assets/Menu_cloud/cloud_x.png" id="7_l3gbx"]
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="8_d78ui"]
-[ext_resource type="Texture2D" uid="uid://w4xwlyt64xsd" path="res://assets/Things/LuPai.png" id="8_vhsfa"]
+[ext_resource type="PackedScene" uid="uid://p7xg2b3fodxu" path="res://scenes/menu_guide.tscn" id="9_vhsfa"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l3gbx"]
 
@@ -493,6 +493,7 @@ offset_left = -58.0
 offset_top = -41.0
 offset_right = 57.0
 offset_bottom = 50.0
+focus_mode = 0
 flat = true
 metadata/_edit_use_anchors_ = true
 
@@ -517,33 +518,12 @@ sprite_frames = SubResource("SpriteFrames_m0wh4")
 autoplay = "default"
 frame_progress = 0.78963
 
-[node name="Guide" type="TextureRect" parent="."]
-offset_left = 3132.0
-offset_top = 135.7143
-offset_right = 3309.0
-offset_bottom = 388.57144
-texture = ExtResource("8_vhsfa")
-expand_mode = 1
-
-[node name="menu_Button" type="Button" parent="Guide"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.31634417
-anchor_top = -0.023728814
-anchor_right = 0.37849107
-anchor_bottom = 0.07909604
-offset_left = 0.007080078
-offset_top = 15.285706
-offset_right = 81.00708
-offset_bottom = 76.285706
-toggle_mode = true
-flat = true
-icon_alignment = 1
-expand_icon = true
-metadata/_edit_use_anchors_ = true
-
 [node name="JiChi" parent="." instance=ExtResource("8_d78ui")]
 position = Vector2(1571, 305)
 
+[node name="menu_guide" parent="." instance=ExtResource("9_vhsfa")]
+position = Vector2(3170, 138)
+scale = Vector2(0.25, 0.25)
+
 [connection signal="pressed" from="menu_right/x/Button" to="." method="_show_menu"]
-[connection signal="pressed" from="Guide/menu_Button" to="." method="_show_menu"]
+[connection signal="menu_button_pressed" from="menu_guide" to="." method="_show_menu"]

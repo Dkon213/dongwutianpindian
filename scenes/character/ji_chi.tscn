@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://cenbtsvh11dp5"]
+[gd_scene load_steps=29 format=3 uid="uid://cenbtsvh11dp5"]
 
 [ext_resource type="Texture2D" uid="uid://dnmxl7nk684e7" path="res://assets/Characters/JiChi/jichi-idel.png" id="1_iwkqx"]
+[ext_resource type="Texture2D" uid="uid://7fwrbn6xykae" path="res://assets/Characters/JiChi/jichi-chilling.png" id="2_4clm3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwkqx"]
 size = Vector2(144.5, 167)
@@ -53,6 +54,54 @@ region = Rect2(1440, 410, 360, 410)
 atlas = ExtResource("1_iwkqx")
 region = Rect2(1800, 410, 360, 410)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8hpvm"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(0, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vt8c4"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(350, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1xax"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(700, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vohcb"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1050, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5h2yy"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1400, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwyok"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1750, 0, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mt383"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(0, 350, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_clnu2"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(350, 350, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvkmh"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(700, 350, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b2g2b"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1050, 350, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_espou"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1400, 350, 350, 350)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1x00"]
+atlas = ExtResource("2_4clm3")
+region = Rect2(1750, 350, 350, 350)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_8hpvm"]
 animations = [{
 "frames": [{
@@ -95,6 +144,47 @@ animations = [{
 "loop": true,
 "name": &"jichi_idel",
 "speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8hpvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vt8c4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1xax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vohcb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5h2yy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwyok")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mt383")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_clnu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vvkmh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b2g2b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_espou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1x00")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
 }]
 
 [node name="JiChi" type="CharacterBody2D"]
@@ -106,5 +196,5 @@ shape = SubResource("RectangleShape2D_iwkqx")
 position = Vector2(2.2500114, 1.0902939)
 scale = Vector2(0.39861107, 0.39861104)
 sprite_frames = SubResource("SpriteFrames_8hpvm")
-animation = &"jichi_idel"
-autoplay = "jichi_idel"
+animation = &"new_animation"
+autoplay = "new_animation"
