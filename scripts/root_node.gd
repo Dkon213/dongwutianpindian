@@ -89,8 +89,6 @@ func _show_menu() -> void:
 	
 	if menu_show == true: # 点了按钮之后menu_show变成true，执行接下来的操作
 		menu_show = false
-		print("false")
 
 	else:
 		menu_show = true
-		print("true")
