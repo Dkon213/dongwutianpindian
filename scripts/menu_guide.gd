@@ -10,7 +10,7 @@ func _ready() -> void:
 	is_animating = false # 初始状态下， 动画没在播放
 
 
-func _on_button_pressed() -> void: # 点击路牌按钮以后会发送信号，接收到信号就开始执行这个函数
+func _on_button_up() -> void: # 点击路牌按钮以后会发送信号，接收到信号就开始执行这个函数
 	#这是该函数做的第一件事，用来向外发信号，用来让根节点唤起菜单
 	emit_signal("menu_button_pressed") #发送刚才自定义的信号，发到哪里取决于在信号列表选择了哪里。这里对接的是主场景的脚本
 	
