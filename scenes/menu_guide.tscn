@@ -147,9 +147,12 @@ flat = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="LuPai"]
 sprite_frames = SubResource("SpriteFrames_trtpa")
-animation = &"fanzhuan"
+animation = &"zheng"
 autoplay = "zheng"
 centered = false
 
+[connection signal="button_down" from="LuPai/Button" to="." method="_on_button_down"]
 [connection signal="button_up" from="LuPai/Button" to="." method="_on_button_up"]
+[connection signal="mouse_entered" from="LuPai/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="LuPai/Button" to="." method="_on_button_mouse_exited"]
 [connection signal="animation_finished" from="LuPai/AnimatedSprite2D" to="." method="_fanzhuan_animation_finished"]
