@@ -24,7 +24,6 @@ func _on_button_down() -> void:  # 这个函数是当按钮按下的时候触发
 	if is_animating == true: # 如果动画正在播放状态中，那点这个没用
 		pass
 	else: # 只有在没播放动画的时候（也就是显示正反面的时候）会出现按下选中的效果
-		print(animation_player.animation)
 		if animation_player.animation == (&"zheng"): # 检查当前动画，是正面就选中正面，是反面就选中反面
 			animation_player.play(&"zheng_selected")
 		else:
@@ -46,14 +45,12 @@ func _on_button_up() -> void: # 这个函数是当按钮按下后松开的时候
 		if is_animating == false: # 如果动画播完了
 			animation_player.play(&"fan") # 牌子显示的画面切换到反面
 		lupai_show = false # 把变量也标记成反面
-		print("现在是反面")
 	else: # 如果路牌是反面
 		animation_player.play_backwards(&"fanzhuan") # 首先播放路牌“转回来”的动画
 		is_animating = true # 因为动画已经开始播放了，所以这时候是“正在播放”状态
 		if is_animating == false: # 如果动画播完
 			animation_player.play(&"zheng") # 牌子显示的画面切换到正面
 		lupai_show = true # 把变量也标记成正面
-		print("现在是正面")
 
 
 func _fanzhuan_animation_finished() -> void: # 这个函数是动画播放完成以后触发的

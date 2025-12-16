@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2fa0y2obgf3w"
-path="res://.godot/imported/jichi-end-chill.png-dd9e61da645f9d61a15010b33e3aa823.ctex"
+uid="uid://bci6u2m7efnjl"
+path="res://.godot/imported/jichi-xiao-idel1.png-ec93d30a5b64f11feaf51dfb45ea5f4b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Characters/JiChi/jichi-end-chill.png"
-dest_files=["res://.godot/imported/jichi-end-chill.png-dd9e61da645f9d61a15010b33e3aa823.ctex"]
+source_file="res://assets/Characters/JiChi/jichi-xiao-idel1.png"
+dest_files=["res://.godot/imported/jichi-xiao-idel1.png-ec93d30a5b64f11feaf51dfb45ea5f4b.ctex"]
 
 [params]
 
