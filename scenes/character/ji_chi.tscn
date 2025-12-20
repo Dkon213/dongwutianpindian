@@ -136,22 +136,6 @@ region = Rect2(4400, 0, 440, 470)
 atlas = ExtResource("3_702t7")
 region = Rect2(4840, 0, 440, 470)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_coy5d"]
-atlas = ExtResource("4_apvqh")
-region = Rect2(0, 0, 440, 470)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_t8k7v"]
-atlas = ExtResource("4_apvqh")
-region = Rect2(440, 0, 440, 470)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_euk3v"]
-atlas = ExtResource("4_apvqh")
-region = Rect2(880, 0, 440, 470)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f05cf"]
-atlas = ExtResource("4_apvqh")
-region = Rect2(1320, 0, 440, 470)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_hyil2"]
 atlas = ExtResource("5_mo744")
 region = Rect2(0, 0, 440, 470)
@@ -166,6 +150,22 @@ region = Rect2(880, 0, 440, 470)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2aisc"]
 atlas = ExtResource("5_mo744")
+region = Rect2(1320, 0, 440, 470)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coy5d"]
+atlas = ExtResource("4_apvqh")
+region = Rect2(0, 0, 440, 470)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8k7v"]
+atlas = ExtResource("4_apvqh")
+region = Rect2(440, 0, 440, 470)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_euk3v"]
+atlas = ExtResource("4_apvqh")
+region = Rect2(880, 0, 440, 470)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f05cf"]
+atlas = ExtResource("4_apvqh")
 region = Rect2(1320, 0, 440, 470)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kduxq"]
@@ -360,23 +360,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_coy5d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_t8k7v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_euk3v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f05cf")
-}],
-"loop": true,
-"name": &"turn_side_to_front",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_hyil2")
 }, {
 "duration": 1.0,
@@ -389,8 +372,25 @@ animations = [{
 "texture": SubResource("AtlasTexture_2aisc")
 }],
 "loop": true,
-"name": &"turn_side_to_side",
+"name": &"turn_big",
 "speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coy5d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8k7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_euk3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f05cf")
+}],
+"loop": true,
+"name": &"turn_small",
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -465,6 +465,16 @@ animations = [{
 
 [node name="JiChi" type="CharacterBody2D"]
 script = ExtResource("1_apvqh")
+walk_small_speed = null
+walk_big_speed = null
+run_speed = null
+auto_action_interval_min = null
+auto_action_interval_max = null
+click_count_timeout = null
+walk_small_range = null
+rest_scale = null
+rest_offset = null
+default_scale = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 6.75)
@@ -474,9 +484,11 @@ shape = SubResource("RectangleShape2D_iwkqx")
 position = Vector2(0, 7)
 scale = Vector2(0.3272727, 0.3272728)
 sprite_frames = SubResource("SpriteFrames_8hpvm")
-animation = &"walk_big"
+animation = &"turn_big"
 autoplay = "idel_front"
 
 [node name="AutoActionTimer" type="Timer" parent="."]
 
 [node name="ClickCountTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="AutoActionTimer" to="." method="_on_auto_action_timer_timeout"]
