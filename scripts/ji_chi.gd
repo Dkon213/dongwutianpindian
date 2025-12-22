@@ -103,7 +103,7 @@ func setup_auto_action_timer():
 
 
 
-#-------------------------------------自动动作计时器-计时结束后函数--------------------------------------------------------
+#-------------------------------------信号触发-自动动作计时器计时结束后函数--------------------------------------------------------
 #待机计时器倒计时结束以后
 func _on_auto_action_timer_timeout():
 	
@@ -268,9 +268,61 @@ func start_move(target_state: AnimState):
 
 
 
+#----------------------------------------------信号触发-开始移动函数---------------------------------------------------------------
+# 只有不循环动画结束后，才会触发这个函数，目前的不循环动画分别是：大转、小转、休息准备、休息结束
 func _on_animation_finished() -> void:
-	pass # Replace with function body.
+	match current_state: # 首先对当前状态进行匹配
+		AnimState.TURN_SMALL: # 如果正在执行的小转，那转完就该移动了
+			#这里把刚才塞给动画节点的元数据拿出来，里面【转身后动作】不出意外就是移动
+			var post_state = anim_sprite.get_meta("post_turn_state", AnimState.IDLE_SIDE)
+			play_anim(post_state) # 执行这个【转身后动作】
+			anim_sprite.remove_meta("post_turn_state") #执行完了把元数据删掉，下次用了再加
+		AnimState.TURN_BIG: #如果是大转，那就播放侧面待机（为啥？）
+			play_anim(AnimState.IDLE_SIDE, false, anim_sprite.flip_h) # 播放动画 侧面待机 不倒放 是否翻转根据之前的赋值决定
+		AnimState.PREPARE_REST: # 如果当前准备休息，那下个动作就是休息
+			play_anim(AnimState.RESTING)
+		AnimState.FINISH_REST: # 如果当前休息结束，那看情况执行待机或者行动
+			# 这里根据之前塞的元数据来决定这个【休息后动作】是啥
+			var post_state = anim_sprite.get_meta("post_rest_state", AnimState.IDLE_SIDE)
+			if post_state != AnimState.IDLE_SIDE: # 如果不是侧面待机，那就执行开始移动函数
+				start_move(post_state)
+			else:
+				play_anim(AnimState.IDLE_SIDE) # 如果是侧面待机，那就待机，然后计时，然后删除元数据
+				setup_auto_action_timer()
+			anim_sprite.remove_meta("post_rest_state")
 
 
+
+#----------------------------------------------硬编码接收触发-开始移动函数---------------------------------------------------------------
+#godot自带函数，有输入事件时会被调用。输入事件会沿节点树向上传播，直到有节点将其消耗。
+#这里给了一个evevt入参，入参是自带类：inputEvevt
+func _input(event: InputEvent):
+	#如果输入的事件是【鼠标操作】，而且是【鼠标按下】，而且是【鼠标左键】（总的来说就是：如果点了以下鼠标左键）
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		target_pos = get_global_mouse_position() # 首先获取目标位置，坐标就是鼠标点击的地方
+		click_count += 1 # 点击计数器+1
+		click_timer.stop() # 点击计时器停止，这里的作用是让时间先归零
+		click_timer.start(click_count_timeout) # 计时器重新开始一次计时
+		auto_action_enabled = false # 自动行为许可被关闭
+
+
+
+#----------------------------------------------信号触发-点鼠标计时器到期---------------------------------------------------------------
+# 这个函数会在点击计时器倒数结束后触发
 func _on_click_count_timeout() -> void:
-	pass # Replace with function body.
+	if click_count >= 3: # 如果这时候连点大于等于3次
+		start_move(AnimState.RUN) # 那就执行跑步
+	else: #没到3次
+		start_move(AnimState.WALK_BIG) # 就只是走路
+		click_count = 0 # 顺便重置计时
+
+
+
+#-----------------------------------------------生成小走目标---------------------------------------------------------------
+# 这个函数会在待机动作随机到【小走】的时候触发
+func generate_walk_small_target():
+	# 先生成一个随机二维方向，（xy轴都是-1到1的随机浮点数，然后标准化变成标准向量）这里注意，要把Y轴归零
+	var random_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	# 小走的目标点位，就是当前全局位置+随机方向的随机长度，这个随机长度区间是【0】到【小走极限范围】
+	target_pos = global_position + random_dir * randf_range(0, walk_small_range)
+	is_moving = true # 直觉告诉我这里是bug，小走不能算移动

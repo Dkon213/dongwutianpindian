@@ -465,16 +465,6 @@ animations = [{
 
 [node name="JiChi" type="CharacterBody2D"]
 script = ExtResource("1_apvqh")
-walk_small_speed = null
-walk_big_speed = null
-run_speed = null
-auto_action_interval_min = null
-auto_action_interval_max = null
-click_count_timeout = null
-walk_small_range = null
-rest_scale = null
-rest_offset = null
-default_scale = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 6.75)
@@ -484,7 +474,7 @@ shape = SubResource("RectangleShape2D_iwkqx")
 position = Vector2(0, 7)
 scale = Vector2(0.3272727, 0.3272728)
 sprite_frames = SubResource("SpriteFrames_8hpvm")
-animation = &"turn_big"
+animation = &"walk_small"
 autoplay = "idel_front"
 
 [node name="AutoActionTimer" type="Timer" parent="."]
@@ -493,3 +483,4 @@ autoplay = "idel_front"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="AutoActionTimer" to="." method="_on_auto_action_timer_timeout"]
+[connection signal="timeout" from="ClickCountTimer" to="." method="_on_click_count_timeout"]
