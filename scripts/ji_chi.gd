@@ -19,22 +19,24 @@ enum AnimState
 # 定义全局变量
 # ↓定义一个【当前状态】变量，这个变量的数据类型是刚才定义的【AnimState】枚举，默认赋值先给枚举里的【正面待机】
 var current_state: AnimState = AnimState.IDLE_FRONT
-var target_pos: Vector2 = Vector2.ZERO # 【目标地点】变量，二维向量，默认状态下是（0，0）
+var target_x: float = 0 # 这里本来是个二维坐标，不过角色不会纵向移动，所以只留了X轴
 var is_moving: bool = false # 【是否在移动】
 var click_count: int = 0 # 【鼠标点击计数器】
 var auto_action_enabled: bool = true # 【自动行为许可】，初始是true，意思是允许待机动画
+var anim_backwards: bool # 用来记录当前动画是否倒放的状态变量。之所以是全局的，主要是为了在动画播放函数和转身函数之间传递消息
 
 # 为了便于调试设置的外显变量
 @export var walk_small_speed: float = 50.0  #小走移速
 @export var walk_big_speed: float = 100.0 # 大走移速
 @export var run_speed: float = 200.0 # 跑步移速
-@export var auto_action_interval_min: float = 3.0 # 待机动画间隔最小值（此处只代表数值，没有时间单位）
-@export var auto_action_interval_max: float = 5.0 # 待机动画间隔最小值（此处只代表数值，没有时间单位）
+@export var auto_action_interval_min: float  # 待机动画间隔最小值（此处只代表数值，没有时间单位）
+@export var auto_action_interval_max: float  # 待机动画间隔最小值（此处只代表数值，没有时间单位）
 @export var click_count_timeout: float = 0.5 # 计算点击次数的单位时间
 @export var walk_small_range: float = 100.0 # 单次小走的最远距离
-@export var rest_scale: Vector2 = Vector2(1.5, 1.5) # 休息类大动作的缩放比
-@export var rest_offset: Vector2 = Vector2(-10, -20) # 休息类动作的偏移量
+@export var rest_scale: Vector2 # 休息类大动作的缩放比
+@export var rest_position: Vector2 # 休息类动作的偏移量,默认（85，-45）
 @export var default_scale: Vector2 = Vector2(0.32, 0.32) # 其他动作的默认缩放比
+@export var default_position: Vector2 # 其他动作的默认偏移量,默认（0，7）
 
 #定义节点变量。初始化结束，ready函数执行之前，创建这些变量。这样相对稳妥可以保障其他节点已经准备好了
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D # 动画精灵节点
@@ -50,7 +52,7 @@ func _ready() -> void:# 初始化：播放侧面待机，启动计时器
 
 
 #--------------------------------------------物理帧函数--------------------------------------------------------
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	# 第一，如果角色不是正在运动状态，就直接返回，节省性能
 	if not is_moving:
 		return
@@ -66,9 +68,9 @@ func _physics_process(delta: float):
 	
 	# 第三，定方向
 	# 声明一个方向变量，变量值是【目标坐标】减去【当前坐标】然后标准化。标准化的作用是让这个向量严格等于1或者-1，变成一个标准向量
-	var dir = (target_pos - global_position).normalized() # 这里的【global_position】是Node2D节点自带的全局位置属性
+	var dir = target_x - global_position.x # 这里的【global_position】是Node2D节点自带的全局位置属性
 	var is_left_move : bool # 声明一个【是否向左】变量，如果方向变量小于零，那就是向左
-	if dir.x < 0:
+	if dir < 0:
 		is_left_move = true
 	else:
 		is_left_move = false
@@ -79,11 +81,11 @@ func _physics_process(delta: float):
 	anim_sprite.flip_h = is_left_move
 
 	#第五，移动角色。这里的【velocity】是【characterBody2D】自带的速度属性，【move_and_slide】也是其自带的移动方法
-	velocity = dir * move_speed # 【velocity】二维速度，赋的值是标准向量（决定方向） * 当前速度
+	velocity = Vector2(dir,0).normalized() * move_speed # 【velocity】二维速度，赋的值是标准向量（决定方向） * 当前速度
 	move_and_slide() #  开始按照指定的方向和速度移动
 
 	#第六，判定啥时候停止
-	if global_position.distance_to(target_pos) < 5.0: # 如果当前位置距离目标位置小于5像素
+	if abs(global_position.x - target_x) < 5.0: # 如果当前位置横坐标距离目标位置横坐标小于5像素
 		is_moving = false # 【is_moving】状态变成否，也就是说下一帧就不会再进入行动，直接返回了
 		velocity = Vector2.ZERO # 速度变成0向量，停下了
 		# 停下以后，默认切回侧待机，此处入参1-侧待机，入参2-不倒放，入参3-如果是向左那就翻转，向右就不翻转
@@ -178,7 +180,7 @@ func play_anim(target_state: AnimState , is_backwards: bool = false , is_flip_h:
 		AnimState.IDLE_FRONT: #如果入参是IDLE_FRONT，就把anim_name变量赋值成idle_front，跟动画名称对应。
 			anim_name = "idle_front" # 以下同理
 		AnimState.IDLE_SIDE:
-			anim_name = "idle_side"
+			anim_name = "idel_side"
 		AnimState.WALK_SMALL:
 			anim_name = "walk_small"
 		AnimState.WALK_BIG:
@@ -189,7 +191,7 @@ func play_anim(target_state: AnimState , is_backwards: bool = false , is_flip_h:
 			anim_name = "turn_small"
 		AnimState.TURN_BIG:
 			anim_name = "turn_big"
-		AnimState.PREPARE_REST:  # 休息动画比较特殊，除了匹配动画之外还要标记休息状态，因为后面要调整大小 # 动画还没加进来
+		AnimState.PREPARE_REST:  # 休息动画比较特殊，除了匹配动画之外还要标记休息状态，因为后面要调整大小
 			anim_name = "prepare_rest"
 			is_rest_anim = true
 		AnimState.RESTING: 
@@ -203,18 +205,20 @@ func play_anim(target_state: AnimState , is_backwards: bool = false , is_flip_h:
 	if is_rest_anim == true : 
 		anim_sprite.scale = rest_scale # 这个rest_scale变量是暴露在外的，可以直接在检查器赋值
 		anim_sprite.centered = true 
-		anim_sprite.offset = rest_offset # 同上，管理偏移，检查器赋值
+		anim_sprite.position = rest_position # 同上，管理偏移，检查器赋值
 	else: # 如果不是休息动画，就用默认比例播放，(0.32,0.32)是调好的比例
 		anim_sprite.scale = default_scale
 		anim_sprite.centered = true 
-		anim_sprite.offset = Vector2.ZERO # 没设置外显的默认偏移，因为大概率用不上
+		anim_sprite.position = default_position # 外显的默认偏移量
 	
 	#动画匹配上了，休息状态判定完了，大小调好了，就开始播放动画
 	anim_sprite.flip_h = is_flip_h # 这里的【is_flip_h】是bool类型的入参，只有是否两个值，在这里是给真正的翻转操作下指令
 	anim_sprite.animation = anim_name # anim_name是根据函数入参已经调好的，把它赋值给动画精灵要播放的动画
 	if is_backwards == true: #如果入参里的【is_backwards】是true，那就倒放，否则就正常
+		anim_backwards = true
 		anim_sprite.play_backwards() # 动画精灵执行播放动作
 	else:
+		anim_backwards = false
 		anim_sprite.play() # 动画精灵执行播放动作
 
 #--------------------------------------------转身播放函数---------------------------------------------------------------
@@ -259,7 +263,7 @@ func start_move(target_state: AnimState):
 		play_anim(AnimState.FINISH_REST) # 播放休息结束
 		anim_sprite.set_meta("post_rest_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【休息后的动作】，数据值是入参的目标状态
 	elif current_state != AnimState.IDLE_SIDE: # 否则，如果目标状态不是侧面待机（也就是除了休息和待机的情况外）
-		var is_left: bool = (target_pos.x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
+		var is_left: bool = (target_x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
 		play_turn_anim(AnimState.TURN_SMALL, "front", "left" if is_left else "right") # 根据是否向左的情况播放小转动画
 		anim_sprite.set_meta("post_turn_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【转身后的动作】，数据值是入参的目标状态
 	else: # 其他情况下，也就是侧面待机情况下
@@ -272,11 +276,18 @@ func start_move(target_state: AnimState):
 # 只有不循环动画结束后，才会触发这个函数，目前的不循环动画分别是：大转、小转、休息准备、休息结束
 func _on_animation_finished() -> void:
 	match current_state: # 首先对当前状态进行匹配
-		AnimState.TURN_SMALL: # 如果正在执行的小转，那转完就该移动了
-			#这里把刚才塞给动画节点的元数据拿出来，里面【转身后动作】不出意外就是移动
-			var post_state = anim_sprite.get_meta("post_turn_state", AnimState.IDLE_SIDE)
-			play_anim(post_state) # 执行这个【转身后动作】
-			anim_sprite.remove_meta("post_turn_state") #执行完了把元数据删掉，下次用了再加
+		AnimState.TURN_SMALL: # 如果正在执行的小转，那要么转完开始移动，要么转完继续待机
+			if anim_sprite.has_meta("post_turn_state") == true: # 如果这时候有元数据，那就是移动
+				var post_state = anim_sprite.get_meta("post_turn_state") #这里把刚才塞给动画节点的元数据拿出来，里面【转身后动作】不出意外就是移动
+				play_anim(post_state) # 执行这个【转身后动作】
+				anim_sprite.remove_meta("post_turn_state") #执行完了把元数据删掉，下次用了再加
+			# 如果这时候没元数据，那就是待机
+			elif anim_backwards == false:  # 首先如果当前转身动画【不是】倒放的，那无论如何都是转向正面
+				play_anim(AnimState.IDLE_FRONT,false,false) # 所以直接播放正面待机
+			elif anim_sprite.flip_h == true: # 如果是倒放，那就是往两边转，这时候如果镜像打开，那就是向右转
+				play_anim(AnimState.IDLE_SIDE,false,false) # 这时候待机动画反而不用开反转，因为天生就是向右转【这个动画方向我下次一定画成一致的 = =！】
+			else : # 这时候就剩一种情况了，就是没倒放，往左转
+				play_anim(AnimState.IDLE_SIDE,false,true)
 		AnimState.TURN_BIG: #如果是大转，那就播放侧面待机（为啥？）
 			play_anim(AnimState.IDLE_SIDE, false, anim_sprite.flip_h) # 播放动画 侧面待机 不倒放 是否翻转根据之前的赋值决定
 		AnimState.PREPARE_REST: # 如果当前准备休息，那下个动作就是休息
@@ -299,7 +310,7 @@ func _on_animation_finished() -> void:
 func _input(event: InputEvent):
 	#如果输入的事件是【鼠标操作】，而且是【鼠标按下】，而且是【鼠标左键】（总的来说就是：如果点了以下鼠标左键）
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		target_pos = get_global_mouse_position() # 首先获取目标位置，坐标就是鼠标点击的地方
+		target_x = get_global_mouse_position().x # 首先获取目标位置，坐标就是鼠标点击的地方
 		click_count += 1 # 点击计数器+1
 		click_timer.stop() # 点击计时器停止，这里的作用是让时间先归零
 		click_timer.start(click_count_timeout) # 计时器重新开始一次计时
@@ -321,8 +332,9 @@ func _on_click_count_timeout() -> void:
 #-----------------------------------------------生成小走目标---------------------------------------------------------------
 # 这个函数会在待机动作随机到【小走】的时候触发
 func generate_walk_small_target():
-	# 先生成一个随机二维方向，（xy轴都是-1到1的随机浮点数，然后标准化变成标准向量）这里注意，要把Y轴归零
-	var random_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-	# 小走的目标点位，就是当前全局位置+随机方向的随机长度，这个随机长度区间是【0】到【小走极限范围】
-	target_pos = global_position + random_dir * randf_range(0, walk_small_range)
-	is_moving = true # 直觉告诉我这里是bug，小走不能算移动
+	# 先生成一个随机二维方向，x轴都是-1到1的随机浮点数，y轴是0，然后标准化变成标准向量
+	var temp_array = [-1, 1] # 先给个随机数组，只有-1和1两个值
+	var random_dir = temp_array.pick_random() # 然后在这两个值里面随机选一个，赋值给【随机方向】
+	# 小走的目标X坐标，就是当前全局位置X坐标 + (随机方向 * 随机长度），这个随机长度区间是【0】到【小走极限范围】
+	target_x = global_position.x + random_dir * randf_range(0, walk_small_range)
+	is_moving = true # 直觉告诉我这里是bug，小走不能算移动 # 好像还真不是bug，是要先走到目标点的

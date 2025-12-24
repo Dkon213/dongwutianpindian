@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvakc5mg1alb6"
-path="res://.godot/imported/jichi-big-goingtochill.png-618f16fe8f6b1ab1e748a776c4b3e058.ctex"
+uid="uid://tuaxiwa72r3l"
+path="res://.godot/imported/jichi-big-rest-end.png-711a981b4e735eb299d19df8b72d85bf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Characters/JiChi/jichi-big-goingtochill.png"
-dest_files=["res://.godot/imported/jichi-big-goingtochill.png-618f16fe8f6b1ab1e748a776c4b3e058.ctex"]
+source_file="res://assets/Characters/JiChi/jichi-big-rest-end.png"
+dest_files=["res://.godot/imported/jichi-big-rest-end.png-711a981b4e735eb299d19df8b72d85bf.ctex"]
 
 [params]
 

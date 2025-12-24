@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byq5l2ipspkyu"
-path="res://.godot/imported/jichi-big-chilling.png-f3f4453c1195db428da387f25119d46c.ctex"
+uid="uid://jg8epuxasvg1"
+path="res://.godot/imported/jichi-big-prepare-rest.png-bc4e48fa3c393501fa6958607358b531.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Characters/JiChi/jichi-big-chilling.png"
-dest_files=["res://.godot/imported/jichi-big-chilling.png-f3f4453c1195db428da387f25119d46c.ctex"]
+source_file="res://assets/Characters/JiChi/jichi-big-prepare-rest.png"
+dest_files=["res://.godot/imported/jichi-big-prepare-rest.png-bc4e48fa3c393501fa6958607358b531.ctex"]
 
 [params]
 

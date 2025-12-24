@@ -1,9 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://debnntbvhv8hu"]
+[gd_scene load_steps=7 format=3 uid="uid://debnntbvhv8hu"]
 
 [ext_resource type="Texture2D" uid="uid://ddudh7si2d4ic" path="res://assets/Maps/forest/forest.png" id="1_mf7j3"]
 [ext_resource type="Texture2D" uid="uid://pmhxpiv6limd" path="res://assets/Maps/forest/forest_ground.png" id="2_ymt0u"]
 
 [sub_resource type="GDScript" id="GDScript_d4hxt"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_mf7j3"]
+distance = 6.1382966
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ymt0u"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pfsq5"]
+normal = Vector2(-1, 0)
 
 [node name="map_forest" type="Node2D"]
 script = SubResource("GDScript_d4hxt")
@@ -27,3 +36,17 @@ texture = ExtResource("2_ymt0u")
 position = Vector2(2724.4995, 581.39294)
 scale = Vector2(0.28921863, 0.28281242)
 texture = ExtResource("2_ymt0u")
+
+[node name="StaticBody_down" type="StaticBody2D" parent="."]
+
+[node name="down" type="CollisionShape2D" parent="StaticBody_down"]
+position = Vector2(1800, 568)
+shape = SubResource("WorldBoundaryShape2D_mf7j3")
+
+[node name="left" type="CollisionShape2D" parent="StaticBody_down"]
+position = Vector2(3, 451)
+shape = SubResource("WorldBoundaryShape2D_ymt0u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody_down"]
+position = Vector2(3648, 452)
+shape = SubResource("WorldBoundaryShape2D_pfsq5")
