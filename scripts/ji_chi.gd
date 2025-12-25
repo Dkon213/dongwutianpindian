@@ -20,10 +20,10 @@ enum AnimState
 # ↓定义一个【当前状态】变量，这个变量的数据类型是刚才定义的【AnimState】枚举，默认赋值先给枚举里的【正面待机】
 var current_state: AnimState = AnimState.IDLE_FRONT
 var target_x: float = 0 # 这里本来是个二维坐标，不过角色不会纵向移动，所以只留了X轴
-var is_moving: bool = false # 【是否在移动】
 var click_count: int = 0 # 【鼠标点击计数器】
 var auto_action_enabled: bool = true # 【自动行为许可】，初始是true，意思是允许待机动画
 var anim_backwards: bool # 用来记录当前动画是否倒放的状态变量。之所以是全局的，主要是为了在动画播放函数和转身函数之间传递消息
+var anim_flip_h : bool # 用来记录当前动画是否翻转的状态变量
 
 # 为了便于调试设置的外显变量
 @export var walk_small_speed: float = 50.0  #小走移速
@@ -53,8 +53,8 @@ func _ready() -> void:# 初始化：播放侧面待机，启动计时器
 
 #--------------------------------------------物理帧函数--------------------------------------------------------
 func _physics_process(_delta: float):
-	# 第一，如果角色不是正在运动状态，就直接返回，节省性能
-	if not is_moving:
+	# 第一，如果允许自主行动（也就是在待机状态），那就直接返回，节省性能
+	if auto_action_enabled == true :
 		return
 	
 	# 第二，定速度
@@ -67,9 +67,8 @@ func _physics_process(_delta: float):
 		_: return # 逻辑兜底，啥也不是就直接return，保持当前状态不变
 	
 	# 第三，定方向
-	# 声明一个方向变量，变量值是【目标坐标】减去【当前坐标】然后标准化。标准化的作用是让这个向量严格等于1或者-1，变成一个标准向量
-	var dir = target_x - global_position.x # 这里的【global_position】是Node2D节点自带的全局位置属性
-	var is_left_move : bool # 声明一个【是否向左】变量，如果方向变量小于零，那就是向左
+	var dir = target_x - global_position.x # 目标位置横坐标减去当前位置横坐标。这里的【global_position】是Node2D节点自带的全局位置属性
+	var is_left_move : bool # 声明一个【是否向左】变量，如果【dir】小于零，那就是向左
 	if dir < 0:
 		is_left_move = true
 	else:
@@ -86,11 +85,10 @@ func _physics_process(_delta: float):
 
 	#第六，判定啥时候停止
 	if abs(global_position.x - target_x) < 5.0: # 如果当前位置横坐标距离目标位置横坐标小于5像素
-		is_moving = false # 【is_moving】状态变成否，也就是说下一帧就不会再进入行动，直接返回了
+		auto_action_enabled = true # 允许自由活动，且下一帧就不会再进入行动，直接返回了
 		velocity = Vector2.ZERO # 速度变成0向量，停下了
 		# 停下以后，默认切回侧待机，此处入参1-侧待机，入参2-不倒放，入参3-如果是向左那就翻转，向右就不翻转
 		play_anim(AnimState.IDLE_SIDE, false, is_left_move)
-		auto_action_enabled = true # 自由活动许可打开
 		setup_auto_action_timer() # 重置制动动作计时
 
 
@@ -107,10 +105,11 @@ func setup_auto_action_timer():
 
 #-------------------------------------信号触发-自动动作计时器计时结束后函数--------------------------------------------------------
 #待机计时器倒计时结束以后
+#这里的所有内容，都仅限于管理自动待机动画，跟点鼠标后的行为没关系
 func _on_auto_action_timer_timeout():
 	
-	# 如果正在移动，或者如果自动行为被禁用，那就不执行待机动作，同时重置计时（小走不算移动）
-	if is_moving or not auto_action_enabled: 
+	# 如果自动行为被禁用，那就不执行待机动作
+	if auto_action_enabled == false : 
 		setup_auto_action_timer()
 		return
 		
@@ -178,7 +177,7 @@ func play_anim(target_state: AnimState , is_backwards: bool = false , is_flip_h:
 	# 对target_state这个参数建立一个匹配树，匹配到对应情况就执行对应代码
 	match target_state: 
 		AnimState.IDLE_FRONT: #如果入参是IDLE_FRONT，就把anim_name变量赋值成idle_front，跟动画名称对应。
-			anim_name = "idle_front" # 以下同理
+			anim_name = "idel_front"# 以下同理
 		AnimState.IDLE_SIDE:
 			anim_name = "idel_side"
 		AnimState.WALK_SMALL:
@@ -226,54 +225,36 @@ func play_anim(target_state: AnimState , is_backwards: bool = false , is_flip_h:
 # 入参2-from_dir: 起始方向（left/front/right）
 # 入参3-to_dir: 目标方向（left/front/right）
 func play_turn_anim(turn_type: AnimState, from_dir: String, to_dir: String):
-	var is_backwards = false # 初始赋值，不倒放
-	var is_flip_h = false # 初始赋值，不翻转
 
 	match turn_type: # 转向类型匹配（类型只有大转或者小转，是这个函数的入参1）
 		AnimState.TURN_SMALL: # 如果是小转
 			if from_dir == "left" and to_dir == "front": # 如果是【左前】，那就【不倒放】+【不翻转】
-				is_backwards = false
-				is_flip_h = false
+				anim_backwards = false
+				anim_flip_h = false
 			elif from_dir == "front" and to_dir == "left":  # 如果是【前左】，那就【倒放】+【不翻转】
-				is_backwards = true
-				is_flip_h = false
+				anim_backwards = true
+				anim_flip_h = false
 			elif from_dir == "right" and to_dir == "front": # 如果是【右前】，那就【不倒放】+【翻转】
-				is_backwards = false
-				is_flip_h = true
+				anim_backwards = false
+				anim_flip_h = true
 			elif from_dir == "front" and to_dir == "right": # 如果是【前右】，那就【倒放】+【翻转】
-				is_backwards = true
-				is_flip_h = true
+				anim_backwards = true
+				anim_flip_h = true
 		AnimState.TURN_BIG: # 如果是大转
 			if from_dir == "left" and to_dir == "right": # 如果是【左右】，那就【不倒放】+【不翻转】
-				is_backwards = false  
-				is_flip_h = false
+				anim_backwards = false  
+				anim_flip_h = false
 			elif from_dir == "right" and to_dir == "left": # 如果是【右左】，那就【倒放】+【不翻转】
-				is_backwards = true   
-				is_flip_h = false
+				anim_backwards = true   
+				anim_flip_h = false
 	#入参调整好，直接调用动画播放函数
-	play_anim(turn_type, is_backwards, is_flip_h)
+	play_anim(turn_type, anim_backwards, anim_flip_h)
 
 
 
-#----------------------------------------------开始移动函数---------------------------------------------------------------
-#入参-目标状态，类型是动画状态枚举
-func start_move(target_state: AnimState):
-	# 首先，如果入参的目标状态是【准备休息】或者【休息中】
-	if current_state in [AnimState.PREPARE_REST, AnimState.RESTING]:  #这里有个问题，准备休息不能直接切休息结束，看是不是先进入休息状态，或者出个打断休息的动画
-		play_anim(AnimState.FINISH_REST) # 播放休息结束
-		anim_sprite.set_meta("post_rest_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【休息后的动作】，数据值是入参的目标状态
-	elif current_state != AnimState.IDLE_SIDE: # 否则，如果目标状态不是侧面待机（也就是除了休息和待机的情况外）
-		var is_left: bool = (target_x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
-		play_turn_anim(AnimState.TURN_SMALL, "front", "left" if is_left else "right") # 根据是否向左的情况播放小转动画
-		anim_sprite.set_meta("post_turn_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【转身后的动作】，数据值是入参的目标状态
-	else: # 其他情况下，也就是侧面待机情况下
-		play_anim(target_state) # 已在侧面，直接播放移动动画（方向由后续_physics_process判定）
-	is_moving = true  #最后统一把【移动中】变成【是】，开始移动了
-
-
-
-#----------------------------------------------信号触发-开始移动函数---------------------------------------------------------------
+#----------------------------------------------信号触发-单次动画结束函数---------------------------------------------------------------
 # 只有不循环动画结束后，才会触发这个函数，目前的不循环动画分别是：大转、小转、休息准备、休息结束
+# 【这个函数在待机、手动状态下都会被触发】
 func _on_animation_finished() -> void:
 	match current_state: # 首先对当前状态进行匹配
 		AnimState.TURN_SMALL: # 如果正在执行的小转，那要么转完开始移动，要么转完继续待机
@@ -298,13 +279,13 @@ func _on_animation_finished() -> void:
 			if post_state != AnimState.IDLE_SIDE: # 如果不是侧面待机，那就执行开始移动函数
 				start_move(post_state)
 			else:
-				play_anim(AnimState.IDLE_SIDE) # 如果是侧面待机，那就待机，然后计时，然后删除元数据
+				play_anim(AnimState.IDLE_SIDE,false,true) # 如果是侧面待机，那就待机，然后计时，然后删除元数据。休息结束之后只能是左侧待机
 				setup_auto_action_timer()
 			anim_sprite.remove_meta("post_rest_state")
 
 
 
-#----------------------------------------------硬编码接收触发-开始移动函数---------------------------------------------------------------
+#----------------------------------------------硬编码接收触发-输入事件函数---------------------------------------------------------------
 #godot自带函数，有输入事件时会被调用。输入事件会沿节点树向上传播，直到有节点将其消耗。
 #这里给了一个evevt入参，入参是自带类：inputEvevt
 func _input(event: InputEvent):
@@ -329,6 +310,23 @@ func _on_click_count_timeout() -> void:
 
 
 
+#----------------------------------------------开始移动函数---------------------------------------------------------------
+#入参-目标状态，类型是动画状态枚举
+func start_move(target_state: AnimState):
+	# 首先，如果入参的目标状态是【准备休息】或者【休息中】
+	if current_state in [AnimState.PREPARE_REST, AnimState.RESTING]:  #这里有个问题，准备休息不能直接切休息结束，看是不是先进入休息状态，或者出个打断休息的动画
+		play_anim(AnimState.FINISH_REST) # 播放休息结束
+		anim_sprite.set_meta("post_rest_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【休息后的动作】，数据值是入参的目标状态
+	elif current_state != AnimState.IDLE_SIDE: # 否则，如果目标状态不是侧面待机（也就是除了休息和待机的情况外）
+		var is_left: bool = (target_x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
+		play_turn_anim(AnimState.TURN_SMALL, "front", "left" if is_left else "right") # 根据是否向左的情况播放小转动画
+		anim_sprite.set_meta("post_turn_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【转身后的动作】，数据值是入参的目标状态
+	else: # 其他情况下，也就是侧面待机情况下
+		play_anim(target_state) # 已在侧面，直接播放移动动画（方向由后续_physics_process判定）
+	auto_action_enabled = false  #最后统一禁用自由行动，开始移动了
+
+
+
 #-----------------------------------------------生成小走目标---------------------------------------------------------------
 # 这个函数会在待机动作随机到【小走】的时候触发
 func generate_walk_small_target():
@@ -337,4 +335,4 @@ func generate_walk_small_target():
 	var random_dir = temp_array.pick_random() # 然后在这两个值里面随机选一个，赋值给【随机方向】
 	# 小走的目标X坐标，就是当前全局位置X坐标 + (随机方向 * 随机长度），这个随机长度区间是【0】到【小走极限范围】
 	target_x = global_position.x + random_dir * randf_range(0, walk_small_range)
-	is_moving = true # 直觉告诉我这里是bug，小走不能算移动 # 好像还真不是bug，是要先走到目标点的
+	auto_action_enabled = true # 小走算待机动作，可以继续待机
