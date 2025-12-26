@@ -952,8 +952,10 @@ shape = SubResource("RectangleShape2D_iwkqx")
 position = Vector2(0, 7)
 scale = Vector2(0.3272727, 0.3272728)
 sprite_frames = SubResource("SpriteFrames_8hpvm")
-animation = &"idel_side"
+animation = &"turn_big"
 autoplay = "idel_front"
+frame = 3
+frame_progress = 1.0
 
 [node name="AutoActionTimer" type="Timer" parent="."]
 
