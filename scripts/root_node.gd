@@ -18,7 +18,7 @@ var menu_right : Node # 左菜单节点
 
 func _ready() -> void:
 	
-	var aspect_ratio : int # 用来表示宽高比的内部变量，主要目的是为了让窗口宽高比和视口保持一致，后面会用到
+	var aspect_ratio : float # 用来表示宽高比的内部变量，主要目的是为了让窗口宽高比和视口保持一致，后面会用到
 	
 	# 【独立功能，不涉及外部交互】用来设置窗口缩放模式的模块
 	get_window().set_content_scale_mode(Window.CONTENT_SCALE_MODE_VIEWPORT) #窗口大小跟着视口走，让窗口缩放与视口大小之间产生绑定关系。
@@ -35,13 +35,13 @@ func _ready() -> void:
 	screen_height = DisplayServer.screen_get_usable_rect().size.y # 屏幕可用空间高度，用来表示排除了窗口栏之后的屏幕高度
 	viewport_width = ProjectSettings.get_setting("display/window/size/viewport_width") #读取视口宽度，赋值给对应变量（视口大小是在项目设置里写死的）
 	viewport_height = ProjectSettings.get_setting("display/window/size/viewport_height") #读取视口高度，赋值给对应变量（视口大小是在项目设置里写死的）
-	aspect_ratio = viewport_width / viewport_height # 临时变量，用来记录视口宽高比，后面调整窗口大小要用
+	aspect_ratio = float(viewport_width) / viewport_height # 临时变量，用来记录视口宽高比，后面调整窗口大小要用
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED) # 把游戏运行方式设置为窗口运行
-	DisplayServer.window_set_size(Vector2i(screen_width,screen_width/aspect_ratio)) # 把游戏窗口尺寸设置为：与屏幕同宽，然后按照视口宽高比来调整窗口高度
+	DisplayServer.window_set_size(Vector2i(screen_width,int(screen_width/aspect_ratio))) # 把游戏窗口尺寸设置为：与屏幕同宽，然后按照视口宽高比来调整窗口高度
 	#【暂时弃用】DisplayServer.window_set_max_size(Vector2i(screen_width,screen_height/3)) # 把游戏窗口最大尺寸设置为：与屏幕同宽，高度是屏幕四分之一
 	#【暂时弃用】DisplayServer.window_set_min_size(Vector2i(screen_width,150)) # 把游戏窗口最小尺寸设置为：宽1000，高150（建议最小宽度不小于视口宽度，不然会纵向扩展）
 	
-	window_position = Vector2i(0,screen_height - screen_width/aspect_ratio) # 表示窗口位置的变量，横坐标是0，纵坐标是屏幕高度-窗口高度
+	window_position = Vector2i(0,screen_height - int(screen_width/aspect_ratio)) # 表示窗口位置的变量，横坐标是0，纵坐标是屏幕高度-窗口高度
 	DisplayServer.window_set_position(window_position) # 把上面的变量赋值给窗口位置（显示在屏幕底端）
 	
 	
@@ -64,15 +64,15 @@ func _process(_delta: float) -> void:
 
 	# 用来弹出和收起菜单
 	if menu_show == true: # 点了按钮之后menu_show变成true，执行接下来的操作
-		if menu_left.position.x < viewport_width/2-menu_left.size.x : # 在【左菜单】的【最右点】抵达屏幕【中间】之前
+		if menu_left.position.x < viewport_width/2.0-menu_left.size.x : # 在【左菜单】的【最右点】抵达屏幕【中间】之前
 			menu_left.position += Vector2(50,0)  # 每帧向右50像素
 		else :  # 抵达屏幕中间之后
-			menu_left.position = Vector2(viewport_width/2-menu_left.size.x,0) # 横坐标跑到屏幕中间，纵坐标0
+			menu_left.position = Vector2(viewport_width/2.0-menu_left.size.x,0) # 横坐标跑到屏幕中间，纵坐标0
 		# 和上面同理
-		if menu_right.position.x > viewport_width/2: # 在【右菜单】的【最左点】抵达屏幕【中点】之前
+		if menu_right.position.x > viewport_width/2.0: # 在【右菜单】的【最左点】抵达屏幕【中点】之前
 			menu_right.position += Vector2(-50,0) # 每帧向左50像素
 		else :
-			menu_right.position = Vector2(viewport_width/2,0) # 横坐标跑到屏幕中间，纵坐标0
+			menu_right.position = Vector2(viewport_width/2.0,0) # 横坐标跑到屏幕中间，纵坐标0
 	else:
 		if menu_left.position.x > -menu_left.size.x-300: # 在【左菜单】的【最左点】抵达屏幕x轴【-300】之前
 			menu_left.position += Vector2(-50,0)  # 每帧向左50像素

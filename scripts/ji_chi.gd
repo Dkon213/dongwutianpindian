@@ -88,12 +88,16 @@ func _physics_process(_delta: float):
 
 	#第六，判定啥时候停止
 	if abs(global_position.x - target_x) < 5.0: # 如果当前位置横坐标距离目标位置横坐标小于5像素
+		# 先保存当前朝向，避免后续状态改变时丢失
+		var saved_flip_h = anim_sprite.flip_h
+		# 立即停止移动，避免下一帧继续处理
+		is_moving = false
 		auto_action_enabled = true # 允许自由活动，且下一帧就不会再进入行动，直接返回了
-		is_moving = false # 不论是走过来还是跑过来的，都先把小走禁用，下次小走的时候函数里自己会打开
 		velocity = Vector2.ZERO # 速度变成0向量，停下了
-		# 停下以后，默认切回侧待机，此处入参1-侧待机，入参2-不倒放，入参3-如果是向左那就翻转，向右就不翻转
-		play_anim(AnimState.IDLE_SIDE, false, is_left_move)
+		# 停下以后，默认切回侧待机，此处入参1-侧待机，入参2-不倒放，入参3-保持当前朝向
+		play_anim(AnimState.IDLE_SIDE, false, saved_flip_h)
 		setup_auto_action_timer() # 重置制动动作计时
+		return # 立即返回，避免后续代码执行
 
 
 
@@ -135,7 +139,7 @@ func _on_auto_action_timer_timeout():
 			]
 		# 这里有个bug，这时不知道小走是往左还是往右，因此侧面待机也不知道该往哪个方向待机
 		AnimState.WALK_SMALL:  #  如果当前是小走，那就侧面待机
-			play_anim(AnimState.IDLE_SIDE)
+			play_anim(AnimState.IDLE_SIDE, false, anim_sprite.flip_h) # 保持当前朝向
 			setup_auto_action_timer()
 			return
 		AnimState.RESTING: # 如果当前是休息中，那就休息结束
@@ -273,22 +277,40 @@ func _input(event: InputEvent):
 #----------------------------------------------信号触发-点鼠标计时器到期---------------------------------------------------------------
 # 这个函数会在点击计时器倒数结束后触发
 func _on_click_count_timeout() -> void:
-	if click_count >= 3: # 如果这时候连点大于等于3次
+	# 如果当前正在跑步，无论点击次数多少，都继续保持跑步状态（不能降级）
+	if current_state == AnimState.RUN:
+		start_move(AnimState.RUN) # 继续跑步到新目标点
+	# 如果当前正在走路，且连点次数>=3，则可以升级为跑步
+	elif current_state == AnimState.WALK_BIG and click_count >= 3:
+		start_move(AnimState.RUN) # 从走路升级为跑步
+	# 如果当前正在走路，且单击，则保持走路但更新目标点（直接切换状态即可）
+	elif current_state == AnimState.WALK_BIG:
+		start_move(AnimState.WALK_BIG) # 继续走路到新目标点
+	# 如果当前不在移动状态（待机），则根据点击次数决定
+	elif click_count >= 3: # 如果这时候连点大于等于3次
 		start_move(AnimState.RUN) # 那就执行跑步
 	else: #没到3次
 		start_move(AnimState.WALK_BIG) # 就只是走路
-		click_count = 0 # 顺便重置计时
+	click_count = 0 # 无论哪种情况，都要重置点击计数器
 
 
 
 #----------------------------------------------开始移动函数---------------------------------------------------------------
 #入参-目标状态，类型是动画状态枚举
 func start_move(target_state: AnimState):
+	# 停止并重置点击计时器，避免在移动过程中计时器到期导致状态切换
+	click_timer.stop()
+	click_count = 0
+	
+	# 防止从跑步状态降级为走路状态（只能升级，不能降级）
+	if current_state == AnimState.RUN and target_state == AnimState.WALK_BIG:
+		target_state = AnimState.RUN # 强制保持跑步状态
+	
 	# 首先，如果在休息，先处理休息结束
 	if current_state in [AnimState.PREPARE_REST, AnimState.RESTING]: #这里有个问题，准备休息不能直接切休息结束，看是不是先进入休息状态，或者出个打断休息的动画
 		play_anim(AnimState.FINISH_REST)  # 播放休息结束
 		anim_sprite.set_meta("post_rest_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【休息后的动作】，数据值是入参的目标状态
-	#其次，只有当前确实是“正面待机”时，才需要执行“先转身再跑”的逻辑
+	#其次，只有当前确实是"正面待机"时，才需要执行"先转身再跑"的逻辑
 	elif current_state == AnimState.IDLE_FRONT: 
 		var is_left: bool = (target_x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
 		play_turn_anim(AnimState.TURN_SMALL, "front", "left" if is_left else "right") # 根据是否向左的情况播放小转动画
