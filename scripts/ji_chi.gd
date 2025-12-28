@@ -25,6 +25,9 @@ var auto_action_enabled: bool = true # 【自动行为许可】，初始是true�
 var is_moving : bool = false # 【是否移动】该变量主要用于判断帧函数是否要触发。因此跑步和大小走等涉及位移的全都算是在移动
 var anim_backwards: bool # 用来记录当前动画是否倒放的状态变量。之所以是全局的，主要是为了在动画播放函数和转身函数之间传递消息
 var anim_flip_h : bool # 用来记录当前动画是否翻转的状态变量
+var is_mouse_pressed: bool = false # 【鼠标是否按下】用于检测鼠标长按
+var is_following_mouse: bool = false # 【是否在跟随鼠标】用于标记长按跟随模式
+var last_mouse_position_x: float = 0.0 # 【鼠标最后位置】用于记录鼠标松开时的位置
 
 # 为了便于调试设置的外显变量
 @export var walk_small_speed: float = 50.0  #小走移速
@@ -86,12 +89,32 @@ func _physics_process(_delta: float):
 	velocity = Vector2(dir,0).normalized() * move_speed # 【velocity】二维速度，赋的值是标准向量（决定方向） * 当前速度
 	move_and_slide() #  开始按照指定的方向和速度移动
 
+	# 如果正在跟随鼠标，持续更新目标位置
+	if is_following_mouse and is_mouse_pressed:
+		target_x = get_global_mouse_position().x
+		# 检查是否追上鼠标（位置重合）
+		if abs(global_position.x - target_x) < 5.0:
+			# 追上了鼠标，进入侧面待机
+			var saved_flip_h = anim_sprite.flip_h
+			is_moving = false
+			is_following_mouse = false
+			auto_action_enabled = true
+			velocity = Vector2.ZERO
+			click_count = 0
+			click_timer.stop()
+			play_anim(AnimState.IDLE_SIDE, false, saved_flip_h)
+			setup_auto_action_timer()
+			return
+
 	#第六，判定啥时候停止
 	if abs(global_position.x - target_x) < 5.0: # 如果当前位置横坐标距离目标位置横坐标小于5像素
 		# 先保存当前朝向，避免后续状态改变时丢失
 		var saved_flip_h = anim_sprite.flip_h
 		# 立即停止移动，避免下一帧继续处理
 		is_moving = false
+		# 如果是在跟随模式下到达目标，需要关闭跟随模式
+		if is_following_mouse:
+			is_following_mouse = false
 		auto_action_enabled = true # 允许自由活动，且下一帧就不会再进入行动，直接返回了
 		velocity = Vector2.ZERO # 速度变成0向量，停下了
 		# 重置点击计数和停止计时器，为下一次移动做准备
@@ -297,20 +320,22 @@ func _check_control_at_position(node: Node, global_mouse_pos: Vector2) -> bool:
 #godot自带函数，有输入事件时会被调用。输入事件会沿节点树向上传播，直到有节点将其消耗。
 #这里给了一个evevt入参，入参是自带类：inputEvevt
 func _input(event: InputEvent):
-	#如果输入的事件是【鼠标操作】，而且是【鼠标按下】，而且是【鼠标左键】（总的来说就是：如果点了以下鼠标左键）
+	# 处理鼠标按下事件
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		# 检查点击位置是否有UI元素（按钮等可交互对象）
 		if _is_clicking_ui_element(event):
 			return # 如果点击到了UI元素，不触发角色移动
 		
+		is_mouse_pressed = true # 标记鼠标已按下
 		target_x = get_global_mouse_position().x # 首先获取目标位置，坐标就是鼠标点击的地方
+		last_mouse_position_x = target_x # 记录鼠标位置
 		auto_action_enabled = false # 自动行为许可被关闭
 		
 		# 如果当前不在移动状态（待机或休息），立即开始走路
 		if not is_moving:
 			click_count = 1 # 重置点击计数器，这是第一次点击
 			start_move(AnimState.WALK_BIG) # 立即开始走路
-			click_timer.start(click_count_timeout) # 启动计时器，用于检测后续连点
+			click_timer.start(click_count_timeout) # 启动计时器，用于检测后续连点和长按
 		else:
 			# 如果正在移动，增加点击计数
 			click_count += 1
@@ -321,13 +346,42 @@ func _input(event: InputEvent):
 			# 重启计时器，用于检测后续连点（即使已经是跑步，也要重启计时器以检测新的连点窗口）
 			click_timer.stop()
 			click_timer.start(click_count_timeout)
+	
+	# 处理鼠标松开事件
+	elif event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		is_mouse_pressed = false # 标记鼠标已松开
+		last_mouse_position_x = get_global_mouse_position().x # 记录鼠标松开时的最后位置
+		
+		# 如果正在跟随鼠标模式
+		if is_following_mouse:
+			# 关闭跟随模式，但保持跑步状态，继续移动到鼠标最后位置
+			is_following_mouse = false
+			target_x = last_mouse_position_x
+			# 确保角色正在跑步状态
+			if current_state != AnimState.RUN:
+				start_move(AnimState.RUN)
 
 
 
 #----------------------------------------------信号触发-点鼠标计时器到期---------------------------------------------------------------
 # 这个函数会在点击计时器倒数结束后触发
 # 计时器用于检测在时间窗口内是否有连点，如果有连点则升级为跑步
+# 同时也用于检测鼠标长按，如果鼠标仍然按下且超过计时器时间，则进入跟随模式
 func _on_click_count_timeout() -> void:
+	# 检测鼠标长按：如果鼠标仍然按下，且超过点击计时器时间，进入跟随模式
+	if is_mouse_pressed:
+		# 进入跟随模式，角色以跑步动作跟随鼠标
+		is_following_mouse = true
+		# 如果当前不是跑步状态，切换到跑步状态
+		if current_state != AnimState.RUN:
+			start_move(AnimState.RUN)
+		# 更新目标位置为当前鼠标位置
+		target_x = get_global_mouse_position().x
+		# 重置点击计数器，但保持跟随模式
+		click_count = 0
+		return
+	
+	# 如果鼠标已经松开，执行原有的连点检测逻辑
 	# 如果当前正在走路，且在计时器期间检测到连点（>=2次），则升级为跑步
 	if current_state == AnimState.WALK_BIG and click_count >= 2:
 		start_move(AnimState.RUN) # 从走路升级为跑步
