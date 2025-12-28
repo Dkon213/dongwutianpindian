@@ -940,6 +940,7 @@ animations = [{
 script = ExtResource("1_apvqh")
 auto_action_interval_min = 5.0
 auto_action_interval_max = 6.0
+click_count_timeout = 0.2
 rest_scale = Vector2(0.32, 0.32)
 rest_position = Vector2(85, -45)
 default_position = Vector2(0, 7)
@@ -952,7 +953,7 @@ shape = SubResource("RectangleShape2D_iwkqx")
 position = Vector2(0, 7)
 scale = Vector2(0.3272727, 0.3272728)
 sprite_frames = SubResource("SpriteFrames_8hpvm")
-animation = &"walk_big"
+animation = &"idel_side"
 autoplay = "idel_front"
 
 [node name="AutoActionTimer" type="Timer" parent="."]

@@ -94,6 +94,9 @@ func _physics_process(_delta: float):
 		is_moving = false
 		auto_action_enabled = true # 允许自由活动，且下一帧就不会再进入行动，直接返回了
 		velocity = Vector2.ZERO # 速度变成0向量，停下了
+		# 重置点击计数和停止计时器，为下一次移动做准备
+		click_count = 0
+		click_timer.stop()
 		# 停下以后，默认切回侧待机，此处入参1-侧待机，入参2-不倒放，入参3-保持当前朝向
 		play_anim(AnimState.IDLE_SIDE, false, saved_flip_h)
 		setup_auto_action_timer() # 重置制动动作计时
@@ -260,47 +263,88 @@ func play_turn_anim(turn_type: AnimState, from_dir: String, to_dir: String):
 
 
 
+#----------------------------------------------检查是否点击到UI元素---------------------------------------------------------------
+# 检查鼠标点击位置是否有UI元素（按钮等可交互对象）
+func _is_clicking_ui_element(_event: InputEventMouseButton) -> bool:
+	# 获取鼠标的全局位置
+	var mouse_pos = get_global_mouse_position()
+	
+	# 遍历场景树，检查是否有Control节点（UI元素）在鼠标位置
+	var root = get_tree().root
+	return _check_control_at_position(root, mouse_pos)
+
+# 递归检查指定位置是否有Control节点
+func _check_control_at_position(node: Node, global_mouse_pos: Vector2) -> bool:
+	# 如果是Control节点，检查鼠标位置是否在其范围内
+	if node is Control:
+		var control = node as Control
+		# 检查控件是否可见且可交互（不是忽略鼠标输入）
+		if control.visible and control.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+			# 获取控件的全局矩形（Control节点使用get_global_rect()）
+			var control_rect = control.get_global_rect()
+			# 检查鼠标位置是否在控件范围内
+			if control_rect.has_point(global_mouse_pos):
+				return true
+	
+	# 递归检查子节点
+	for child in node.get_children():
+		if _check_control_at_position(child, global_mouse_pos):
+			return true
+	
+	return false
+
 #----------------------------------------------硬编码接收触发-输入事件函数---------------------------------------------------------------
 #godot自带函数，有输入事件时会被调用。输入事件会沿节点树向上传播，直到有节点将其消耗。
 #这里给了一个evevt入参，入参是自带类：inputEvevt
 func _input(event: InputEvent):
 	#如果输入的事件是【鼠标操作】，而且是【鼠标按下】，而且是【鼠标左键】（总的来说就是：如果点了以下鼠标左键）
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 检查点击位置是否有UI元素（按钮等可交互对象）
+		if _is_clicking_ui_element(event):
+			return # 如果点击到了UI元素，不触发角色移动
+		
 		target_x = get_global_mouse_position().x # 首先获取目标位置，坐标就是鼠标点击的地方
-		click_count += 1 # 点击计数器+1
-		click_timer.stop() # 点击计时器停止，这里的作用是让时间先归零
-		click_timer.start(click_count_timeout) # 计时器重新开始一次计时
 		auto_action_enabled = false # 自动行为许可被关闭
+		
+		# 如果当前不在移动状态（待机或休息），立即开始走路
+		if not is_moving:
+			click_count = 1 # 重置点击计数器，这是第一次点击
+			start_move(AnimState.WALK_BIG) # 立即开始走路
+			click_timer.start(click_count_timeout) # 启动计时器，用于检测后续连点
+		else:
+			# 如果正在移动，增加点击计数
+			click_count += 1
+			# 如果连点次数>=2，且当前是走路状态，立即切换为跑步
+			if click_count >= 2 and current_state == AnimState.WALK_BIG:
+				start_move(AnimState.RUN) # 切换为跑步
+			# 如果已经是跑步状态，不需要重新调用start_move，target_x已经更新，_physics_process会自动处理
+			# 重启计时器，用于检测后续连点（即使已经是跑步，也要重启计时器以检测新的连点窗口）
+			click_timer.stop()
+			click_timer.start(click_count_timeout)
 
 
 
 #----------------------------------------------信号触发-点鼠标计时器到期---------------------------------------------------------------
 # 这个函数会在点击计时器倒数结束后触发
+# 计时器用于检测在时间窗口内是否有连点，如果有连点则升级为跑步
 func _on_click_count_timeout() -> void:
-	# 如果当前正在跑步，无论点击次数多少，都继续保持跑步状态（不能降级）
-	if current_state == AnimState.RUN:
-		start_move(AnimState.RUN) # 继续跑步到新目标点
-	# 如果当前正在走路，且连点次数>=3，则可以升级为跑步
-	elif current_state == AnimState.WALK_BIG and click_count >= 3:
+	# 如果当前正在走路，且在计时器期间检测到连点（>=2次），则升级为跑步
+	if current_state == AnimState.WALK_BIG and click_count >= 2:
 		start_move(AnimState.RUN) # 从走路升级为跑步
-	# 如果当前正在走路，且单击，则保持走路但更新目标点（直接切换状态即可）
-	elif current_state == AnimState.WALK_BIG:
-		start_move(AnimState.WALK_BIG) # 继续走路到新目标点
-	# 如果当前不在移动状态（待机），则根据点击次数决定
-	elif click_count >= 3: # 如果这时候连点大于等于3次
-		start_move(AnimState.RUN) # 那就执行跑步
-	else: #没到3次
-		start_move(AnimState.WALK_BIG) # 就只是走路
-	click_count = 0 # 无论哪种情况，都要重置点击计数器
+	# 如果当前正在跑步，保持跑步状态（不能降级）
+	elif current_state == AnimState.RUN:
+		pass # 保持跑步状态，不需要做任何操作
+	# 其他情况（走路且只点击了1次，或者不在移动状态），保持当前状态
+	# 重置点击计数器，准备检测下一次连点
+	click_count = 0
 
 
 
 #----------------------------------------------开始移动函数---------------------------------------------------------------
 #入参-目标状态，类型是动画状态枚举
 func start_move(target_state: AnimState):
-	# 停止并重置点击计时器，避免在移动过程中计时器到期导致状态切换
-	click_timer.stop()
-	click_count = 0
+	# 注意：不再在这里停止计时器和重置点击计数
+	# 因为计时器需要持续运行以检测连点，点击计数也需要保留以判断是否升级
 	
 	# 防止从跑步状态降级为走路状态（只能升级，不能降级）
 	if current_state == AnimState.RUN and target_state == AnimState.WALK_BIG:
