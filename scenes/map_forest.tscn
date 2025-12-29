@@ -17,36 +17,36 @@ normal = Vector2(-1, 0)
 [node name="map_forest" type="Node2D"]
 script = SubResource("GDScript_d4hxt")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="background_forest1" type="Sprite2D" parent="."]
 position = Vector2(929.6302, 470.35715)
 scale = Vector2(0.5794049, 0.5727681)
 texture = ExtResource("1_mf7j3")
 
-[node name="Sprite2D3" type="Sprite2D" parent="."]
+[node name="background_forest2" type="Sprite2D" parent="."]
 position = Vector2(2727.4995, 469.6429)
 scale = Vector2(0.5794049, 0.5727681)
 texture = ExtResource("1_mf7j3")
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
+[node name="land_forest1" type="Sprite2D" parent="."]
 position = Vector2(928.5002, 581.75)
 scale = Vector2(0.28921863, 0.28281242)
 texture = ExtResource("2_ymt0u")
 
-[node name="Sprite2D4" type="Sprite2D" parent="."]
+[node name="land_forest2" type="Sprite2D" parent="."]
 position = Vector2(2724.4995, 581.39294)
 scale = Vector2(0.28921863, 0.28281242)
 texture = ExtResource("2_ymt0u")
 
-[node name="StaticBody_down" type="StaticBody2D" parent="."]
+[node name="invisible_wall_forest" type="StaticBody2D" parent="."]
 
-[node name="down" type="CollisionShape2D" parent="StaticBody_down"]
+[node name="down" type="CollisionShape2D" parent="invisible_wall_forest"]
 position = Vector2(1800, 568)
 shape = SubResource("WorldBoundaryShape2D_mf7j3")
 
-[node name="left" type="CollisionShape2D" parent="StaticBody_down"]
+[node name="left" type="CollisionShape2D" parent="invisible_wall_forest"]
 position = Vector2(3, 451)
 shape = SubResource("WorldBoundaryShape2D_ymt0u")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody_down"]
+[node name="right" type="CollisionShape2D" parent="invisible_wall_forest"]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_pfsq5")

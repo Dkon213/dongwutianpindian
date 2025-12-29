@@ -88,6 +88,24 @@ func _physics_process(_delta: float):
 	#第五，移动角色。这里的【velocity】是【characterBody2D】自带的速度属性，【move_and_slide】也是其自带的移动方法
 	velocity = Vector2(dir,0).normalized() * move_speed # 【velocity】二维速度，赋的值是标准向量（决定方向） * 当前速度
 	move_and_slide() #  开始按照指定的方向和速度移动
+	
+	# 检测碰撞：如果是WALK_SMALL状态且撞到左右墙，则停止移动
+	if current_state == AnimState.WALK_SMALL:
+		# 检测是否有碰撞
+		for i in get_slide_collision_count():
+			var collision = get_slide_collision(i)
+			var normal = collision.get_normal()
+			# 判断是否为水平方向的碰撞（左右墙），通过法线的y分量接近0来判断
+			# 底部墙的法线y分量会接近-1，左右墙的法线y分量接近0
+			if abs(normal.y) < 0.5:  # 法线基本水平，说明撞到的是左右墙
+				# 撞到左右墙，停止移动并进入待机状态
+				var saved_flip_h = anim_sprite.flip_h
+				is_moving = false
+				auto_action_enabled = true
+				velocity = Vector2.ZERO
+				play_anim(AnimState.IDLE_SIDE, false, saved_flip_h)
+				setup_auto_action_timer()
+				return
 
 	# 如果正在跟随鼠标，持续更新目标位置
 	if is_following_mouse and is_mouse_pressed:
@@ -404,10 +422,23 @@ func start_move(target_state: AnimState):
 	if current_state == AnimState.RUN and target_state == AnimState.WALK_BIG:
 		target_state = AnimState.RUN # 强制保持跑步状态
 	
-	# 首先，如果在休息，先处理休息结束
-	if current_state in [AnimState.PREPARE_REST, AnimState.RESTING]: #这里有个问题，准备休息不能直接切休息结束，看是不是先进入休息状态，或者出个打断休息的动画
-		play_anim(AnimState.FINISH_REST)  # 播放休息结束
+	# 首先，如果在休息相关状态，处理休息中断逻辑
+	if current_state == AnimState.PREPARE_REST:
+		# 如果正在准备休息，设置元数据标记需要中断，等prepare_rest播放完后直接播放finish_rest
+		anim_sprite.set_meta("interrupt_rest", true) # 标记需要中断休息
+		anim_sprite.set_meta("post_rest_state", target_state) # 设置休息后的动作
+		# 不立即切换动画，等待prepare_rest播放完成
+		return
+	elif current_state == AnimState.RESTING:
+		# 如果正在休息中，直接切换到finish_rest
+		play_anim(AnimState.FINISH_REST)
 		anim_sprite.set_meta("post_rest_state", target_state) # 给动画播放器节点塞个元数据，数据名称是【休息后的动作】，数据值是入参的目标状态
+		return
+	elif current_state == AnimState.FINISH_REST:
+		# 如果正在播放休息结束，设置元数据，等finish_rest播放完后再行动
+		anim_sprite.set_meta("post_rest_state", target_state) # 设置休息后的动作
+		# 不立即切换动画，等待finish_rest播放完成
+		return
 	#其次，只有当前确实是"正面待机"时，才需要执行"先转身再跑"的逻辑
 	elif current_state == AnimState.IDLE_FRONT: 
 		var is_left: bool = (target_x - global_position.x) < 0 # 声明一个【是否向左】变量，如果【目标位置】-【当前位置】小于零 那就向左
@@ -441,15 +472,27 @@ func _on_animation_finished() -> void:
 		AnimState.TURN_BIG: # 如果是大转，那就播放侧面待机
 			play_anim(AnimState.IDLE_SIDE, false, anim_backwards) # 播放动画 侧面待机 不倒放 是否翻转根据之前的【anim_backwards】赋值决定（只能是倒放值，不能是翻转值）
 		AnimState.PREPARE_REST: # 如果当前准备休息，那下个动作就是休息
-			play_anim(AnimState.RESTING)
-		AnimState.FINISH_REST: # 如果当前休息结束，那看情况执行待机或者行动
-			var post_state = anim_sprite.get_meta("post_rest_state", AnimState.IDLE_SIDE) # 这里根据之前塞的元数据来决定这个【休息后动作】是啥
-			if post_state != AnimState.IDLE_SIDE: # 如果不是侧面待机，那就执行开始移动函数
-				start_move(post_state)
+			# 检查是否有中断标记（收到鼠标信号）
+			if anim_sprite.has_meta("interrupt_rest") and anim_sprite.get_meta("interrupt_rest") == true:
+				# 如果有中断标记，直接播放finish_rest，跳过resting状态
+				anim_sprite.remove_meta("interrupt_rest") # 删除中断标记
+				play_anim(AnimState.FINISH_REST)
 			else:
-				play_anim(AnimState.IDLE_SIDE, false, true) # 如果是侧面待机，那就待机，然后计时，然后删除元数据。休息结束之后只能是左侧待机
+				# 正常流程，进入休息状态
+				play_anim(AnimState.RESTING)
+		AnimState.FINISH_REST: # 如果当前休息结束，那看情况执行待机或者行动
+			# 检查是否有post_rest_state元数据（表示收到了鼠标信号）
+			if anim_sprite.has_meta("post_rest_state"):
+				var post_state = anim_sprite.get_meta("post_rest_state") # 获取休息后的动作
+				anim_sprite.remove_meta("post_rest_state") # 删除元数据
+				# 直接执行移动逻辑，不调用start_move，避免再次进入FINISH_REST分支
+				# FINISH_REST完成后，直接切换到目标移动状态并开始移动
+				play_anim(post_state)
+				is_moving = true # 开启物理移动
+			else:
+				# 没有post_rest_state，说明是正常流程，进入侧面待机
+				play_anim(AnimState.IDLE_SIDE, false, true) # 休息结束之后只能是左侧待机
 				setup_auto_action_timer()
-			anim_sprite.remove_meta("post_rest_state")
 
 #-----------------------------------------------生成小走目标---------------------------------------------------------------
 # 这个函数会在待机动作随机到【小走】的时候触发
