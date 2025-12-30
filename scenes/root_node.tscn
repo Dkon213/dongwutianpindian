@@ -1,7 +1,7 @@
 [gd_scene load_steps=71 format=3 uid="uid://bvx5xobt1mbos"]
 
 [ext_resource type="Script" uid="uid://7y23aqm45dwe" path="res://scripts/root_node.gd" id="1_ynfbw"]
-[ext_resource type="PackedScene" uid="uid://debnntbvhv8hu" path="res://scenes/map_forest.tscn" id="2_65evt"]
+[ext_resource type="PackedScene" uid="uid://snquxgay4etk" path="res://scenes/map_field.tscn" id="2_vhsfa"]
 [ext_resource type="Texture2D" uid="uid://subdd5os2xsx" path="res://assets/Menu_cloud/cloud_1.png" id="3_j38m8"]
 [ext_resource type="Texture2D" uid="uid://d22g1oyd6etqi" path="res://assets/Menu_cloud/cloud_2.png" id="4_ldoum"]
 [ext_resource type="Texture2D" uid="uid://p3nrfx4hte13" path="res://assets/Menu_cloud/cloud_3.png" id="5_jfjke"]
@@ -437,8 +437,7 @@ animations = [{
 [node name="RootNode" type="Node2D"]
 script = ExtResource("1_ynfbw")
 
-[node name="map_forest" parent="." instance=ExtResource("2_65evt")]
-position = Vector2(-5, -170)
+[node name="map_field" parent="." instance=ExtResource("2_vhsfa")]
 
 [node name="menu_left" type="PanelContainer" parent="."]
 clip_contents = true

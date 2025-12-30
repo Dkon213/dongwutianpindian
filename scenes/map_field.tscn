@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=6 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
+distance = 6.1382966
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o75br"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hinbh"]
+normal = Vector2(-1, 0)
 
 [node name="map_field" type="Node2D"]
 
@@ -16,9 +25,26 @@ scale = Vector2(1.4285746, 1.418567)
 texture = ExtResource("1_d4hxt")
 
 [node name="field_trees1" type="Sprite2D" parent="."]
-position = Vector2(642, 322)
+position = Vector2(913, 293)
+scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="field_trees1" type="Sprite2D" parent="field_trees1"]
-position = Vector2(1281, 6)
+[node name="field_trees2" type="Sprite2D" parent="."]
+position = Vector2(2737, 293)
+scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
+
+[node name="invisible_wall_forest" type="StaticBody2D" parent="."]
+position = Vector2(-2, -167)
+
+[node name="down" type="CollisionShape2D" parent="invisible_wall_forest"]
+position = Vector2(1800, 568)
+shape = SubResource("WorldBoundaryShape2D_rrqhf")
+
+[node name="left" type="CollisionShape2D" parent="invisible_wall_forest"]
+position = Vector2(3, 451)
+shape = SubResource("WorldBoundaryShape2D_o75br")
+
+[node name="right" type="CollisionShape2D" parent="invisible_wall_forest"]
+position = Vector2(3648, 452)
+shape = SubResource("WorldBoundaryShape2D_hinbh")
