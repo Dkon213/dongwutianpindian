@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=10 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
+[ext_resource type="Script" path="res://scripts/farming_system.gd" id="3_farming"]
+[ext_resource type="Script" path="res://scripts/warehouse.gd" id="4_warehouse"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -11,6 +13,14 @@ normal = Vector2(1, 0)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hinbh"]
 normal = Vector2(-1, 0)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_farmland"]
+texture = ExtResource("1_d4hxt")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_farmland"]
+0/0 = SubResource("TileSetAtlasSource_farmland")
 
 [node name="map_field" type="Node2D"]
 
@@ -52,3 +62,14 @@ shape = SubResource("WorldBoundaryShape2D_o75br")
 [node name="right" type="CollisionShape2D" parent="invisible_wall_forest"]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_hinbh")
+
+[node name="FarmingSystem" type="Node2D" parent="."]
+script = ExtResource("3_farming")
+
+[node name="FarmlandTileMap" type="TileMap" parent="FarmingSystem"]
+tile_set = SubResource("TileSet_farmland")
+
+[node name="CropManager" type="Node2D" parent="FarmingSystem"]
+
+[node name="Warehouse" type="Node2D" parent="."]
+script = ExtResource("4_warehouse")
