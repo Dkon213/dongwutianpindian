@@ -15,21 +15,25 @@ normal = Vector2(-1, 0)
 [node name="map_field" type="Node2D"]
 
 [node name="field_groung1" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(912, 406.00006)
 scale = Vector2(1.425, 1.42)
 texture = ExtResource("1_d4hxt")
 
 [node name="field_ground2" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(2736.0002, 406)
 scale = Vector2(1.4285746, 1.418567)
 texture = ExtResource("1_d4hxt")
 
 [node name="field_trees1" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(913, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
 [node name="field_trees2" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(2737, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")

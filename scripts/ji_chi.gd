@@ -153,6 +153,12 @@ func setup_auto_action_timer():
 	auto_timer.wait_time = randf_range(auto_action_interval_min, auto_action_interval_max)
 	auto_timer.start() #根据刚才设定好的随机时间，开始计时
 
+# 设置休息动作的计时器，休息动作需要更长的持续时间（60-90秒）
+func setup_resting_timer():
+	# 设置休息动作的计时器，时间范围为60-90秒
+	auto_timer.wait_time = randf_range(60.0, 90.0)
+	auto_timer.start() # 开始计时
+
 
 
 #-------------------------------------信号触发-自动动作计时器计时结束后函数--------------------------------------------------------
@@ -188,6 +194,7 @@ func _on_auto_action_timer_timeout():
 			return
 		AnimState.RESTING: # 如果当前是休息中，那就休息结束
 			play_anim(AnimState.FINISH_REST)
+			# 休息结束后，使用默认的待机动作计时器
 			setup_auto_action_timer()
 			return
 		_: # 逻辑兜底，如果是其他情况那就仅重置计时，不进行其他操作
@@ -357,13 +364,28 @@ func _input(event: InputEvent):
 		else:
 			# 如果正在移动，增加点击计数
 			click_count += 1
+			# 如果当前是WALK_SMALL状态（待机时的随机小走），接收到鼠标信号后应该切换到WALK_BIG或RUN
+			if current_state == AnimState.WALK_SMALL:
+				# 如果连点次数>=2，立即切换为跑步
+				if click_count >= 2:
+					start_move(AnimState.RUN) # 切换为跑步
+				else:
+					# 单击鼠标，切换为WALK_BIG
+					start_move(AnimState.WALK_BIG) # 切换为大走
+				# 重启计时器，用于检测后续连点和长按
+				click_timer.stop()
+				click_timer.start(click_count_timeout)
 			# 如果连点次数>=2，且当前是走路状态，立即切换为跑步
-			if click_count >= 2 and current_state == AnimState.WALK_BIG:
+			elif click_count >= 2 and current_state == AnimState.WALK_BIG:
 				start_move(AnimState.RUN) # 切换为跑步
+				# 重启计时器，用于检测后续连点（即使已经是跑步，也要重启计时器以检测新的连点窗口）
+				click_timer.stop()
+				click_timer.start(click_count_timeout)
 			# 如果已经是跑步状态，不需要重新调用start_move，target_x已经更新，_physics_process会自动处理
 			# 重启计时器，用于检测后续连点（即使已经是跑步，也要重启计时器以检测新的连点窗口）
-			click_timer.stop()
-			click_timer.start(click_count_timeout)
+			else:
+				click_timer.stop()
+				click_timer.start(click_count_timeout)
 	
 	# 处理鼠标松开事件
 	elif event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -480,6 +502,8 @@ func _on_animation_finished() -> void:
 			else:
 				# 正常流程，进入休息状态
 				play_anim(AnimState.RESTING)
+				# 设置休息动作的长时间计时器（60-90秒）
+				setup_resting_timer()
 		AnimState.FINISH_REST: # 如果当前休息结束，那看情况执行待机或者行动
 			# 检查是否有post_rest_state元数据（表示收到了鼠标信号）
 			if anim_sprite.has_meta("post_rest_state"):

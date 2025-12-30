@@ -92,3 +92,7 @@ func _show_menu() -> void:
 
 	else:
 		menu_show = true
+
+# 退出游戏函数，点击退出按钮后调用
+func _quit_game() -> void:
+	get_tree().quit()

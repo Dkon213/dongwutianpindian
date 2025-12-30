@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://bvx5xobt1mbos"]
+[gd_scene load_steps=72 format=3 uid="uid://bvx5xobt1mbos"]
 
 [ext_resource type="Script" uid="uid://7y23aqm45dwe" path="res://scripts/root_node.gd" id="1_ynfbw"]
 [ext_resource type="PackedScene" uid="uid://snquxgay4etk" path="res://scenes/map_field.tscn" id="2_vhsfa"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bmmpjj3fbvnec" path="res://assets/Menu_cloud/cloud_4.png" id="6_l3gbx"]
 [ext_resource type="Texture2D" uid="uid://c1spcv8lrmwny" path="res://assets/Menu_cloud/cloud_x.png" id="7_l3gbx"]
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="8_d78ui"]
+[ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="8_gwtxu"]
 [ext_resource type="PackedScene" uid="uid://p7xg2b3fodxu" path="res://scenes/menu_guide.tscn" id="9_vhsfa"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l3gbx"]
@@ -450,6 +451,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_l3gbx")
 metadata/_edit_use_anchors_ = true
 
 [node name="1" type="AnimatedSprite2D" parent="menu_left"]
+texture_filter = 1
 position = Vector2(104, 166)
 scale = Vector2(0.339947, 0.339947)
 sprite_frames = SubResource("SpriteFrames_65evt")
@@ -459,6 +461,7 @@ frame = 5
 frame_progress = 0.857075
 
 [node name="2" type="AnimatedSprite2D" parent="menu_left"]
+texture_filter = 1
 position = Vector2(601, 87.00001)
 scale = Vector2(0.491195, 0.491195)
 sprite_frames = SubResource("SpriteFrames_qvdbn")
@@ -466,6 +469,7 @@ autoplay = "default"
 frame_progress = 0.490758
 
 [node name="3" type="AnimatedSprite2D" parent="menu_left"]
+texture_filter = 1
 position = Vector2(1124, 162.00002)
 scale = Vector2(0.385157, 0.385156)
 sprite_frames = SubResource("SpriteFrames_fekcl")
@@ -481,6 +485,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_d78ui")
 metadata/_edit_use_anchors_ = true
 
 [node name="x" type="AnimatedSprite2D" parent="menu_right"]
+texture_filter = 1
 position = Vector2(1250, 63)
 scale = Vector2(0.7716669, 0.96000004)
 sprite_frames = SubResource("SpriteFrames_yd5j6")
@@ -497,13 +502,15 @@ flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="4" type="AnimatedSprite2D" parent="menu_right"]
-position = Vector2(607.00006, 84)
+texture_filter = 1
+position = Vector2(617, 88)
 scale = Vector2(0.604492, 0.604492)
 sprite_frames = SubResource("SpriteFrames_6e56t")
 autoplay = "default"
 frame_progress = 0.113348
 
 [node name="5" type="AnimatedSprite2D" parent="menu_right"]
+texture_filter = 1
 position = Vector2(205, 197.00002)
 scale = Vector2(0.393765, 0.351562)
 sprite_frames = SubResource("SpriteFrames_jipf2")
@@ -511,18 +518,34 @@ autoplay = "default"
 frame_progress = 0.176488
 
 [node name="6" type="AnimatedSprite2D" parent="menu_right"]
+texture_filter = 1
 position = Vector2(921, 186)
 scale = Vector2(0.326902, 0.32695)
 sprite_frames = SubResource("SpriteFrames_m0wh4")
 autoplay = "default"
 frame_progress = 0.78963
 
+[node name="exit_button" type="Button" parent="menu_right/6"]
+offset_left = -247.7807
+offset_top = -39.761414
+offset_right = 238.60358
+offset_bottom = 146.8115
+theme_override_colors/font_color = Color(0.3375569, 0.3628211, 0.698831, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_gwtxu")
+theme_override_font_sizes/font_size = 76
+text = "退出
+"
+flat = true
+
 [node name="JiChi" parent="." instance=ExtResource("8_d78ui")]
 position = Vector2(1571, 305)
 
 [node name="menu_guide" parent="." instance=ExtResource("9_vhsfa")]
+texture_filter = 1
 position = Vector2(3170, 138)
 scale = Vector2(0.25, 0.25)
 
 [connection signal="pressed" from="menu_right/x/Button" to="." method="_show_menu"]
+[connection signal="pressed" from="menu_right/6/exit_button" to="." method="_quit_game"]
 [connection signal="menu_button_pressed" from="menu_guide" to="." method="_show_menu"]
