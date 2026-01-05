@@ -2,7 +2,6 @@
 extends Node2D
 
 # 节点引用
-var farmland_tilemap: TileMap  # TileMap 节点引用
 var farmland_layer: TileMapLayer  # TileMapLayer 节点引用
 var crop_manager: Node2D  # 作物管理器节点
 var warehouse: Node2D  # 仓库节点引用
@@ -15,7 +14,7 @@ var player_idle_timeout: float = 10.0  # 无操作超时时间（秒）
 
 # 地块状态管理：使用字典存储每个格子坐标对应的作物
 var farmland_crops: Dictionary = {}  # {Vector2i(格子坐标): Crop节点}
-var tile_size: Vector2i  # TileMap 的格子大小
+var tile_size: Vector2i  # TileMapLayer 的格子大小
 var farmland_row: int  # 可种植区域所在的行（地图底部）
 
 # 当前选中的种子类型（用于玩家播种）
@@ -34,15 +33,14 @@ func _ready() -> void:
 	add_to_group("farming_system")
 	
 	# 获取节点引用
-	farmland_tilemap = $FarmlandTileMap
-	farmland_layer = farmland_tilemap.get_layer(0)  # 获取第一个图层
+	farmland_layer = $FarmlandTileMapLayer
 	
 	# 获取 TileSet 的格子大小
-	if farmland_tilemap.tile_set:
-		var source_count = farmland_tilemap.tile_set.get_source_count()
+	if farmland_layer.tile_set:
+		var source_count = farmland_layer.tile_set.get_source_count()
 		if source_count > 0:
-			var source_id = farmland_tilemap.tile_set.get_source_id(0)
-			var source = farmland_tilemap.tile_set.get_source(source_id)
+			var source_id = farmland_layer.tile_set.get_source_id(0)
+			var source = farmland_layer.tile_set.get_source(source_id)
 			if source:
 				# 尝试获取纹理区域大小
 				if source.has_method("get_texture_region_size"):
@@ -148,10 +146,10 @@ func _input(event: InputEvent) -> void:
 		if _is_valid_farmland(tile_coord):
 			_on_farmland_clicked(tile_coord, world_pos)
 
-# 将世界坐标转换为 TileMap 格子坐标
+# 将世界坐标转换为 TileMapLayer 格子坐标
 func _get_farmland_tile_coord(world_pos: Vector2) -> Vector2i:
-	# 将世界坐标转换为 TileMap 的本地坐标
-	var local_pos = farmland_tilemap.to_local(world_pos)
+	# 将世界坐标转换为 TileMapLayer 的本地坐标
+	var local_pos = farmland_layer.to_local(world_pos)
 	# 转换为格子坐标
 	return farmland_layer.local_to_map(local_pos)
 
@@ -199,7 +197,7 @@ func plant_seed_at_tile(tile_coord: Vector2i, seed_type: String) -> void:
 	
 	# 设置作物位置（格子中心）
 	var local_pos = farmland_layer.map_to_local(tile_coord)
-	var world_pos = farmland_tilemap.to_global(local_pos)
+	var world_pos = farmland_layer.to_global(local_pos)
 	crop.global_position = world_pos
 	
 	# 记录到字典
@@ -345,7 +343,7 @@ func _execute_next_auto_task(tiles: Array, action_func: Callable, next_phase_fun
 	
 	# 将格子坐标转换为世界坐标
 	var local_pos = farmland_layer.map_to_local(tile_coord)
-	var world_pos = farmland_tilemap.to_global(local_pos)
+	var world_pos = farmland_layer.to_global(local_pos)
 	
 	# 设置 ji_chi 移动目标
 	ji_chi_node.target_x = world_pos.x
