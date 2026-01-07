@@ -1,8 +1,8 @@
 # 种子类型配置数据
-extends Node
+extends RefCounted
 
 # 种子类型配置字典
-var SEED_TYPES = {
+static var SEED_TYPES = {
 	"wheat": {
 		"name": "小麦",
 		"stages": {

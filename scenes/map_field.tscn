@@ -1,12 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=8 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
 [ext_resource type="Script" uid="uid://cdv0l0xk2y8w8" path="res://scripts/farming_system.gd" id="3_farming"]
 [ext_resource type="Script" uid="uid://8qsv88fsuk7r" path="res://scripts/warehouse.gd" id="4_warehouse"]
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
-distance = 6.1382966
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o75br"]
 normal = Vector2(1, 0)
@@ -45,10 +42,6 @@ texture = ExtResource("2_n6xbp")
 [node name="invisible_wall_forest" type="StaticBody2D" parent="."]
 position = Vector2(-2, -167)
 
-[node name="down" type="CollisionShape2D" parent="invisible_wall_forest"]
-position = Vector2(1800, 568)
-shape = SubResource("WorldBoundaryShape2D_rrqhf")
-
 [node name="left" type="CollisionShape2D" parent="invisible_wall_forest"]
 position = Vector2(3, 451)
 shape = SubResource("WorldBoundaryShape2D_o75br")
@@ -61,9 +54,13 @@ shape = SubResource("WorldBoundaryShape2D_hinbh")
 script = ExtResource("3_farming")
 
 [node name="FarmlandTileMapLayer" type="TileMapLayer" parent="FarmingSystem"]
+position = Vector2(0, 383.305)
+scale = Vector2(4.275, 4.275)
 tile_set = SubResource("TileSet_56vjj")
 
 [node name="CropManager" type="Node2D" parent="FarmingSystem"]
+visible = false
 
 [node name="Warehouse" type="Node2D" parent="."]
+visible = false
 script = ExtResource("4_warehouse")

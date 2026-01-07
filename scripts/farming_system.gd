@@ -27,6 +27,7 @@ var auto_task_queue: Array = []  # 任务队列
 
 # 场景资源
 const CropScene = preload("res://scenes/crop.tscn")
+const SeedData = preload("res://scripts/seed_data.gd")
 
 func _ready() -> void:
 	# 添加到组，方便其他节点查找
@@ -162,7 +163,7 @@ func _is_valid_farmland(tile_coord: Vector2i) -> bool:
 	return farmland_layer.get_cell_source_id(tile_coord) != -1
 
 # 处理可种植区域点击
-func _on_farmland_clicked(tile_coord: Vector2i, world_pos: Vector2) -> void:
+func _on_farmland_clicked(tile_coord: Vector2i, _world_pos: Vector2) -> void:
 	# 检查该格子是否已种植
 	if farmland_crops.has(tile_coord):
 		# 已种植，尝试浇水

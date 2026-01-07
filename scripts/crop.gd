@@ -1,6 +1,9 @@
 # 作物脚本
 extends Node2D
 
+# 预加载种子数据脚本
+const SeedData = preload("res://scripts/seed_data.gd")
+
 # 成长阶段枚举
 enum GrowthStage {
 	SEED,      # 种子
