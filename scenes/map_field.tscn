@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=11 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
 [ext_resource type="Script" uid="uid://cdv0l0xk2y8w8" path="res://scripts/farming_system.gd" id="3_farming"]
 [ext_resource type="Script" uid="uid://8qsv88fsuk7r" path="res://scripts/warehouse.gd" id="4_warehouse"]
+[ext_resource type="Texture2D" uid="uid://w7avbeu54ymk" path="res://assets/Maps/field/field_shop.png" id="5_rrqhf"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o75br"]
 normal = Vector2(1, 0)
@@ -12,6 +13,21 @@ normal = Vector2(1, 0)
 normal = Vector2(-1, 0)
 
 [sub_resource type="TileSet" id="TileSet_56vjj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o75br"]
+atlas = ExtResource("5_rrqhf")
+region = Rect2(0, 0, 3000, 3000)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_56vjj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o75br")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="map_field" type="Node2D"]
 
@@ -59,8 +75,13 @@ scale = Vector2(4.275, 4.275)
 tile_set = SubResource("TileSet_56vjj")
 
 [node name="CropManager" type="Node2D" parent="FarmingSystem"]
-visible = false
 
 [node name="Warehouse" type="Node2D" parent="."]
-visible = false
 script = ExtResource("4_warehouse")
+
+[node name="shop" type="Node2D" parent="."]
+
+[node name="shop_anime" type="AnimatedSprite2D" parent="shop"]
+position = Vector2(3437, 136)
+scale = Vector2(0.16383338, 0.16383338)
+sprite_frames = SubResource("SpriteFrames_56vjj")

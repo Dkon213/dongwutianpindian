@@ -137,11 +137,13 @@ func pickup_fruit() -> void:
 	if current_stage != GrowthStage.FRUIT:
 		return
 	
+	# 获取 farming_system 节点（在函数开始处声明，避免重复声明）
+	var farming_system = get_tree().get_first_node_in_group("farming_system")
+	
 	# 获取仓库节点（通过父节点查找）
 	var warehouse = get_tree().get_first_node_in_group("warehouse")
 	if not warehouse:
 		# 如果找不到，尝试通过 FarmingSystem 获取
-		var farming_system = get_tree().get_first_node_in_group("farming_system")
 		if farming_system and farming_system.has_method("get_warehouse"):
 			warehouse = farming_system.get_warehouse()
 	
@@ -151,7 +153,6 @@ func pickup_fruit() -> void:
 	fruit_picked.emit()
 	
 	# 通知 FarmingSystem 移除这个作物
-	var farming_system = get_tree().get_first_node_in_group("farming_system")
 	if farming_system and farming_system.has_method("remove_crop_at_tile"):
 		farming_system.remove_crop_at_tile(tile_coord)
 	
