@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkmy8x1pmn1ge"
-path="res://.godot/imported/tomato_mature.png-4ecf40d00fcfaf7a4dcfeecddd60b259.ctex"
+uid="uid://b72km6nr4vvje"
+path="res://.godot/imported/field_ground_tileset.png-b5f75e16eff6a81cfc80126d56e55696.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/plants/tomato_mature.png"
-dest_files=["res://.godot/imported/tomato_mature.png-4ecf40d00fcfaf7a4dcfeecddd60b259.ctex"]
+source_file="res://assets/Maps/field/field_ground_tileset.png"
+dest_files=["res://.godot/imported/field_ground_tileset.png-b5f75e16eff6a81cfc80126d56e55696.ctex"]
 
 [params]
 

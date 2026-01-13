@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbf2lmmu7ork8"
-path="res://.godot/imported/LuPai_Fan.png-760d04d856846d10454b95172aa0741b.ctex"
+uid="uid://dtvj4ecyivmhs"
+path="res://.godot/imported/wheat_seed.png-fd4f73a5024e833cb0316877582c28c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/LuPai_Fan.png"
-dest_files=["res://.godot/imported/LuPai_Fan.png-760d04d856846d10454b95172aa0741b.ctex"]
+source_file="res://assets/crops/wheat_seed.png"
+dest_files=["res://.godot/imported/wheat_seed.png-fd4f73a5024e833cb0316877582c28c3.ctex"]
 
 [params]
 

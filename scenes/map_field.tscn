@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=14 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
 [ext_resource type="Script" uid="uid://cdv0l0xk2y8w8" path="res://scripts/farming_system.gd" id="3_farming"]
+[ext_resource type="Texture2D" uid="uid://b72km6nr4vvje" path="res://assets/Maps/field/field_ground_tileset.png" id="4_hinbh"]
 [ext_resource type="Script" uid="uid://8qsv88fsuk7r" path="res://scripts/warehouse.gd" id="4_warehouse"]
+[ext_resource type="Texture2D" uid="uid://g7r6n5lj7lrb" path="res://assets/Things/field/field_warehouse.png" id="5_o75br"]
 [ext_resource type="Texture2D" uid="uid://w7avbeu54ymk" path="res://assets/Maps/field/field_shop.png" id="5_rrqhf"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o75br"]
@@ -12,7 +14,15 @@ normal = Vector2(1, 0)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hinbh"]
 normal = Vector2(-1, 0)
 
-[sub_resource type="TileSet" id="TileSet_56vjj"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_phrsi"]
+texture = ExtResource("4_hinbh")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_nmw0k"]
+tile_size = Vector2i(32, 32)
+sources/1 = SubResource("TileSetAtlasSource_phrsi")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o75br"]
 atlas = ExtResource("5_rrqhf")
@@ -69,15 +79,21 @@ shape = SubResource("WorldBoundaryShape2D_hinbh")
 [node name="FarmingSystem" type="Node2D" parent="."]
 script = ExtResource("3_farming")
 
-[node name="FarmlandTileMapLayer" type="TileMapLayer" parent="FarmingSystem"]
-position = Vector2(0, 383.305)
-scale = Vector2(4.275, 4.275)
-tile_set = SubResource("TileSet_56vjj")
-
 [node name="CropManager" type="Node2D" parent="FarmingSystem"]
+
+[node name="FarmlandTileMapLayer" type="TileMapLayer" parent="FarmingSystem"]
+position = Vector2(0, 383.18)
+scale = Vector2(2.125, 2.125)
+tile_map_data = PackedByteArray(0, 0, 5, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 6, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_nmw0k")
+rendering_quadrant_size = 32
 
 [node name="Warehouse" type="Node2D" parent="."]
 script = ExtResource("4_warehouse")
+
+[node name="Sprite2D" type="Sprite2D" parent="Warehouse"]
+position = Vector2(179, 235)
+texture = ExtResource("5_o75br")
 
 [node name="shop" type="Node2D" parent="."]
 

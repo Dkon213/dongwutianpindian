@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnm4kligj55e"
-path="res://.godot/imported/GanZi.png-e850b02d14a6a3241a409fbcfa87afcc.ctex"
+uid="uid://davnvaqc73ich"
+path="res://.godot/imported/field_hoe.png-671557fe0b1e5e33de2ed206365aa137.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/GanZi.png"
-dest_files=["res://.godot/imported/GanZi.png-e850b02d14a6a3241a409fbcfa87afcc.ctex"]
+source_file="res://assets/Things/field/field_hoe.png"
+dest_files=["res://.godot/imported/field_hoe.png-671557fe0b1e5e33de2ed206365aa137.ctex"]
 
 [params]
 

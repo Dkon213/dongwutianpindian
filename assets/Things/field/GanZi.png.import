@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmxluk48yxsuy"
-path="res://.godot/imported/wheat_fruit.png-addd7edcf7c39b7a05d07ad7dc2ae28b.ctex"
+uid="uid://bnm4kligj55e"
+path="res://.godot/imported/GanZi.png-4773381e86fd433b53268da1d9394467.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/plants/wheat_fruit.png"
-dest_files=["res://.godot/imported/wheat_fruit.png-addd7edcf7c39b7a05d07ad7dc2ae28b.ctex"]
+source_file="res://assets/Things/field/GanZi.png"
+dest_files=["res://.godot/imported/GanZi.png-4773381e86fd433b53268da1d9394467.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl2bwxi7x32jn"
-path="res://.godot/imported/carrot_sprout.png-747c25085ce81dd0005243b68aaf6279.ctex"
+uid="uid://dw5ir6qf6ryfc"
+path="res://.godot/imported/LuPai_Zheng.png-83aa65fac4c0894627f99669b28e6ca1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/plants/carrot_sprout.png"
-dest_files=["res://.godot/imported/carrot_sprout.png-747c25085ce81dd0005243b68aaf6279.ctex"]
+source_file="res://assets/Things/field/LuPai_Zheng.png"
+dest_files=["res://.godot/imported/LuPai_Zheng.png-83aa65fac4c0894627f99669b28e6ca1.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0nmmybupboon"
-path="res://.godot/imported/tomato_sprout.png-9fcd739db1641aa17b669f3ce463e77b.ctex"
+uid="uid://hg411iuww5fc"
+path="res://.godot/imported/carrot_fruit.png-c46cdc629e8b0416c86b8efa66222ce1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/plants/tomato_sprout.png"
-dest_files=["res://.godot/imported/tomato_sprout.png-9fcd739db1641aa17b669f3ce463e77b.ctex"]
+source_file="res://assets/crops/carrot_fruit.png"
+dest_files=["res://.godot/imported/carrot_fruit.png-c46cdc629e8b0416c86b8efa66222ce1.ctex"]
 
 [params]
 

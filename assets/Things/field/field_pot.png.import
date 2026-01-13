@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://se3pp2m7d6vm"
-path="res://.godot/imported/wheat_mature.png-8ca5851a073711e05f7471327616fb3e.ctex"
+uid="uid://d0dc2emhd3kqf"
+path="res://.godot/imported/field_pot.png-230ca498e5eed52d51a4365085dede77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/plants/wheat_mature.png"
-dest_files=["res://.godot/imported/wheat_mature.png-8ca5851a073711e05f7471327616fb3e.ctex"]
+source_file="res://assets/Things/field/field_pot.png"
+dest_files=["res://.godot/imported/field_pot.png-230ca498e5eed52d51a4365085dede77.ctex"]
 
 [params]
 

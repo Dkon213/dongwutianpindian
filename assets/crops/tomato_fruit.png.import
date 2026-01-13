@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dw5ir6qf6ryfc"
-path="res://.godot/imported/LuPai_Zheng.png-35da47874ba8d0bc2cd903569467e41f.ctex"
+uid="uid://s0ebnvrghpvf"
+path="res://.godot/imported/tomato_fruit.png-ba0463b61d19c7661e9afa51cebb3c80.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/LuPai_Zheng.png"
-dest_files=["res://.godot/imported/LuPai_Zheng.png-35da47874ba8d0bc2cd903569467e41f.ctex"]
+source_file="res://assets/crops/tomato_fruit.png"
+dest_files=["res://.godot/imported/tomato_fruit.png-ba0463b61d19c7661e9afa51cebb3c80.ctex"]
 
 [params]
 
