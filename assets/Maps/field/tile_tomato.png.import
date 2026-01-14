@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0eq2twxg30vx"
-path="res://.godot/imported/world_tileset_test.png-e6c9b8c7ddd4142e3173adce87286a2e.ctex"
+uid="uid://bjctwrqojm0cb"
+path="res://.godot/imported/tile_tomato.png-4aad92b46d4e5d8b83f53c7170d6d846.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Maps/field/world_tileset_test.png"
-dest_files=["res://.godot/imported/world_tileset_test.png-e6c9b8c7ddd4142e3173adce87286a2e.ctex"]
+source_file="res://assets/Maps/field/tile_tomato.png"
+dest_files=["res://.godot/imported/tile_tomato.png-4aad92b46d4e5d8b83f53c7170d6d846.ctex"]
 
 [params]
 

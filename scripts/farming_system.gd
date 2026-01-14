@@ -404,4 +404,3 @@ func _finish_auto_behavior() -> void:
 # 获取仓库节点（供其他节点调用）
 func get_warehouse() -> Node2D:
 	return warehouse
-

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3rjd3yxo1bi0"
-path="res://.godot/imported/field_ground_tileset.png-b5f75e16eff6a81cfc80126d56e55696.ctex"
+uid="uid://dk0uipve085r7"
+path="res://.godot/imported/tile_wheat.png-0443c0312da8a844ee156023dc141834.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Maps/field/field_ground_tileset.png"
-dest_files=["res://.godot/imported/field_ground_tileset.png-b5f75e16eff6a81cfc80126d56e55696.ctex"]
+source_file="res://assets/Maps/field/tile_wheat.png"
+dest_files=["res://.godot/imported/tile_wheat.png-0443c0312da8a844ee156023dc141834.ctex"]
 
 [params]
 
