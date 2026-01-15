@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0dc2emhd3kqf"
-path="res://.godot/imported/field_pot.png-230ca498e5eed52d51a4365085dede77.ctex"
+uid="uid://g7r6n5lj7lrb"
+path="res://.godot/imported/field_warehouse.png-04079f51b9090991ccde77f97a540f77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/field/field_pot.png"
-dest_files=["res://.godot/imported/field_pot.png-230ca498e5eed52d51a4365085dede77.ctex"]
+source_file="res://assets/Maps/field/field_warehouse.png"
+dest_files=["res://.godot/imported/field_warehouse.png-04079f51b9090991ccde77f97a540f77.ctex"]
 
 [params]
 

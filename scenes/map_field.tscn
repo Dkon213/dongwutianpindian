@@ -1,15 +1,21 @@
-[gd_scene load_steps=21 format=4 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=32 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
-[ext_resource type="Script" uid="uid://cdv0l0xk2y8w8" path="res://scripts/farming_system.gd" id="3_farming"]
+[ext_resource type="Texture2D" uid="uid://g7r6n5lj7lrb" path="res://assets/Maps/field/field_warehouse.png" id="3_ticpy"]
 [ext_resource type="Texture2D" uid="uid://d3rjd3yxo1bi0" path="res://assets/Maps/field/field_ground_tileset.png" id="4_hinbh"]
-[ext_resource type="Script" uid="uid://8qsv88fsuk7r" path="res://scripts/warehouse.gd" id="4_warehouse"]
-[ext_resource type="Texture2D" uid="uid://g7r6n5lj7lrb" path="res://assets/Things/field/field_warehouse.png" id="5_o75br"]
+[ext_resource type="Texture2D" uid="uid://c6hj6d1tmoo54" path="res://assets/Maps/field/field_shelf.png" id="4_ts0ht"]
+[ext_resource type="Texture2D" uid="uid://d0dc2emhd3kqf" path="res://assets/Maps/field/field_pot.png" id="5_0i05h"]
 [ext_resource type="Texture2D" uid="uid://bjctwrqojm0cb" path="res://assets/Maps/field/tile_tomato.png" id="5_phrsi"]
 [ext_resource type="Texture2D" uid="uid://w7avbeu54ymk" path="res://assets/Maps/field/field_shop.png" id="5_rrqhf"]
 [ext_resource type="Texture2D" uid="uid://b2hjw232oj5cq" path="res://assets/Maps/field/tile_carrot.png" id="6_1otix"]
+[ext_resource type="Texture2D" uid="uid://davnvaqc73ich" path="res://assets/Maps/field/field_hoe.png" id="6_mbqsv"]
 [ext_resource type="Texture2D" uid="uid://dk0uipve085r7" path="res://assets/Maps/field/tile_wheat.png" id="7_ticpy"]
+[ext_resource type="PackedScene" uid="uid://xaggvm7kkblj" path="res://scenes/fruits.tscn" id="12_ts0ht"]
+[ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="13_8c1jw"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
+distance = 6.1382966
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o75br"]
 normal = Vector2(1, 0)
@@ -17,34 +23,89 @@ normal = Vector2(1, 0)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hinbh"]
 normal = Vector2(-1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hinbh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwdqm"]
+atlas = ExtResource("3_ticpy")
+region = Rect2(0, 0, 300, 300)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hinbh"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_lwdav"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwdqm")
+}],
+"loop": true,
+"name": &"barn_default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bcppt"]
+atlas = ExtResource("4_ts0ht")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0b677"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bcppt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sa83"]
+atlas = ExtResource("5_0i05h")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n31ce"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0sa83")
+}],
+"loop": true,
+"name": &"pot_default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol67m"]
+atlas = ExtResource("6_mbqsv")
+region = Rect2(0, 0, 150, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jntf5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ol67m")
+}],
+"loop": true,
+"name": &"hoe_default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ck7ss"]
+atlas = ExtResource("5_rrqhf")
+region = Rect2(0, 0, 3000, 3000)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lnqt4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ck7ss")
+}],
+"loop": true,
+"name": &"shop_default",
+"speed": 5.0
+}]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o75br"]
 texture = ExtResource("4_hinbh")
 texture_region_size = Vector2i(32, 32)
+0:0/next_alternative_id = 3
 0:0/0 = 0
 1:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmw0k"]
-texture = ExtResource("5_phrsi")
-texture_region_size = Vector2i(32, 32)
-0:0/animation_frame_0/duration = 1.0
-0:0/animation_frame_1/duration = 1.0
-0:0/0 = 0
-2:0/animation_frame_0/duration = 1.0
-2:0/animation_frame_1/duration = 1.0
-2:0/animation_frame_2/duration = 1.0
-2:0/animation_frame_3/duration = 1.0
-2:0/animation_frame_4/duration = 1.0
-2:0/0 = 0
-7:0/animation_frame_0/duration = 1.0
-7:0/animation_frame_1/duration = 1.0
-7:0/animation_frame_2/duration = 1.0
-7:0/animation_frame_3/duration = 1.0
-7:0/animation_frame_4/duration = 1.0
-7:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ts0ht"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hinbh"]
 texture = ExtResource("6_1otix")
 texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_0/duration = 1.0
@@ -63,7 +124,26 @@ texture_region_size = Vector2i(32, 32)
 7:0/animation_frame_4/duration = 1.0
 7:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0i05h"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_phrsi"]
+texture = ExtResource("5_phrsi")
+texture_region_size = Vector2i(32, 32)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/animation_frame_4/duration = 1.0
+2:0/0 = 0
+7:0/animation_frame_0/duration = 1.0
+7:0/animation_frame_1/duration = 1.0
+7:0/animation_frame_2/duration = 1.0
+7:0/animation_frame_3/duration = 1.0
+7:0/animation_frame_4/duration = 1.0
+7:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmw0k"]
 texture = ExtResource("7_ticpy")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -80,96 +160,107 @@ texture_region_size = Vector2i(32, 32)
 6:0/animation_frame_4/duration = 1.0
 6:0/0 = 0
 
-[sub_resource type="TileSet" id="TileSet_phrsi"]
+[sub_resource type="TileSet" id="TileSet_1otix"]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_hinbh")
-sources/1 = SubResource("TileSetAtlasSource_nmw0k")
-sources/2 = SubResource("TileSetAtlasSource_ts0ht")
-sources/3 = SubResource("TileSetAtlasSource_0i05h")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_o75br"]
-atlas = ExtResource("5_rrqhf")
-region = Rect2(0, 0, 3000, 3000)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_56vjj"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_o75br")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+sources/0 = SubResource("TileSetAtlasSource_o75br")
+sources/1 = SubResource("TileSetAtlasSource_hinbh")
+sources/2 = SubResource("TileSetAtlasSource_phrsi")
+sources/3 = SubResource("TileSetAtlasSource_nmw0k")
 
 [node name="map_field" type="Node2D"]
 
-[node name="field_groung1" type="Sprite2D" parent="."]
+[node name="background&wall" type="Node2D" parent="."]
+
+[node name="field_groung1" type="Sprite2D" parent="background&wall"]
 texture_filter = 1
 position = Vector2(912, 406.00006)
 scale = Vector2(1.425, 1.42)
 texture = ExtResource("1_d4hxt")
 
-[node name="field_ground2" type="Sprite2D" parent="."]
+[node name="field_ground2" type="Sprite2D" parent="background&wall"]
 texture_filter = 1
 position = Vector2(2736.0002, 406)
 scale = Vector2(1.4285746, 1.418567)
 texture = ExtResource("1_d4hxt")
 
-[node name="field_trees1" type="Sprite2D" parent="."]
+[node name="field_trees1" type="Sprite2D" parent="background&wall"]
 texture_filter = 1
 position = Vector2(913, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="field_trees2" type="Sprite2D" parent="."]
+[node name="field_trees2" type="Sprite2D" parent="background&wall"]
 texture_filter = 1
 position = Vector2(2737, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="invisible_wall_forest" type="StaticBody2D" parent="."]
+[node name="invisible_wall_forest" type="StaticBody2D" parent="background&wall"]
 position = Vector2(-2, -167)
 
-[node name="left" type="CollisionShape2D" parent="invisible_wall_forest"]
+[node name="down" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
+position = Vector2(1800, 568)
+shape = SubResource("WorldBoundaryShape2D_rrqhf")
+
+[node name="left" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
 position = Vector2(3, 451)
 shape = SubResource("WorldBoundaryShape2D_o75br")
 
-[node name="right" type="CollisionShape2D" parent="invisible_wall_forest"]
+[node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_hinbh")
 
-[node name="FarmingSystem" type="Node2D" parent="."]
-script = ExtResource("3_farming")
+[node name="barn" type="Node2D" parent="."]
+position = Vector2(151.905, 238.55)
 
-[node name="CropManager" type="Node2D" parent="FarmingSystem"]
+[node name="barn_animation" type="AnimatedSprite2D" parent="barn"]
+sprite_frames = SubResource("SpriteFrames_lwdav")
+animation = &"barn_default"
 
-[node name="PanelContainer" type="PanelContainer" parent="FarmingSystem"]
-texture_filter = 1
-clip_contents = true
-offset_left = 340.0
-offset_top = 316.0
-offset_right = 3190.0
-offset_bottom = 452.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_hinbh")
+[node name="shelf" type="Node2D" parent="."]
+position = Vector2(3190.261, 337.057)
 
-[node name="FarmlandTileMapLayer" type="TileMapLayer" parent="FarmingSystem/PanelContainer"]
-texture_filter = 1
-position = Vector2(-340, 67.640015)
-scale = Vector2(2.12, 2.12)
-tile_map_data = PackedByteArray("AAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAnAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAApAAAAAAAAAAAAAAAqAAAAAAAAAAAAAAArAAAAAAAAAAAAAAAtAAAAAAAAAAAAAAAuAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_phrsi")
+[node name="shelf_animation" type="AnimatedSprite2D" parent="shelf"]
+scale = Vector2(0.34666666, 0.34666666)
+sprite_frames = SubResource("SpriteFrames_0b677")
 
-[node name="Warehouse" type="Node2D" parent="."]
-script = ExtResource("4_warehouse")
+[node name="pot" type="Node2D" parent="shelf"]
+position = Vector2(-16.655, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Warehouse"]
-position = Vector2(179, 235)
-texture = ExtResource("5_o75br")
+[node name="pot_animation" type="AnimatedSprite2D" parent="shelf/pot"]
+scale = Vector2(0.135, 0.135)
+sprite_frames = SubResource("SpriteFrames_n31ce")
+animation = &"pot_default"
+
+[node name="hoe" type="Node2D" parent="shelf"]
+position = Vector2(21.033936, -0.75616455)
+
+[node name="hoe_animation" type="AnimatedSprite2D" parent="shelf/hoe"]
+scale = Vector2(0.365, 0.365)
+sprite_frames = SubResource("SpriteFrames_jntf5")
+animation = &"hoe_default"
 
 [node name="shop" type="Node2D" parent="."]
+position = Vector2(3450.44, 190.504)
 
-[node name="shop_anime" type="AnimatedSprite2D" parent="shop"]
-position = Vector2(3437, 136)
-scale = Vector2(0.16383338, 0.16383338)
-sprite_frames = SubResource("SpriteFrames_56vjj")
+[node name="shop_animation" type="AnimatedSprite2D" parent="shop"]
+scale = Vector2(0.12816674, 0.12816674)
+sprite_frames = SubResource("SpriteFrames_lnqt4")
+animation = &"shop_default"
+
+[node name="farming_system" type="Node2D" parent="."]
+script = ExtResource("13_8c1jw")
+
+[node name="farming_tile_map_container" type="PanelContainer" parent="farming_system"]
+clip_contents = true
+offset_left = 316.0
+offset_top = 315.0
+offset_right = 3111.0
+offset_bottom = 452.0
+
+[node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container"]
+position = Vector2(0, 69.000015)
+scale = Vector2(2.13, 2.13)
+tile_set = SubResource("TileSet_1otix")
+
+[node name="fruits" parent="farming_system" instance=ExtResource("12_ts0ht")]

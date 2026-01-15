@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://xaggvm7kkblj"]
+
+[ext_resource type="Texture2D" uid="uid://hg411iuww5fc" path="res://assets/Maps/field/fruit_carrot.png" id="1_iuj4e"]
+[ext_resource type="Texture2D" uid="uid://s0ebnvrghpvf" path="res://assets/Maps/field/fruit_tomato.png" id="2_dgkhl"]
+[ext_resource type="Texture2D" uid="uid://dmxluk48yxsuy" path="res://assets/Maps/field/fruit_wheat.png" id="3_mue5y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5v7wr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6urs"]
+atlas = ExtResource("1_iuj4e")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgupl"]
+atlas = ExtResource("2_dgkhl")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uroet"]
+atlas = ExtResource("3_mue5y")
+region = Rect2(0, 0, 300, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jlcbh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6urs")
+}],
+"loop": true,
+"name": &"carrot",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgupl")
+}],
+"loop": true,
+"name": &"tomato",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uroet")
+}],
+"loop": true,
+"name": &"wheat",
+"speed": 5.0
+}]
+
+[node name="fruits" type="Area2D"]
+
+[node name="collision_shape_fruits" type="CollisionShape2D" parent="."]
+scale = Vector2(3, 3)
+shape = SubResource("CircleShape2D_5v7wr")
+
+[node name="animation_fruits" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1.1444092e-05)
+scale = Vector2(0.19999999, 0.19999999)
+sprite_frames = SubResource("SpriteFrames_jlcbh")
+animation = &"tomato"

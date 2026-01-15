@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl2bwxi7x32jn"
-path="res://.godot/imported/carrot_sprout.png-e21c455961ab4e807007195ba72941fd.ctex"
+uid="uid://d0dc2emhd3kqf"
+path="res://.godot/imported/field_pot.png-07a18d97e82697c4dad8dc5378064bb4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/crops/carrot_sprout.png"
-dest_files=["res://.godot/imported/carrot_sprout.png-e21c455961ab4e807007195ba72941fd.ctex"]
+source_file="res://assets/Maps/field/field_pot.png"
+dest_files=["res://.godot/imported/field_pot.png-07a18d97e82697c4dad8dc5378064bb4.ctex"]
 
 [params]
 

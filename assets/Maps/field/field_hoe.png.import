@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpqkyahskygp3"
-path="res://.godot/imported/wheat_sprout.png-5788aeed0c2508a7843f053c46ac42d0.ctex"
+uid="uid://davnvaqc73ich"
+path="res://.godot/imported/field_hoe.png-ace1dda37566222dd44314d29d202535.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/crops/wheat_sprout.png"
-dest_files=["res://.godot/imported/wheat_sprout.png-5788aeed0c2508a7843f053c46ac42d0.ctex"]
+source_file="res://assets/Maps/field/field_hoe.png"
+dest_files=["res://.godot/imported/field_hoe.png-ace1dda37566222dd44314d29d202535.ctex"]
 
 [params]
 

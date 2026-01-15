@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://davnvaqc73ich"
-path="res://.godot/imported/field_hoe.png-671557fe0b1e5e33de2ed206365aa137.ctex"
+uid="uid://s0ebnvrghpvf"
+path="res://.godot/imported/fruit_tomato.png-f096d730092838e2268fa0a5fea9cc92.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Things/field/field_hoe.png"
-dest_files=["res://.godot/imported/field_hoe.png-671557fe0b1e5e33de2ed206365aa137.ctex"]
+source_file="res://assets/Maps/field/fruit_tomato.png"
+dest_files=["res://.godot/imported/fruit_tomato.png-f096d730092838e2268fa0a5fea9cc92.ctex"]
 
 [params]
 
