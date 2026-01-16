@@ -1,8 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://xaggvm7kkblj"]
+[gd_scene load_steps=11 format=3 uid="uid://xaggvm7kkblj"]
 
 [ext_resource type="Texture2D" uid="uid://hg411iuww5fc" path="res://assets/Maps/field/fruit_carrot.png" id="1_iuj4e"]
 [ext_resource type="Texture2D" uid="uid://s0ebnvrghpvf" path="res://assets/Maps/field/fruit_tomato.png" id="2_dgkhl"]
 [ext_resource type="Texture2D" uid="uid://dmxluk48yxsuy" path="res://assets/Maps/field/fruit_wheat.png" id="3_mue5y"]
+[ext_resource type="Script" uid="uid://bktit7ehyjp0n" path="res://scripts/fruits.gd" id="4_fruits"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iuj4e"]
+friction = 0.5
+rough = true
+bounce = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5v7wr"]
 
@@ -45,7 +51,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="fruits" type="Area2D"]
+[node name="fruits" type="RigidBody2D"]
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_iuj4e")
+script = ExtResource("4_fruits")
 
 [node name="collision_shape_fruits" type="CollisionShape2D" parent="."]
 scale = Vector2(3, 3)

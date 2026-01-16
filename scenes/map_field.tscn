@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://davnvaqc73ich" path="res://assets/Maps/field/field_hoe.png" id="6_mbqsv"]
 [ext_resource type="Texture2D" uid="uid://dk0uipve085r7" path="res://assets/Maps/field/tile_wheat.png" id="7_ticpy"]
 [ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="8_0i05h"]
-[ext_resource type="PackedScene" uid="uid://xaggvm7kkblj" path="res://scenes/fruits.tscn" id="12_ts0ht"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -97,6 +96,8 @@ animations = [{
 "name": &"shop_default",
 "speed": 5.0
 }]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ts0ht"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o75br"]
 texture = ExtResource("4_hinbh")
@@ -195,18 +196,19 @@ position = Vector2(2737, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="invisible_wall_forest" type="StaticBody2D" parent="background&wall"]
+[node name="invisible_wall_field" type="StaticBody2D" parent="background&wall"]
 position = Vector2(-2, -167)
+collision_mask = 2
 
-[node name="down" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
-position = Vector2(1800, 568)
+[node name="down" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
+position = Vector2(1801, 558)
 shape = SubResource("WorldBoundaryShape2D_rrqhf")
 
-[node name="left" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
+[node name="left" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
 position = Vector2(3, 451)
 shape = SubResource("WorldBoundaryShape2D_o75br")
 
-[node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_forest"]
+[node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_hinbh")
 
@@ -257,10 +259,9 @@ offset_left = 316.0
 offset_top = 315.0
 offset_right = 3111.0
 offset_bottom = 452.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
 
 [node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container"]
 position = Vector2(0, 69.000015)
 scale = Vector2(2.13, 2.13)
 tile_set = SubResource("TileSet_1otix")
-
-[node name="fruits" parent="farming_system" instance=ExtResource("12_ts0ht")]

@@ -540,6 +540,7 @@ flat = true
 
 [node name="JiChi" parent="." instance=ExtResource("8_d78ui")]
 position = Vector2(1571, 305)
+collision_layer = 2
 
 [node name="menu_guide" parent="." instance=ExtResource("9_vhsfa")]
 texture_filter = 1
