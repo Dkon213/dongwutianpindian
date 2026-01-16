@@ -11,8 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://b2hjw232oj5cq" path="res://assets/Maps/field/tile_carrot.png" id="6_1otix"]
 [ext_resource type="Texture2D" uid="uid://davnvaqc73ich" path="res://assets/Maps/field/field_hoe.png" id="6_mbqsv"]
 [ext_resource type="Texture2D" uid="uid://dk0uipve085r7" path="res://assets/Maps/field/tile_wheat.png" id="7_ticpy"]
+[ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="8_0i05h"]
 [ext_resource type="PackedScene" uid="uid://xaggvm7kkblj" path="res://scenes/fruits.tscn" id="12_ts0ht"]
-[ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="13_8c1jw"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -249,7 +249,7 @@ sprite_frames = SubResource("SpriteFrames_lnqt4")
 animation = &"shop_default"
 
 [node name="farming_system" type="Node2D" parent="."]
-script = ExtResource("13_8c1jw")
+script = ExtResource("8_0i05h")
 
 [node name="farming_tile_map_container" type="PanelContainer" parent="farming_system"]
 clip_contents = true
