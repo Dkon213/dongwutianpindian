@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2m338c1r2q7x"
-path="res://.godot/imported/field_hoe.png-ace1dda37566222dd44314d29d202535.ctex"
+uid="uid://dvr5w3nd1juhx"
+path="res://.godot/imported/field_hoe_wave.png-4eedfe954c82b95a5b01edd6d62ed29a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Maps/field/field_hoe.png"
-dest_files=["res://.godot/imported/field_hoe.png-ace1dda37566222dd44314d29d202535.ctex"]
+source_file="res://assets/Maps/field/field_hoe_wave.png"
+dest_files=["res://.godot/imported/field_hoe_wave.png-4eedfe954c82b95a5b01edd6d62ed29a.ctex"]
 
 [params]
 

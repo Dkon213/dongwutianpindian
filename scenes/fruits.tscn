@@ -55,6 +55,7 @@ animations = [{
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_iuj4e")
 script = ExtResource("4_fruits")
+horizontal_random_range = 200.0
 
 [node name="collision_shape_fruits" type="CollisionShape2D" parent="."]
 scale = Vector2(3, 3)
