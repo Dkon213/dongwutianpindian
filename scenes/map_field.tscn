@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://snquxgay4etk"]
+[gd_scene load_steps=74 format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://dk0uipve085r7" path="res://assets/Maps/field/tile_wheat.png" id="7_ticpy"]
 [ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="8_0i05h"]
 [ext_resource type="Texture2D" uid="uid://dvr5w3nd1juhx" path="res://assets/Maps/field/field_hoe_wave.png" id="8_mbqsv"]
+[ext_resource type="Script" uid="uid://d20fb1coux4yx" path="res://scripts/pot_controller.gd" id="9_potctl"]
+[ext_resource type="Script" uid="uid://cocwpd7ji5hbm" path="res://scripts/hoe_controller.gd" id="10_hoectl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -53,6 +55,9 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mbqsv"]
+size = Vector2(284.61597, 255.76929)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mbqsv"]
 atlas = ExtResource("5_0i05h")
@@ -219,6 +224,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_mbqsv"]
+radius = 16.528727
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_lwdav"]
 atlas = ExtResource("6_mbqsv")
 region = Rect2(0, 0, 80, 70)
@@ -349,6 +357,9 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kwdqm"]
+size = Vector2(20, 38.33332)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ck7ss"]
 atlas = ExtResource("5_rrqhf")
 region = Rect2(0, 0, 3000, 3000)
@@ -438,6 +449,7 @@ sources/3 = SubResource("TileSetAtlasSource_nmw0k")
 [node name="map_field" type="Node2D"]
 
 [node name="background&wall" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="field_groung1" type="Sprite2D" parent="background&wall"]
 texture_filter = 1
@@ -487,34 +499,57 @@ sprite_frames = SubResource("SpriteFrames_lwdav")
 animation = &"barn_default"
 
 [node name="shelf" type="Node2D" parent="."]
-position = Vector2(3118.011, 313.36)
+position = Vector2(3168.011, 313.36)
 scale = Vector2(1.5, 1.5)
 
 [node name="shelf_animation" type="AnimatedSprite2D" parent="shelf"]
 scale = Vector2(0.34666666, 0.34666666)
 sprite_frames = SubResource("SpriteFrames_0b677")
 
-[node name="pot" type="Node2D" parent="shelf"]
-position = Vector2(-21.55, -1.77)
-scale = Vector2(1.385, 1.385)
+[node name="shelf_area" type="Area2D" parent="shelf"]
+scale = Vector2(0.34666666, 0.34666666)
 
-[node name="pot_animation" type="AnimatedSprite2D" parent="shelf/pot"]
+[node name="shelf_shape" type="CollisionShape2D" parent="shelf/shelf_area"]
+position = Vector2(-3.8676758, 17.577026)
+shape = SubResource("RectangleShape2D_mbqsv")
+
+[node name="pot" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(3135.686, 310.705)
+scale = Vector2(2.0774999, 2.0774999)
+script = ExtResource("9_potctl")
+
+[node name="pot_animation" type="AnimatedSprite2D" parent="pot"]
 texture_filter = 1
 scale = Vector2(0.54, 0.54)
 sprite_frames = SubResource("SpriteFrames_kggy2")
 animation = &"pot_default"
 autoplay = "pot_default"
-frame_progress = 0.22463538
 
-[node name="hoe" type="Node2D" parent="shelf"]
-position = Vector2(26.864, -6.171)
+[node name="pot_area" type="Area2D" parent="pot"]
 
-[node name="hoe_animation" type="AnimatedSprite2D" parent="shelf/hoe"]
+[node name="pot_shape" type="CollisionShape2D" parent="pot/pot_area"]
+shape = SubResource("CircleShape2D_mbqsv")
+
+[node name="hoe" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(3208.307, 304.103)
+scale = Vector2(1.5, 1.5)
+script = ExtResource("10_hoectl")
+
+[node name="hoe_animation" type="AnimatedSprite2D" parent="hoe"]
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_toylf")
 animation = &"hoe_default"
 autoplay = "hoe_default"
+
+[node name="hoe_area" type="Area2D" parent="hoe"]
+scale = Vector2(2, 2)
+
+[node name="hoe_shape" type="CollisionShape2D" parent="hoe/hoe_area"]
+position = Vector2(0, 0.4655075)
+shape = SubResource("RectangleShape2D_kwdqm")
 
 [node name="shop" type="Node2D" parent="."]
 position = Vector2(3450.44, 190.504)

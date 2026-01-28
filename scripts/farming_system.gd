@@ -43,6 +43,10 @@ const PlantDB := {
 
 var _plots: Array[FarmPlot] = []
 
+# 标记水壶/锄头是否正在跟随鼠标移动
+var is_pot_following_mouse: bool = false
+var is_hoe_following_mouse: bool = false
+
 # 预加载果实场景
 const FRUIT_SCENE = preload("res://scenes/fruits.tscn")
 
@@ -65,6 +69,10 @@ func _init_plots() -> void:
 
 #处理输入事件（使用 _input 而不是 _unhandled_input，因为 PanelContainer 会拦截事件）
 func _input(event: InputEvent) -> void:
+	# 只有当有工具在跟随鼠标时，才允许处理地块输入
+	if not is_pot_following_mouse and not is_hoe_following_mouse:
+		return
+
 	var mouse_event := event as InputEventMouseButton
 	if mouse_event == null:
 		return
@@ -102,29 +110,52 @@ func _on_column_clicked(column: int) -> void:
 
 	var plot := _plots[column]
 
-	# 状态机：NORMAL → TILLED → SEED → SPROUT → MATURE → 收获并清空
-	if plot.land_state == LandState.NORMAL and plot.growth_stage == GrowthStage.NONE:
-		plot.land_state = LandState.TILLED
-	elif plot.land_state == LandState.TILLED and plot.growth_stage == GrowthStage.NONE:
-		# 目前只默认种 carrot
-		plot.plant_type = "carrot"
-		plot.growth_stage = GrowthStage.SEED
-	elif plot.growth_stage == GrowthStage.SEED:
-		plot.growth_stage = GrowthStage.SPROUT
-	elif plot.growth_stage == GrowthStage.SPROUT:
-		plot.growth_stage = GrowthStage.MATURE
-	elif plot.growth_stage == GrowthStage.MATURE:
-		# 收获
-		if plot.plant_type != "":
-			var plant_global_pos := _get_plant_global_center(column)
-			fruit_spawned.emit(plant_global_pos, plot.plant_type)
+	# 当锄头跟随鼠标时：
+	# - 只负责耕地：NORMAL → TILLED
+	if is_hoe_following_mouse:
+		if plot.land_state == LandState.NORMAL and plot.growth_stage == GrowthStage.NONE:
+			# 耕地：把 NORMAL 变成 TILLED
+			plot.land_state = LandState.TILLED
+			# 锄头只负责把地从 NORMAL 变为 TILLED，不处理后续生长
 
-		# 重置为无植物 & 普通土地
-		plot.plant_type = ""
-		plot.growth_stage = GrowthStage.NONE
-		plot.land_state = LandState.NORMAL
+	# 当水壶跟随鼠标时：
+	# - 只负责在已耕地的基础上处理：TILLED → SEED → SPROUT → MATURE
+	# - 如果再点击 MATURE，则直接结成果实，并把地块重置为 NORMAL & NONE
+	if is_pot_following_mouse:
+		# 只有已经被锄头耕过的土地才响应水壶
+		if plot.land_state != LandState.TILLED:
+			_update_column_tiles(column)
+			return
+
+		if plot.growth_stage == GrowthStage.NONE:
+			# 第一次浇水：播种 + 变为 SEED（默认 carrot）
+			plot.plant_type = "carrot"
+			plot.growth_stage = GrowthStage.SEED
+		elif plot.growth_stage == GrowthStage.SEED:
+			# SEED → SPROUT
+			plot.growth_stage = GrowthStage.SPROUT
+		elif plot.growth_stage == GrowthStage.SPROUT:
+			# SPROUT → MATURE
+			plot.growth_stage = GrowthStage.MATURE
+		elif plot.growth_stage == GrowthStage.MATURE:
+			# MATURE 再次被水壶点击：直接结出果实并清空该地块
+			if plot.plant_type != "":
+				var plant_global_pos := _get_plant_global_center(column)
+				fruit_spawned.emit(plant_global_pos, plot.plant_type)
+
+			plot.plant_type = ""
+			plot.growth_stage = GrowthStage.NONE
+			plot.land_state = LandState.NORMAL
 
 	_update_column_tiles(column)
+
+
+func set_pot_following_mouse(value: bool) -> void:
+	is_pot_following_mouse = value
+
+
+func set_hoe_following_mouse(value: bool) -> void:
+	is_hoe_following_mouse = value
 
 
 func _get_plant_global_center(column: int) -> Vector2:
