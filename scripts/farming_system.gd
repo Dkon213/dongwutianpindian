@@ -40,6 +40,8 @@ const PlantDB := {
 
 @onready var _container: PanelContainer = $farming_tile_map_container
 @onready var _tile_map: TileMapLayer = $farming_tile_map_container/farming_tile_map
+@onready var _pot_controller: Node = $"../pot"
+@onready var _hoe_controller: Node = $"../hoe"
 
 var _plots: Array[FarmPlot] = []
 
@@ -87,6 +89,12 @@ func _input(event: InputEvent) -> void:
 	var rect := _container.get_global_rect()
 	if not rect.has_point(global_pos):
 		return
+
+	# 当鼠标在 farming_tile_map_container 范围内点击时，根据当前跟随的工具播放对应动画
+	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
+		_pot_controller.play_use_animation()
+	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
+		_hoe_controller.play_use_animation()
 
 	# 将全局坐标转换为 TileMapLayer 的本地坐标，再转换为网格坐标
 	var local_on_tilemap := _tile_map.to_local(global_pos)

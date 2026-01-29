@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://snquxgay4etk"]
+[gd_scene format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
@@ -149,7 +149,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mbqsv")
 }],
-"loop": true,
+"loop": false,
 "name": &"pot_default",
 "speed": 5.0
 }, {
@@ -181,7 +181,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6o88t")
 }],
-"loop": true,
+"loop": false,
 "name": &"pot_light",
 "speed": 12.0
 }, {
@@ -219,7 +219,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_40c7f")
 }],
-"loop": true,
+"loop": false,
 "name": &"pot_water",
 "speed": 10.0
 }]
@@ -297,7 +297,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lwdav")
 }],
-"loop": true,
+"loop": false,
 "name": &"hoe_default",
 "speed": 5.0
 }, {
@@ -326,7 +326,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vdxpd")
 }],
-"loop": true,
+"loop": false,
 "name": &"hoe_light",
 "speed": 10.0
 }, {
@@ -352,7 +352,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p2mwt")
 }],
-"loop": true,
+"loop": false,
 "name": &"hoe_wave",
 "speed": 12.0
 }]
@@ -446,123 +446,121 @@ sources/1 = SubResource("TileSetAtlasSource_hinbh")
 sources/2 = SubResource("TileSetAtlasSource_phrsi")
 sources/3 = SubResource("TileSetAtlasSource_nmw0k")
 
-[node name="map_field" type="Node2D"]
+[node name="map_field" type="Node2D" unique_id=1120339112]
 
-[node name="background&wall" type="Node2D" parent="."]
+[node name="background&wall" type="Node2D" parent="." unique_id=144467476]
 metadata/_edit_lock_ = true
 
-[node name="field_groung1" type="Sprite2D" parent="background&wall"]
+[node name="field_groung1" type="Sprite2D" parent="background&wall" unique_id=1297601942]
 texture_filter = 1
 position = Vector2(912, 406.00006)
 scale = Vector2(1.425, 1.42)
 texture = ExtResource("1_d4hxt")
 
-[node name="field_ground2" type="Sprite2D" parent="background&wall"]
+[node name="field_ground2" type="Sprite2D" parent="background&wall" unique_id=407577142]
 texture_filter = 1
 position = Vector2(2736.0002, 406)
 scale = Vector2(1.4285746, 1.418567)
 texture = ExtResource("1_d4hxt")
 
-[node name="field_trees1" type="Sprite2D" parent="background&wall"]
+[node name="field_trees1" type="Sprite2D" parent="background&wall" unique_id=315381257]
 texture_filter = 1
 position = Vector2(913, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="field_trees2" type="Sprite2D" parent="background&wall"]
+[node name="field_trees2" type="Sprite2D" parent="background&wall" unique_id=1432529564]
 texture_filter = 1
 position = Vector2(2737, 293)
 scale = Vector2(1.425, 1.425)
 texture = ExtResource("2_n6xbp")
 
-[node name="invisible_wall_field" type="StaticBody2D" parent="background&wall"]
+[node name="invisible_wall_field" type="StaticBody2D" parent="background&wall" unique_id=1562639302]
 position = Vector2(-2, -167)
 collision_mask = 2
 
-[node name="down" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
+[node name="down" type="CollisionShape2D" parent="background&wall/invisible_wall_field" unique_id=131746233]
 position = Vector2(1801, 558)
 shape = SubResource("WorldBoundaryShape2D_rrqhf")
 
-[node name="left" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
+[node name="left" type="CollisionShape2D" parent="background&wall/invisible_wall_field" unique_id=2019022768]
 position = Vector2(3, 451)
 shape = SubResource("WorldBoundaryShape2D_o75br")
 
-[node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_field"]
+[node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_field" unique_id=1932526452]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_hinbh")
 
-[node name="barn" type="Node2D" parent="."]
+[node name="barn" type="Node2D" parent="." unique_id=13575241]
 position = Vector2(151.905, 238.55)
 
-[node name="barn_animation" type="AnimatedSprite2D" parent="barn"]
+[node name="barn_animation" type="AnimatedSprite2D" parent="barn" unique_id=2049399468]
 sprite_frames = SubResource("SpriteFrames_lwdav")
 animation = &"barn_default"
 
-[node name="shelf" type="Node2D" parent="."]
+[node name="shelf" type="Node2D" parent="." unique_id=1205715001]
 position = Vector2(3168.011, 313.36)
 scale = Vector2(1.5, 1.5)
 
-[node name="shelf_animation" type="AnimatedSprite2D" parent="shelf"]
+[node name="shelf_animation" type="AnimatedSprite2D" parent="shelf" unique_id=802725598]
 scale = Vector2(0.34666666, 0.34666666)
 sprite_frames = SubResource("SpriteFrames_0b677")
 
-[node name="shelf_area" type="Area2D" parent="shelf"]
+[node name="shelf_area" type="Area2D" parent="shelf" unique_id=1004928374]
 scale = Vector2(0.34666666, 0.34666666)
 
-[node name="shelf_shape" type="CollisionShape2D" parent="shelf/shelf_area"]
+[node name="shelf_shape" type="CollisionShape2D" parent="shelf/shelf_area" unique_id=608799269]
 position = Vector2(-3.8676758, 17.577026)
 shape = SubResource("RectangleShape2D_mbqsv")
 
-[node name="pot" type="Node2D" parent="."]
-z_index = 1
+[node name="pot" type="Node2D" parent="." unique_id=431672944]
 position = Vector2(3135.686, 310.705)
 scale = Vector2(2.0774999, 2.0774999)
 script = ExtResource("9_potctl")
 
-[node name="pot_animation" type="AnimatedSprite2D" parent="pot"]
+[node name="pot_animation" type="AnimatedSprite2D" parent="pot" unique_id=268863143]
 texture_filter = 1
 scale = Vector2(0.54, 0.54)
 sprite_frames = SubResource("SpriteFrames_kggy2")
-animation = &"pot_default"
+animation = &"pot_light"
 autoplay = "pot_default"
 
-[node name="pot_area" type="Area2D" parent="pot"]
+[node name="pot_area" type="Area2D" parent="pot" unique_id=834202716]
 
-[node name="pot_shape" type="CollisionShape2D" parent="pot/pot_area"]
+[node name="pot_shape" type="CollisionShape2D" parent="pot/pot_area" unique_id=762485878]
 shape = SubResource("CircleShape2D_mbqsv")
 
-[node name="hoe" type="Node2D" parent="."]
-z_index = 1
+[node name="hoe" type="Node2D" parent="." unique_id=177539916]
 position = Vector2(3208.307, 304.103)
 scale = Vector2(1.5, 1.5)
 script = ExtResource("10_hoectl")
 
-[node name="hoe_animation" type="AnimatedSprite2D" parent="hoe"]
+[node name="hoe_animation" type="AnimatedSprite2D" parent="hoe" unique_id=1212205021]
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_toylf")
 animation = &"hoe_default"
 autoplay = "hoe_default"
 
-[node name="hoe_area" type="Area2D" parent="hoe"]
+[node name="hoe_area" type="Area2D" parent="hoe" unique_id=200707500]
 scale = Vector2(2, 2)
 
-[node name="hoe_shape" type="CollisionShape2D" parent="hoe/hoe_area"]
+[node name="hoe_shape" type="CollisionShape2D" parent="hoe/hoe_area" unique_id=1815316819]
 position = Vector2(0, 0.4655075)
 shape = SubResource("RectangleShape2D_kwdqm")
 
-[node name="shop" type="Node2D" parent="."]
+[node name="shop" type="Node2D" parent="." unique_id=1969378773]
 position = Vector2(3450.44, 190.504)
 
-[node name="shop_animation" type="AnimatedSprite2D" parent="shop"]
+[node name="shop_animation" type="AnimatedSprite2D" parent="shop" unique_id=1341143601]
 scale = Vector2(0.12816674, 0.12816674)
 sprite_frames = SubResource("SpriteFrames_lnqt4")
 animation = &"shop_default"
 
-[node name="farming_system" type="Node2D" parent="."]
+[node name="farming_system" type="Node2D" parent="." unique_id=1355085591]
 script = ExtResource("8_0i05h")
 
-[node name="farming_tile_map_container" type="PanelContainer" parent="farming_system"]
+[node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
 clip_contents = true
 offset_left = 316.0
 offset_top = 315.0
@@ -570,7 +568,7 @@ offset_right = 3111.0
 offset_bottom = 452.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
 
-[node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container"]
+[node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container" unique_id=1405946565]
 position = Vector2(0, 69.000015)
 scale = Vector2(2.13, 2.13)
 tile_set = SubResource("TileSet_1otix")
