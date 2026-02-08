@@ -26,6 +26,77 @@ normal = Vector2(1, 0)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hinbh"]
 normal = Vector2(-1, 0)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ts0ht"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o75br"]
+texture = ExtResource("4_hinbh")
+texture_region_size = Vector2i(32, 32)
+0:0/next_alternative_id = 3
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hinbh"]
+texture = ExtResource("6_1otix")
+texture_region_size = Vector2i(32, 32)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/animation_frame_4/duration = 1.0
+2:0/0 = 0
+7:0/animation_frame_0/duration = 1.0
+7:0/animation_frame_1/duration = 1.0
+7:0/animation_frame_2/duration = 1.0
+7:0/animation_frame_3/duration = 1.0
+7:0/animation_frame_4/duration = 1.0
+7:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_phrsi"]
+texture = ExtResource("5_phrsi")
+texture_region_size = Vector2i(32, 32)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/0 = 0
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/animation_frame_4/duration = 1.0
+2:0/0 = 0
+7:0/animation_frame_0/duration = 1.0
+7:0/animation_frame_1/duration = 1.0
+7:0/animation_frame_2/duration = 1.0
+7:0/animation_frame_3/duration = 1.0
+7:0/animation_frame_4/duration = 1.0
+7:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmw0k"]
+texture = ExtResource("7_ticpy")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/animation_frame_0/duration = 1.0
+1:0/animation_frame_1/duration = 1.0
+1:0/animation_frame_2/duration = 1.0
+1:0/animation_frame_3/duration = 1.0
+1:0/animation_frame_4/duration = 1.0
+1:0/0 = 0
+6:0/animation_frame_0/duration = 1.0
+6:0/animation_frame_1/duration = 1.0
+6:0/animation_frame_2/duration = 1.0
+6:0/animation_frame_3/duration = 1.0
+6:0/animation_frame_4/duration = 1.0
+6:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_1otix"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_o75br")
+sources/1 = SubResource("TileSetAtlasSource_hinbh")
+sources/2 = SubResource("TileSetAtlasSource_phrsi")
+sources/3 = SubResource("TileSetAtlasSource_nmw0k")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_kwdqm"]
 atlas = ExtResource("3_ticpy")
 region = Rect2(0, 0, 300, 300)
@@ -375,77 +446,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ts0ht"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o75br"]
-texture = ExtResource("4_hinbh")
-texture_region_size = Vector2i(32, 32)
-0:0/next_alternative_id = 3
-0:0/0 = 0
-1:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hinbh"]
-texture = ExtResource("6_1otix")
-texture_region_size = Vector2i(32, 32)
-0:0/animation_frame_0/duration = 1.0
-0:0/animation_frame_1/duration = 1.0
-0:0/0 = 0
-2:0/animation_frame_0/duration = 1.0
-2:0/animation_frame_1/duration = 1.0
-2:0/animation_frame_2/duration = 1.0
-2:0/animation_frame_3/duration = 1.0
-2:0/animation_frame_4/duration = 1.0
-2:0/0 = 0
-7:0/animation_frame_0/duration = 1.0
-7:0/animation_frame_1/duration = 1.0
-7:0/animation_frame_2/duration = 1.0
-7:0/animation_frame_3/duration = 1.0
-7:0/animation_frame_4/duration = 1.0
-7:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_phrsi"]
-texture = ExtResource("5_phrsi")
-texture_region_size = Vector2i(32, 32)
-0:0/animation_frame_0/duration = 1.0
-0:0/animation_frame_1/duration = 1.0
-0:0/0 = 0
-2:0/animation_frame_0/duration = 1.0
-2:0/animation_frame_1/duration = 1.0
-2:0/animation_frame_2/duration = 1.0
-2:0/animation_frame_3/duration = 1.0
-2:0/animation_frame_4/duration = 1.0
-2:0/0 = 0
-7:0/animation_frame_0/duration = 1.0
-7:0/animation_frame_1/duration = 1.0
-7:0/animation_frame_2/duration = 1.0
-7:0/animation_frame_3/duration = 1.0
-7:0/animation_frame_4/duration = 1.0
-7:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmw0k"]
-texture = ExtResource("7_ticpy")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/animation_frame_0/duration = 1.0
-1:0/animation_frame_1/duration = 1.0
-1:0/animation_frame_2/duration = 1.0
-1:0/animation_frame_3/duration = 1.0
-1:0/animation_frame_4/duration = 1.0
-1:0/0 = 0
-6:0/animation_frame_0/duration = 1.0
-6:0/animation_frame_1/duration = 1.0
-6:0/animation_frame_2/duration = 1.0
-6:0/animation_frame_3/duration = 1.0
-6:0/animation_frame_4/duration = 1.0
-6:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_1otix"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_o75br")
-sources/1 = SubResource("TileSetAtlasSource_hinbh")
-sources/2 = SubResource("TileSetAtlasSource_phrsi")
-sources/3 = SubResource("TileSetAtlasSource_nmw0k")
-
 [node name="map_field" type="Node2D" unique_id=1120339112]
 
 [node name="background&wall" type="Node2D" parent="." unique_id=144467476]
@@ -490,6 +490,23 @@ shape = SubResource("WorldBoundaryShape2D_o75br")
 [node name="right" type="CollisionShape2D" parent="background&wall/invisible_wall_field" unique_id=1932526452]
 position = Vector2(3648, 452)
 shape = SubResource("WorldBoundaryShape2D_hinbh")
+
+[node name="farming_system" type="Node2D" parent="." unique_id=1355085591]
+script = ExtResource("8_0i05h")
+hold_repeat_interval = 0.1
+
+[node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
+clip_contents = true
+offset_left = 316.0
+offset_top = 315.0
+offset_right = 3111.0
+offset_bottom = 452.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
+
+[node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container" unique_id=1405946565]
+position = Vector2(0, 69.000015)
+scale = Vector2(2.13, 2.13)
+tile_set = SubResource("TileSet_1otix")
 
 [node name="barn" type="Node2D" parent="." unique_id=13575241]
 position = Vector2(151.905, 238.55)
@@ -556,19 +573,3 @@ position = Vector2(3450.44, 190.504)
 scale = Vector2(0.12816674, 0.12816674)
 sprite_frames = SubResource("SpriteFrames_lnqt4")
 animation = &"shop_default"
-
-[node name="farming_system" type="Node2D" parent="." unique_id=1355085591]
-script = ExtResource("8_0i05h")
-
-[node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
-clip_contents = true
-offset_left = 316.0
-offset_top = 315.0
-offset_right = 3111.0
-offset_bottom = 452.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
-
-[node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container" unique_id=1405946565]
-position = Vector2(0, 69.000015)
-scale = Vector2(2.13, 2.13)
-tile_set = SubResource("TileSet_1otix")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://bvx5xobt1mbos"]
+[gd_scene format=3 uid="uid://bvx5xobt1mbos"]
 
 [ext_resource type="Script" uid="uid://7y23aqm45dwe" path="res://scripts/root_node.gd" id="1_ynfbw"]
 [ext_resource type="PackedScene" uid="uid://snquxgay4etk" path="res://scenes/map_field.tscn" id="2_vhsfa"]
@@ -435,12 +435,12 @@ animations = [{
 "speed": 2.0
 }]
 
-[node name="RootNode" type="Node2D"]
+[node name="RootNode" type="Node2D" unique_id=1320791067]
 script = ExtResource("1_ynfbw")
 
-[node name="map_field" parent="." instance=ExtResource("2_vhsfa")]
+[node name="map_field" parent="." unique_id=412792461 instance=ExtResource("2_vhsfa")]
 
-[node name="menu_left" type="PanelContainer" parent="."]
+[node name="menu_left" type="PanelContainer" parent="." unique_id=774465611]
 clip_contents = true
 custom_minimum_size = Vector2(960, 250)
 offset_right = 1302.0
@@ -450,7 +450,7 @@ size_flags_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_l3gbx")
 metadata/_edit_use_anchors_ = true
 
-[node name="1" type="AnimatedSprite2D" parent="menu_left"]
+[node name="1" type="AnimatedSprite2D" parent="menu_left" unique_id=703444720]
 texture_filter = 1
 position = Vector2(104, 166)
 scale = Vector2(0.339947, 0.339947)
@@ -460,7 +460,7 @@ autoplay = "defalt"
 frame = 5
 frame_progress = 0.857075
 
-[node name="2" type="AnimatedSprite2D" parent="menu_left"]
+[node name="2" type="AnimatedSprite2D" parent="menu_left" unique_id=1349345826]
 texture_filter = 1
 position = Vector2(601, 87.00001)
 scale = Vector2(0.491195, 0.491195)
@@ -468,7 +468,7 @@ sprite_frames = SubResource("SpriteFrames_qvdbn")
 autoplay = "default"
 frame_progress = 0.490758
 
-[node name="3" type="AnimatedSprite2D" parent="menu_left"]
+[node name="3" type="AnimatedSprite2D" parent="menu_left" unique_id=705009443]
 texture_filter = 1
 position = Vector2(1124, 162.00002)
 scale = Vector2(0.385157, 0.385156)
@@ -476,7 +476,7 @@ sprite_frames = SubResource("SpriteFrames_fekcl")
 autoplay = "default"
 frame_progress = 0.28904
 
-[node name="menu_right" type="PanelContainer" parent="."]
+[node name="menu_right" type="PanelContainer" parent="." unique_id=1146074822]
 clip_contents = true
 custom_minimum_size = Vector2(1300, 250)
 offset_right = 1395.0
@@ -484,7 +484,7 @@ offset_bottom = 300.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_d78ui")
 metadata/_edit_use_anchors_ = true
 
-[node name="x" type="AnimatedSprite2D" parent="menu_right"]
+[node name="x" type="AnimatedSprite2D" parent="menu_right" unique_id=288965366]
 texture_filter = 1
 position = Vector2(1250, 63)
 scale = Vector2(0.7716669, 0.96000004)
@@ -492,7 +492,7 @@ sprite_frames = SubResource("SpriteFrames_yd5j6")
 autoplay = "default"
 frame_progress = 0.709443
 
-[node name="Button" type="Button" parent="menu_right/x"]
+[node name="Button" type="Button" parent="menu_right/x" unique_id=953556724]
 offset_left = -58.0
 offset_top = -41.0
 offset_right = 57.0
@@ -501,7 +501,7 @@ focus_mode = 0
 flat = true
 metadata/_edit_use_anchors_ = true
 
-[node name="4" type="AnimatedSprite2D" parent="menu_right"]
+[node name="4" type="AnimatedSprite2D" parent="menu_right" unique_id=677820999]
 texture_filter = 1
 position = Vector2(617, 88)
 scale = Vector2(0.604492, 0.604492)
@@ -509,7 +509,7 @@ sprite_frames = SubResource("SpriteFrames_6e56t")
 autoplay = "default"
 frame_progress = 0.113348
 
-[node name="5" type="AnimatedSprite2D" parent="menu_right"]
+[node name="5" type="AnimatedSprite2D" parent="menu_right" unique_id=1090969064]
 texture_filter = 1
 position = Vector2(205, 197.00002)
 scale = Vector2(0.393765, 0.351562)
@@ -517,7 +517,7 @@ sprite_frames = SubResource("SpriteFrames_jipf2")
 autoplay = "default"
 frame_progress = 0.176488
 
-[node name="6" type="AnimatedSprite2D" parent="menu_right"]
+[node name="6" type="AnimatedSprite2D" parent="menu_right" unique_id=1430103936]
 texture_filter = 1
 position = Vector2(921, 186)
 scale = Vector2(0.326902, 0.32695)
@@ -525,7 +525,7 @@ sprite_frames = SubResource("SpriteFrames_m0wh4")
 autoplay = "default"
 frame_progress = 0.78963
 
-[node name="exit_button" type="Button" parent="menu_right/6"]
+[node name="exit_button" type="Button" parent="menu_right/6" unique_id=708403934]
 offset_left = -247.7807
 offset_top = -39.761414
 offset_right = 238.60358
@@ -538,11 +538,11 @@ text = "退出
 "
 flat = true
 
-[node name="JiChi" parent="." instance=ExtResource("8_d78ui")]
+[node name="JiChi" parent="." unique_id=504818564 instance=ExtResource("8_d78ui")]
 position = Vector2(1571, 305)
 collision_layer = 2
 
-[node name="menu_guide" parent="." instance=ExtResource("9_vhsfa")]
+[node name="menu_guide" parent="." unique_id=1640993150 instance=ExtResource("9_vhsfa")]
 texture_filter = 1
 position = Vector2(3170, 138)
 scale = Vector2(0.25, 0.25)

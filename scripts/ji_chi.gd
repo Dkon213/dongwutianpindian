@@ -311,6 +311,15 @@ func play_turn_anim(turn_type: AnimState, from_dir: String, to_dir: String):
 
 
 
+#----------------------------------------------检查水壶/锄头是否正在跟随鼠标---------------------------------------------------------------
+# 当 pot 或 hoe 正在跟随鼠标时，不应在 ji_chi 中触发角色跟随
+func _is_farming_tool_following_mouse() -> bool:
+	var farming_system = get_parent().get_node_or_null("map_field/farming_system")
+	if farming_system == null:
+		return false
+	return farming_system.is_pot_following_mouse or farming_system.is_hoe_following_mouse
+
+
 #----------------------------------------------检查是否点击到UI元素---------------------------------------------------------------
 # 检查鼠标点击位置是否有UI元素（按钮等可交互对象）
 func _is_clicking_ui_element(_event: InputEventMouseButton) -> bool:
@@ -347,6 +356,10 @@ func _check_control_at_position(node: Node, global_mouse_pos: Vector2) -> bool:
 func _input(event: InputEvent):
 	# 处理鼠标按下事件
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 当水壶或锄头正在跟随鼠标时，不触发角色跟随（不打断角色当前动作）
+		if _is_farming_tool_following_mouse():
+			return
+
 		# 检查点击位置是否有UI元素（按钮等可交互对象）
 		if _is_clicking_ui_element(event):
 			return # 如果点击到了UI元素，不触发角色移动
@@ -389,6 +402,10 @@ func _input(event: InputEvent):
 	
 	# 处理鼠标松开事件
 	elif event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 当水壶或锄头正在跟随鼠标时，不处理松开（不触发角色跟随相关逻辑）
+		if _is_farming_tool_following_mouse():
+			return
+
 		is_mouse_pressed = false # 标记鼠标已松开
 		last_mouse_position_x = get_global_mouse_position().x # 记录鼠标松开时的最后位置
 		

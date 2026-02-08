@@ -49,6 +49,11 @@ var _plots: Array[FarmPlot] = []
 var is_pot_following_mouse: bool = false
 var is_hoe_following_mouse: bool = false
 
+# 长按重复：鼠标按住时每隔该秒数执行一次浇水/耕地
+var _mouse_held_for_farming: bool = false # 标记鼠标是否按住
+var _hold_repeat_timer: Timer # 长按重复计时器
+@export var hold_repeat_interval: float = 0.2 # 长按重复间隔时间（秒）
+
 # 预加载果实场景
 const FRUIT_SCENE = preload("res://scenes/fruits.tscn")
 
@@ -60,7 +65,13 @@ func _ready() -> void:
 	_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# 连接信号，当果实被收获时自动实例化
 	fruit_spawned.connect(_on_fruit_spawned)
-	# 注意：_input 函数不需要 set_process_unhandled_input，它会自动被调用
+
+	# 长按重复计时器：单次 0.5 秒，超时后执行一次操作并再次启动
+	_hold_repeat_timer = Timer.new() #创建计时器
+	_hold_repeat_timer.one_shot = true #单次模式
+	_hold_repeat_timer.wait_time = hold_repeat_interval #设置间隔时间
+	_hold_repeat_timer.timeout.connect(_on_hold_repeat_timeout) #连接超时信号
+	add_child(_hold_repeat_timer) #添加到场景树
 
 #初始化地块
 func _init_plots() -> void:
@@ -75,41 +86,52 @@ func _input(event: InputEvent) -> void:
 	if not is_pot_following_mouse and not is_hoe_following_mouse:
 		return
 
-	var mouse_event := event as InputEventMouseButton
-	if mouse_event == null:
-		return
-	if not mouse_event.pressed or mouse_event.button_index != MOUSE_BUTTON_LEFT:
+	var mouse_event := event as InputEventMouseButton # 把事件转换为鼠标按钮事件
+	if mouse_event == null or mouse_event.button_index != MOUSE_BUTTON_LEFT: # 如果事件为空或者按钮不是左键，则返回
 		return
 
-	# 在 Godot 4 中，mouse_event.position 是画布坐标，需要转换为全局坐标
-	# 使用 get_global_mouse_position() 获取全局鼠标位置
-	var global_pos: Vector2 = get_global_mouse_position()
+	# 左键松开：停止长按重复
+	if not mouse_event.pressed:
+		_mouse_held_for_farming = false # 停止长按重复
+		_hold_repeat_timer.stop() # 停止计时器
+		return
 
-	# 限制在 PanelContainer 的可见范围内
+	# 左键按下：在当前鼠标位置执行一次浇水/耕地，并开启长按每 0.5 秒重复
+	if not _do_farming_action_at_mouse(): # 如果执行失败，则返回
+		return
+	get_viewport().set_input_as_handled() # 设置输入为已处理
+	_mouse_held_for_farming = true # 开启长按重复
+	_hold_repeat_timer.start(hold_repeat_interval) # 启动计时器
+
+
+# 在当前鼠标位置执行一次浇水（pot）或耕地（hoe），若位置无效则返回 false
+func _do_farming_action_at_mouse() -> bool:
+	var global_pos: Vector2 = get_global_mouse_position() # 获取鼠标全局位置
 	var rect := _container.get_global_rect()
 	if not rect.has_point(global_pos):
-		return
+		return false # 如果鼠标位置不在地块范围内，则返回false
 
-	# 当鼠标在 farming_tile_map_container 范围内点击时，根据当前跟随的工具播放对应动画
+	# 根据当前跟随的工具播放使用动画
 	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
 		_pot_controller.play_use_animation()
 	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
 		_hoe_controller.play_use_animation()
 
-	# 将全局坐标转换为 TileMapLayer 的本地坐标，再转换为网格坐标
 	var local_on_tilemap := _tile_map.to_local(global_pos)
 	var cell: Vector2i = _tile_map.local_to_map(local_on_tilemap)
+	if cell.x < MIN_X or cell.x > MAX_X or cell.y < PLANT_Y or cell.y > LAND_Y:
+		return false # 如果鼠标位置不在地块范围内，则返回false
 
-
-	# 检查网格坐标是否在有效范围内
-	if cell.x < MIN_X or cell.x > MAX_X:
-		return
-	if cell.y < PLANT_Y or cell.y > LAND_Y:
-		return
-
-	# 只有在有效范围内才标记事件已处理，防止被其他节点处理（比如角色移动）
-	get_viewport().set_input_as_handled()
 	_on_column_clicked(cell.x)
+	return true # 如果鼠标位置在地块范围内，则返回true
+
+
+func _on_hold_repeat_timeout() -> void:
+	if not _mouse_held_for_farming: # 如果鼠标没有按住，则返回
+		return
+	# 长按期间仍用当前鼠标位置执行一次操作
+	_do_farming_action_at_mouse()
+	_hold_repeat_timer.start(hold_repeat_interval)
 
 
 func _on_column_clicked(column: int) -> void:
