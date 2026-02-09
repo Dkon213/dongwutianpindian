@@ -42,8 +42,15 @@ const PlantDB := {
 @onready var _tile_map: TileMapLayer = $farming_tile_map_container/farming_tile_map
 @onready var _pot_controller: Node = $"../pot"
 @onready var _hoe_controller: Node = $"../hoe"
+@onready var _barn: Node2D = $"../barn"
 
 var _plots: Array[FarmPlot] = []
+
+# 果实飞向谷仓的吸入动画时长（秒）
+@export var collect_fly_duration: float = 0.4
+
+# 上一帧鼠标所在的果实（用于 _process 中“进入”检测，避免重复触发）
+var _last_fruit_under_mouse: Node = null
 
 # 标记水壶/锄头是否正在跟随鼠标移动
 var is_pot_following_mouse: bool = false
@@ -52,7 +59,7 @@ var is_hoe_following_mouse: bool = false
 # 长按重复：鼠标按住时每隔该秒数执行一次浇水/耕地
 var _mouse_held_for_farming: bool = false # 标记鼠标是否按住
 var _hold_repeat_timer: Timer # 长按重复计时器
-@export var hold_repeat_interval: float = 0.2 # 长按重复间隔时间（秒）
+@export var hold_repeat_interval: float = 0.2 # hoe和pot长按状态下执行浇水/耕地操作的间隔时间（秒）
 
 # 预加载果实场景
 const FRUIT_SCENE = preload("res://scenes/fruits.tscn")
@@ -72,6 +79,30 @@ func _ready() -> void:
 	_hold_repeat_timer.wait_time = hold_repeat_interval #设置间隔时间
 	_hold_repeat_timer.timeout.connect(_on_hold_repeat_timeout) #连接超时信号
 	add_child(_hold_repeat_timer) #添加到场景树
+
+# 当未持工具时，用物理检测鼠标下的果实并触发“吸入”（解决 Control 遮挡导致 mouse_entered 不触发的问题）
+func _process(_delta: float) -> void:
+	if is_pot_following_mouse or is_hoe_following_mouse:
+		_last_fruit_under_mouse = null
+		return
+	if _barn == null:
+		return
+	var params := PhysicsPointQueryParameters2D.new()
+	params.position = get_global_mouse_position()
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+	var space := get_world_2d().direct_space_state
+	var results := space.intersect_point(params)
+	var fruit_under_mouse: Node = null
+	for r in results:
+		var collider = r["collider"]
+		if is_instance_valid(collider) and collider.get_parent() == self:
+			fruit_under_mouse = collider
+			break
+	if fruit_under_mouse != null and fruit_under_mouse != _last_fruit_under_mouse:
+		_on_fruit_mouse_entered(fruit_under_mouse)
+	_last_fruit_under_mouse = fruit_under_mouse
+
 
 #初始化地块
 func _init_plots() -> void:
@@ -265,3 +296,28 @@ func _on_fruit_spawned(global_pos: Vector2, fruit_type: String) -> void:
 	
 	# 将果实添加到场景树中（添加到 farming_system 节点下）
 	add_child(fruit_instance)
+	# 鼠标滑过果实时触发“吸入谷仓”（仅在未持工具时生效）
+	fruit_instance.mouse_entered.connect(_on_fruit_mouse_entered.bind(fruit_instance))
+
+
+# 鼠标进入果实：若当前未持工具，则播放飞向谷仓的吸入动画并消失
+func _on_fruit_mouse_entered(fruit_node: Node) -> void:
+	if is_pot_following_mouse or is_hoe_following_mouse:
+		return
+	if _barn == null:
+		return
+	# 同一果实只触发一次吸入
+	if fruit_node.get_meta("collecting", false):
+		return
+	fruit_node.set_meta("collecting", true)
+
+	# 冻结物理，避免飞行过程中被重力等影响
+	if fruit_node is RigidBody2D:
+		fruit_node.freeze = true
+
+	var barn_global_pos: Vector2 = _barn.global_position
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property(fruit_node, "global_position", barn_global_pos, collect_fly_duration)
+	tween.parallel().tween_property(fruit_node, "scale", Vector2(0.01, 0.01), collect_fly_duration)
+	tween.tween_callback(fruit_node.queue_free)

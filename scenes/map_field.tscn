@@ -493,7 +493,7 @@ shape = SubResource("WorldBoundaryShape2D_hinbh")
 
 [node name="farming_system" type="Node2D" parent="." unique_id=1355085591]
 script = ExtResource("8_0i05h")
-hold_repeat_interval = 0.1
+hold_repeat_interval = 0.05
 
 [node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
 clip_contents = true

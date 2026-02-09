@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://xaggvm7kkblj"]
+[gd_scene format=3 uid="uid://xaggvm7kkblj"]
 
 [ext_resource type="Texture2D" uid="uid://hg411iuww5fc" path="res://assets/Maps/field/fruit_carrot.png" id="1_iuj4e"]
 [ext_resource type="Texture2D" uid="uid://s0ebnvrghpvf" path="res://assets/Maps/field/fruit_tomato.png" id="2_dgkhl"]
@@ -51,18 +51,18 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="fruits" type="RigidBody2D"]
+[node name="fruits" type="RigidBody2D" unique_id=919167447]
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_iuj4e")
 script = ExtResource("4_fruits")
 horizontal_random_range = 200.0
 
-[node name="collision_shape_fruits" type="CollisionShape2D" parent="."]
+[node name="collision_shape_fruits" type="CollisionShape2D" parent="." unique_id=950800938]
 scale = Vector2(3, 3)
 shape = SubResource("CircleShape2D_5v7wr")
 
-[node name="animation_fruits" type="AnimatedSprite2D" parent="."]
+[node name="animation_fruits" type="AnimatedSprite2D" parent="." unique_id=2062272087]
 position = Vector2(0, 1.1444092e-05)
 scale = Vector2(0.19999999, 0.19999999)
 sprite_frames = SubResource("SpriteFrames_jlcbh")
-animation = &"tomato"
+animation = &"wheat"
