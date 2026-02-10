@@ -10,6 +10,7 @@ var _is_following_mouse: bool = false
 var _start_position: Vector2
 var _default_scale: Vector2
 var _follow_scale: Vector2
+var _idle_light_timer: float = 0.0  # 用于每 5 秒播放 pot_light 待机动画
 
 
 func _ready() -> void:
@@ -30,9 +31,19 @@ func _ready() -> void:
 	_set_pot_following(false)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _is_following_mouse:
 		global_position = get_global_mouse_position()
+		_idle_light_timer = 0.0  # 被持有时不累计，放下后重新计 5 秒
+	else:
+		# 待机时每 5 秒自动播放一次 pot_light
+		_idle_light_timer += delta
+		if _idle_light_timer >= 5.0 and _pot_animation: # 如果计时器大于5秒，并且pot_animation存在，则播放pot_light动画
+			var anim := _pot_animation.animation # 获取当前动画	
+			var can_play_idle := (anim != "pot_water") and not (anim == "pot_light" and _pot_animation.is_playing()) # 如果当前动画不是pot_water，并且不是pot_light正在播放，则可以播放pot_light动画
+			if can_play_idle:
+				_pot_animation.play("pot_light") # 播放pot_light动画
+				_idle_light_timer = 0.0 # 重置计时器
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -90,6 +101,7 @@ func _set_pot_following(is_following: bool) -> void:
 	# 跟随时放大，不跟随时恢复默认大小
 	if is_following:
 		scale = _follow_scale
+		_idle_light_timer = 0.0  # 拿起时重置待机动画计时
 	else:
 		scale = _default_scale
 
@@ -109,7 +121,7 @@ func play_use_animation() -> void:
 
 
 func _on_pot_animation_finished() -> void:
-	# 水动画结束后切回默认待机动画
-	if _pot_animation.animation == "pot_water":
+	# 水动画或 pot_light 结束后切回默认待机动画
+	if _pot_animation.animation == "pot_water" or _pot_animation.animation == "pot_light":
 		_pot_animation.play("pot_default")
 

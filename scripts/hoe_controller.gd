@@ -10,6 +10,7 @@ var _is_following_mouse: bool = false
 var _start_position: Vector2
 var _default_scale: Vector2
 var _follow_scale: Vector2
+var _idle_light_timer: float = 0.0  # 用于每 5 秒播放 hoe_light 待机动画
 
 
 func _ready() -> void:
@@ -30,9 +31,19 @@ func _ready() -> void:
 	_set_hoe_following(false)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _is_following_mouse:
 		global_position = get_global_mouse_position()
+		_idle_light_timer = 0.0  # 被持有时不累计，放下后重新计 5 秒
+	else:
+		# 待机时每 5 秒自动播放一次 hoe_light
+		_idle_light_timer += delta
+		if _idle_light_timer >= 5.0 and _hoe_animation:
+			var anim := _hoe_animation.animation
+			var can_play_idle := (anim != "hoe_wave") and not (anim == "hoe_light" and _hoe_animation.is_playing())
+			if can_play_idle:
+				_hoe_animation.play("hoe_light")
+				_idle_light_timer = 0.0
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -90,6 +101,7 @@ func _set_hoe_following(following: bool) -> void:
 	# 跟随时放大，不跟随时恢复默认大小
 	if following:
 		scale = _follow_scale
+		_idle_light_timer = 0.0  # 拿起时重置待机动画计时
 	else:
 		scale = _default_scale
 
@@ -109,7 +121,7 @@ func play_use_animation() -> void:
 
 
 func _on_hoe_animation_finished() -> void:
-	# 挥动动画结束后切回默认待机动画
-	if _hoe_animation.animation == "hoe_wave":
+	# 挥动动画或 hoe_light 结束后切回默认待机动画
+	if _hoe_animation.animation == "hoe_wave" or _hoe_animation.animation == "hoe_light":
 		_hoe_animation.play("hoe_default")
 

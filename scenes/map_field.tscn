@@ -573,3 +573,14 @@ position = Vector2(3450.44, 190.504)
 scale = Vector2(0.12816674, 0.12816674)
 sprite_frames = SubResource("SpriteFrames_lnqt4")
 animation = &"shop_default"
+
+[node name="UI" type="Control" parent="." unique_id=1168275095]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="shop_menu" type="Window" parent="UI" unique_id=901401628]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+size = Vector2i(326, 136)

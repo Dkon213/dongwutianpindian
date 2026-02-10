@@ -319,5 +319,5 @@ func _on_fruit_mouse_entered(fruit_node: Node) -> void:
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN)
 	tween.tween_property(fruit_node, "global_position", barn_global_pos, collect_fly_duration)
-	tween.parallel().tween_property(fruit_node, "scale", Vector2(0.01, 0.01), collect_fly_duration)
+	tween.parallel().tween_property(fruit_node, "scale", Vector2(0.5, 0.5), collect_fly_duration)
 	tween.tween_callback(fruit_node.queue_free)
