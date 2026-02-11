@@ -16,7 +16,7 @@ enum GrowthStage {
 
 class FarmPlot:
 	var land_state: int
-	var plant_type: String
+	var plant_type: String       
 	var growth_stage: int
 
 	func _init() -> void:

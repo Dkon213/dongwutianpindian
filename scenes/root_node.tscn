@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://p3nrfx4hte13" path="res://assets/Menu_cloud/cloud_3.png" id="5_jfjke"]
 [ext_resource type="Texture2D" uid="uid://bmmpjj3fbvnec" path="res://assets/Menu_cloud/cloud_4.png" id="6_l3gbx"]
 [ext_resource type="Texture2D" uid="uid://c1spcv8lrmwny" path="res://assets/Menu_cloud/cloud_x.png" id="7_l3gbx"]
-[ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="8_d78ui"]
 [ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="8_gwtxu"]
 [ext_resource type="PackedScene" uid="uid://p7xg2b3fodxu" path="res://scenes/menu_guide.tscn" id="9_vhsfa"]
 
@@ -537,10 +536,6 @@ theme_override_font_sizes/font_size = 76
 text = "退出
 "
 flat = true
-
-[node name="JiChi" parent="." unique_id=504818564 instance=ExtResource("8_d78ui")]
-position = Vector2(1571, 305)
-collision_layer = 2
 
 [node name="menu_guide" parent="." unique_id=1640993150 instance=ExtResource("9_vhsfa")]
 texture_filter = 1

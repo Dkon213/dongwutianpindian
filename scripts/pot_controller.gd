@@ -97,16 +97,16 @@ func reset_from_other_tool() -> void:
 	_reset_pot()
 
 
-func _set_pot_following(is_following: bool) -> void:
+func _set_pot_following(follow: bool) -> void:
 	# 跟随时放大，不跟随时恢复默认大小
-	if is_following:
+	if follow:
 		scale = _follow_scale
 		_idle_light_timer = 0.0  # 拿起时重置待机动画计时
 	else:
 		scale = _default_scale
 
 	if _farming_system and _farming_system.has_method("set_pot_following_mouse"):
-		_farming_system.set_pot_following_mouse(is_following)
+		_farming_system.set_pot_following_mouse(follow)
 
 
 func play_use_animation() -> void:

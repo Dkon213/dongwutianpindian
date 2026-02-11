@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://dvr5w3nd1juhx" path="res://assets/Maps/field/field_hoe_wave.png" id="8_mbqsv"]
 [ext_resource type="Script" uid="uid://d20fb1coux4yx" path="res://scripts/pot_controller.gd" id="9_potctl"]
 [ext_resource type="Script" uid="uid://cocwpd7ji5hbm" path="res://scripts/hoe_controller.gd" id="10_hoectl"]
+[ext_resource type="Script" uid="uid://cuppeojq83p4o" path="res://scenes/shop_controller.gd" id="16_0b677"]
+[ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="17_bcppt"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -446,6 +448,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lwdav"]
+size = Vector2(365, 255)
+
 [node name="map_field" type="Node2D" unique_id=1120339112]
 
 [node name="background&wall" type="Node2D" parent="." unique_id=144467476]
@@ -568,11 +573,18 @@ shape = SubResource("RectangleShape2D_kwdqm")
 
 [node name="shop" type="Node2D" parent="." unique_id=1969378773]
 position = Vector2(3450.44, 190.504)
+script = ExtResource("16_0b677")
 
 [node name="shop_animation" type="AnimatedSprite2D" parent="shop" unique_id=1341143601]
 scale = Vector2(0.12816674, 0.12816674)
 sprite_frames = SubResource("SpriteFrames_lnqt4")
 animation = &"shop_default"
+
+[node name="shop_area" type="Area2D" parent="shop" unique_id=1195174724]
+
+[node name="shop_shape" type="CollisionShape2D" parent="shop/shop_area" unique_id=1839285588]
+position = Vector2(0, 63.996002)
+shape = SubResource("RectangleShape2D_lwdav")
 
 [node name="UI" type="Control" parent="." unique_id=1168275095]
 layout_mode = 3
@@ -582,5 +594,14 @@ offset_bottom = 40.0
 
 [node name="shop_menu" type="Window" parent="UI" unique_id=901401628]
 oversampling_override = 1.0
-position = Vector2i(0, 36)
+position = Vector2i(0, 38)
 size = Vector2i(326, 136)
+visible = false
+popup_window = true
+minimize_disabled = true
+maximize_disabled = true
+
+[node name="JiChi" parent="." unique_id=1429305371 instance=ExtResource("17_bcppt")]
+position = Vector2(1570, 305)
+
+[connection signal="input_event" from="shop/shop_area" to="shop" method="_on_shop_area_input_event"]
