@@ -18,6 +18,8 @@
 [ext_resource type="Script" uid="uid://cocwpd7ji5hbm" path="res://scripts/hoe_controller.gd" id="10_hoectl"]
 [ext_resource type="Script" uid="uid://cuppeojq83p4o" path="res://scenes/shop_controller.gd" id="16_0b677"]
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="17_bcppt"]
+[ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
+[ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -451,6 +453,126 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lwdav"]
 size = Vector2(365, 255)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kggy2"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(0, 0, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xu30f"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(82, 0, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3e8t"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(164, 0, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3ql8"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(246, 0, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mj4pr"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(0, 64, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_06e15"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(82, 64, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pgnb"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(164, 64, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epco1"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(246, 64, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cqls6"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(0, 128, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huoum"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(82, 128, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uqxq1"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(164, 128, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28ahm"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(246, 128, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfrmx"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(0, 192, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pj5ip"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(82, 192, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dmqp8"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(164, 192, 82, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8hgb5"]
+atlas = ExtResource("19_n31ce")
+region = Rect2(246, 192, 82, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ghsr4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kggy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xu30f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3e8t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3ql8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mj4pr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_06e15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pgnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_epco1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cqls6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_huoum")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uqxq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28ahm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfrmx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pj5ip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dmqp8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8hgb5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
 [node name="map_field" type="Node2D" unique_id=1120339112]
 
 [node name="background&wall" type="Node2D" parent="." unique_id=144467476]
@@ -589,17 +711,61 @@ shape = SubResource("RectangleShape2D_lwdav")
 [node name="UI" type="Control" parent="." unique_id=1168275095]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 137.0
+offset_bottom = 89.0
 
-[node name="shop_menu" type="Window" parent="UI" unique_id=901401628]
+[node name="shop_menu_window" type="Window" parent="UI" unique_id=1887064195]
+transparent_bg = true
 oversampling_override = 1.0
-position = Vector2i(0, 38)
-size = Vector2i(326, 136)
+position = Vector2i(19, 47)
+size = Vector2i(444, 320)
 visible = false
-popup_window = true
-minimize_disabled = true
-maximize_disabled = true
+borderless = true
+transparent = true
+
+[node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -209.0
+offset_top = -230.0
+offset_right = 209.0
+offset_bottom = -0.35998535
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("18_0sa83")
+region_rect = Rect2(0, 0, 319, 321)
+patch_margin_left = 60
+patch_margin_top = 60
+patch_margin_right = 60
+patch_margin_bottom = 60
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_menu_background" unique_id=1015575566]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -169.0
+offset_top = -69.0
+offset_right = 169.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 6
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
+texture_filter = 1
+position = Vector2(221, 51.999992)
+scale = Vector2(3.2695315, 3.2695313)
+sprite_frames = SubResource("SpriteFrames_ghsr4")
+autoplay = "default"
+frame_progress = 0.08037108
 
 [node name="JiChi" parent="." unique_id=1429305371 instance=ExtResource("17_bcppt")]
 position = Vector2(1570, 305)

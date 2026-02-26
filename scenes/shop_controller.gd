@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var _shop_menu: Window = $"../UI/shop_menu"
+@onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
 
 
