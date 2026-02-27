@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://v6rju0ivib7s"]
+
+[ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="1_eendu"]
+
+[resource]
+font = ExtResource("1_eendu")
+outline_size = 1
+outline_color = Color(0.037294276, 0.034412127, 0.020264149, 1)

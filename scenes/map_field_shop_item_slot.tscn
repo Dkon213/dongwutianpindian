@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dbh1joc25wn5u"]
+
+[ext_resource type="Texture2D" uid="uid://kd0ex40dupoh" path="res://assets/Match_three_game/orange.png" id="1_ohtpv"]
+[ext_resource type="LabelSettings" uid="uid://v6rju0ivib7s" path="res://themes/label_settings.tres" id="2_l67d8"]
+
+[node name="map_field_shop_item_slot" type="PanelContainer" unique_id=824977426]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -51.5
+offset_right = 75.0
+offset_bottom = 98.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1530951141]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=835619041]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="texture" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=2099715866]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+texture = ExtResource("1_ohtpv")
+expand_mode = 5
+
+[node name="Label_name" type="Label" parent="MarginContainer/VBoxContainer" unique_id=526785071]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "name"
+label_settings = ExtResource("2_l67d8")
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1832668620]
+layout_mode = 2
+text = "cost"
+label_settings = ExtResource("2_l67d8")
+horizontal_alignment = 1

@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="17_bcppt"]
 [ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
 [ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
+[ext_resource type="PackedScene" uid="uid://dbh1joc25wn5u" path="res://scenes/map_field_shop_item_slot.tscn" id="19_ol67m"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -719,20 +720,19 @@ transparent_bg = true
 oversampling_override = 1.0
 position = Vector2i(19, 47)
 size = Vector2i(444, 320)
-visible = false
 borderless = true
 transparent = true
 
 [node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.637
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.637
 offset_left = -209.0
-offset_top = -230.0
+offset_top = -113.84001
 offset_right = 209.0
-offset_bottom = -0.35998535
+offset_bottom = 114.15999
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("18_0sa83")
@@ -744,20 +744,43 @@ patch_margin_bottom = 60
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_menu_background" unique_id=1015575566]
+[node name="shop_menu_VScrollBar" type="VScrollBar" parent="UI/shop_menu_window/shop_menu_background" unique_id=1566748857]
+texture_filter = 1
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.83000004
+anchor_top = 0.50100005
+anchor_right = 0.83000004
+anchor_bottom = 0.50100005
+offset_left = -4.940033
+offset_top = -80.04966
+offset_right = 5.059845
+offset_bottom = 79.95034
+grow_horizontal = 2
+
+[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_menu_background" unique_id=1015575566]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.44700003
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.44700003
 anchor_bottom = 0.5
-offset_left = -169.0
-offset_top = -69.0
-offset_right = 169.0
+offset_left = -144.42601
+offset_top = -69.00001
+offset_right = 144.57397
 offset_bottom = 69.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 6
+columns = 3
+
+[node name="map_field_shop_item_slot" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=824977426 instance=ExtResource("19_ol67m")]
+layout_mode = 2
+
+[node name="map_field_shop_item_slot2" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=228397480 instance=ExtResource("19_ol67m")]
+layout_mode = 2
+
+[node name="map_field_shop_item_slot3" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=1494702045 instance=ExtResource("19_ol67m")]
+layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
 texture_filter = 1
