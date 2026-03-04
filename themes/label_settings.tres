@@ -4,5 +4,6 @@
 
 [resource]
 font = ExtResource("1_eendu")
+font_size = 20
 outline_size = 1
 outline_color = Color(0.037294276, 0.034412127, 0.020264149, 1)

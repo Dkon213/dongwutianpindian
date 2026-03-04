@@ -52,9 +52,11 @@ var _plots: Array[FarmPlot] = []
 # 上一帧鼠标所在的果实（用于 _process 中“进入”检测，避免重复触发）
 var _last_fruit_under_mouse: Node = null
 
-# 标记水壶/锄头是否正在跟随鼠标移动
+# 标记水壶/锄头/种子是否正在跟随鼠标移动
 var is_pot_following_mouse: bool = false
 var is_hoe_following_mouse: bool = false
+var is_seed_following_mouse: bool = false
+var following_seed_plant_type: String = ""
 
 # 长按重复：鼠标按住时每隔该秒数执行一次浇水/耕地
 var _mouse_held_for_farming: bool = false # 标记鼠标是否按住
@@ -82,7 +84,7 @@ func _ready() -> void:
 
 # 当未持工具时，用物理检测鼠标下的果实并触发“吸入”（解决 Control 遮挡导致 mouse_entered 不触发的问题）
 func _process(_delta: float) -> void:
-	if is_pot_following_mouse or is_hoe_following_mouse:
+	if is_pot_following_mouse or is_hoe_following_mouse or is_seed_following_mouse:
 		_last_fruit_under_mouse = null
 		return
 	if _barn == null:
@@ -113,8 +115,8 @@ func _init_plots() -> void:
 
 #处理输入事件（使用 _input 而不是 _unhandled_input，因为 PanelContainer 会拦截事件）
 func _input(event: InputEvent) -> void:
-	# 只有当有工具在跟随鼠标时，才允许处理地块输入
-	if not is_pot_following_mouse and not is_hoe_following_mouse:
+	# 只有当有工具或种子在跟随鼠标时，才允许处理地块输入
+	if not is_pot_following_mouse and not is_hoe_following_mouse and not is_seed_following_mouse:
 		return
 
 	var mouse_event := event as InputEventMouseButton # 把事件转换为鼠标按钮事件
@@ -142,11 +144,12 @@ func _do_farming_action_at_mouse() -> bool:
 	if not rect.has_point(global_pos):
 		return false # 如果鼠标位置不在地块范围内，则返回false
 
-	# 根据当前跟随的工具播放使用动画
+	# 根据当前跟随的工具播放使用动画（种子无动画）
 	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
 		_pot_controller.play_use_animation()
 	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
 		_hoe_controller.play_use_animation()
+	# is_seed_following_mouse 不播放动画
 
 	var local_on_tilemap := _tile_map.to_local(global_pos)
 	var cell: Vector2i = _tile_map.local_to_map(local_on_tilemap)
@@ -171,6 +174,15 @@ func _on_column_clicked(column: int) -> void:
 
 	var plot := _plots[column]
 
+	# 当种子跟随鼠标时：在已耕地块上播种
+	if is_seed_following_mouse:
+		if plot.land_state == LandState.TILLED and plot.growth_stage == GrowthStage.NONE and plot.plant_type == "":
+			if PlantDB.has(following_seed_plant_type):
+				plot.plant_type = following_seed_plant_type
+				plot.growth_stage = GrowthStage.SEED
+		_update_column_tiles(column)
+		return
+
 	# 当锄头跟随鼠标时：
 	# - 只负责耕地：NORMAL → TILLED
 	if is_hoe_following_mouse:
@@ -188,11 +200,12 @@ func _on_column_clicked(column: int) -> void:
 			_update_column_tiles(column)
 			return
 
-		if plot.growth_stage == GrowthStage.NONE:
-			# 第一次浇水：播种 + 变为 SEED（默认 carrot）
-			plot.plant_type = "carrot"
-			plot.growth_stage = GrowthStage.SEED
-		elif plot.growth_stage == GrowthStage.SEED:
+		# 浇水只对有植物的地块生效，不会自动播种
+		if plot.growth_stage == GrowthStage.NONE or plot.plant_type == "": 
+			_update_column_tiles(column)
+			return
+
+		if plot.growth_stage == GrowthStage.SEED:
 			# SEED → SPROUT
 			plot.growth_stage = GrowthStage.SPROUT
 		elif plot.growth_stage == GrowthStage.SPROUT:
@@ -217,6 +230,11 @@ func set_pot_following_mouse(value: bool) -> void:
 
 func set_hoe_following_mouse(value: bool) -> void:
 	is_hoe_following_mouse = value
+
+
+func set_seed_following_mouse(following: bool, plant_type: String = "") -> void:
+	is_seed_following_mouse = following
+	following_seed_plant_type = plant_type
 
 
 func _get_plant_global_center(column: int) -> Vector2:
@@ -300,9 +318,9 @@ func _on_fruit_spawned(global_pos: Vector2, fruit_type: String) -> void:
 	fruit_instance.mouse_entered.connect(_on_fruit_mouse_entered.bind(fruit_instance))
 
 
-# 鼠标进入果实：若当前未持工具，则播放飞向谷仓的吸入动画并消失
+# 鼠标进入果实：若当前未持工具/种子，则播放飞向谷仓的吸入动画并消失
 func _on_fruit_mouse_entered(fruit_node: Node) -> void:
-	if is_pot_following_mouse or is_hoe_following_mouse:
+	if is_pot_following_mouse or is_hoe_following_mouse or is_seed_following_mouse:
 		return
 	if _barn == null:
 		return

@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="17_bcppt"]
 [ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
 [ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
-[ext_resource type="PackedScene" uid="uid://dbh1joc25wn5u" path="res://scenes/map_field_shop_item_slot.tscn" id="19_ol67m"]
+[ext_resource type="Script" uid="uid://u1s2oocalovj" path="res://scripts/seed_cursor_controller.gd" id="20_ol67m"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -718,21 +718,21 @@ offset_bottom = 89.0
 [node name="shop_menu_window" type="Window" parent="UI" unique_id=1887064195]
 transparent_bg = true
 oversampling_override = 1.0
-position = Vector2i(19, 47)
-size = Vector2i(444, 320)
+position = Vector2i(0, 36)
+size = Vector2i(750, 600)
+visible = false
 borderless = true
 transparent = true
 
 [node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
-anchors_preset = -1
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.637
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.637
-offset_left = -209.0
-offset_top = -113.84001
-offset_right = 209.0
-offset_bottom = 114.15999
+anchor_bottom = 1.0
+offset_left = -361.5
+offset_top = -491.0
+offset_right = 361.5
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("18_0sa83")
@@ -748,47 +748,50 @@ axis_stretch_vertical = 1
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.83000004
-anchor_top = 0.50100005
-anchor_right = 0.83000004
-anchor_bottom = 0.50100005
-offset_left = -4.940033
-offset_top = -80.04966
-offset_right = 5.059845
-offset_bottom = 79.95034
-grow_horizontal = 2
+anchor_left = 0.90200007
+anchor_top = 0.5
+anchor_right = 0.90200007
+anchor_bottom = 0.5
+offset_left = -13.646057
+offset_top = -194.5
+offset_right = 14.353943
+offset_bottom = 200.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+theme_override_constants/padding_left = 10
+theme_override_constants/padding_right = 10
 
 [node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_menu_background" unique_id=1015575566]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.44700003
+anchor_left = 0.46
 anchor_top = 0.5
-anchor_right = 0.44700003
+anchor_right = 0.46
 anchor_bottom = 0.5
-offset_left = -144.42601
-offset_top = -69.00001
-offset_right = 144.57397
-offset_bottom = 69.0
-grow_horizontal = 2
-grow_vertical = 2
-columns = 3
-
-[node name="map_field_shop_item_slot" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=824977426 instance=ExtResource("19_ol67m")]
-layout_mode = 2
-
-[node name="map_field_shop_item_slot2" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=228397480 instance=ExtResource("19_ol67m")]
-layout_mode = 2
-
-[node name="map_field_shop_item_slot3" parent="UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer" unique_id=1494702045 instance=ExtResource("19_ol67m")]
-layout_mode = 2
+offset_left = -279.08002
+offset_top = -193.5
+offset_right = 280.91998
+offset_bottom = 196.5
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
 texture_filter = 1
-position = Vector2(221, 51.999992)
-scale = Vector2(3.2695315, 3.2695313)
+position = Vector2(375.00003, 67)
+scale = Vector2(3.6591558, 3.6816409)
 sprite_frames = SubResource("SpriteFrames_ghsr4")
 autoplay = "default"
 frame_progress = 0.08037108
+
+[node name="seed_cursor" type="Node2D" parent="UI" unique_id=560012882]
+script = ExtResource("20_ol67m")
+
+[node name="seed_cursor_TextureRect" type="TextureRect" parent="UI/seed_cursor" unique_id=781340122]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="JiChi" parent="." unique_id=1429305371 instance=ExtResource("17_bcppt")]
 position = Vector2(1570, 305)

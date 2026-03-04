@@ -1,15 +1,45 @@
 extends Node2D
 
+const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/map_field_shop_item_slot.tscn")
+
+const SHOP_ITEMS: Array[Dictionary] = [
+	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-CARROTI.png", "name": "萝卜种子", "price": 50, "plant_type": "carrot"},
+	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-TOMATOI.png", "name": "番茄种子", "price": 50, "plant_type": "tomato"},
+	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-WHEAT.png", "name": "小麦种子", "price": 50, "plant_type": "wheat"},
+]
+
 @onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
+@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer"
+@onready var _seed_cursor: Node = $"../UI/seed_cursor"
 
 
 func _ready() -> void:
+	_populate_shop_grid()
 	# 确保 shop_area 能接收鼠标输入（某些配置下 Area2D 默认可能不接收）
 	if _shop_area:
 		_shop_area.input_pickable = true
 	# 点击窗口自带关闭按钮时关闭
 	_shop_menu.close_requested.connect(_on_shop_menu_close_requested)
+
+
+func _populate_shop_grid() -> void:
+	for item_data in SHOP_ITEMS:
+		var texture := load(item_data.texture_path) as Texture2D
+		if texture == null:
+			push_warning("商店商品图片加载失败: %s" % item_data.texture_path)
+			continue
+		var plant_type: String = item_data.get("plant_type", "")
+		var slot: PanelContainer = SHOP_ITEM_SLOT_SCENE.instantiate()
+		slot.setup(texture, item_data.name, item_data.price, plant_type)
+		if slot.has_signal("item_clicked"):
+			slot.item_clicked.connect(_on_shop_item_clicked)
+		_shop_grid.add_child(slot)
+
+
+func _on_shop_item_clicked(plant_type: String, texture: Texture2D) -> void:
+	if _seed_cursor and _seed_cursor.has_method("pick_seed"):
+		_seed_cursor.pick_seed(plant_type, texture)
 
 
 func _on_shop_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:

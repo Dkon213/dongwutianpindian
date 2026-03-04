@@ -4,6 +4,7 @@ extends Node2D
 @onready var _shelf_area: Area2D = get_node("../shelf/shelf_area")
 @onready var _farming_system: Node = get_node("../farming_system")
 @onready var _pot_controller: Node = get_node("../pot")
+@onready var _seed_cursor: Node = get_node("../UI/seed_cursor")
 @onready var _hoe_animation: AnimatedSprite2D = $hoe_animation
 
 var _is_following_mouse: bool = false
@@ -66,6 +67,9 @@ func _on_hoe_area_input_event(_viewport: Viewport, event: InputEvent, _shape_idx
 		# 如果此时水壶正在跟随鼠标，先让水壶复位
 		if _pot_controller and _pot_controller.has_method("is_following") and _pot_controller.is_following():
 			_pot_controller.reset_from_other_tool()
+		# 如果此时种子正在跟随鼠标，取消种子
+		if _seed_cursor and _seed_cursor.has_method("cancel_seed") and _seed_cursor.is_following():
+			_seed_cursor.cancel_seed()
 
 		_is_following_mouse = true
 		_set_hoe_following(true)
