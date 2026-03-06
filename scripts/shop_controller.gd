@@ -82,11 +82,21 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	# 按 Esc 关闭
 	if not _shop_menu.visible:
 		return
+	# 按 Esc 关闭
 	if event is InputEventKey:
 		var key_ev := event as InputEventKey
 		if key_ev.pressed and key_ev.keycode == KEY_ESCAPE:
 			_shop_menu.hide()
 			get_viewport().set_input_as_handled()
+		return
+	# 当种子跟随鼠标时：左键点击 shop_menu_window 范围外可关闭窗口（使用 _input 以在 farming 处理前执行）
+	var mouse_btn := event as InputEventMouseButton
+	if mouse_btn != null and mouse_btn.pressed and mouse_btn.button_index == MOUSE_BUTTON_LEFT:
+		if _seed_cursor and _seed_cursor.has_method("is_following") and _seed_cursor.is_following():
+			var mouse_pos: Vector2 = DisplayServer.mouse_get_position()
+			var menu_rect := Rect2(Vector2(_shop_menu.position.x, _shop_menu.position.y), Vector2(_shop_menu.size.x, _shop_menu.size.y))
+			if not menu_rect.has_point(mouse_pos):
+				_shop_menu.hide()
+				# 不消耗事件，允许 farming_system 继续处理种植

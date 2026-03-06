@@ -1,6 +1,9 @@
 extends Node2D
 ## 种子图标跟随鼠标控制器。当玩家点击商店中的种子商品后，对应图标跟随鼠标，可在已耕地块上种植。
 
+@export var icon_size: Vector2 = Vector2(40, 40)  # 默认图标尺寸（可在编辑器中调整）
+@export var icon_following_scale: float = 2.0  # 跟随鼠标时的缩放倍数（默认 2 倍）
+
 @onready var _texture_rect: TextureRect = $seed_cursor_TextureRect
 @onready var _farming_system: Node = $"../../farming_system"
 @onready var _pot_controller: Node = $"../../pot"
@@ -12,9 +15,20 @@ var _current_plant_type: String = ""
 
 func _ready() -> void:
 	visible = false
-	# 使 TextureRect 中心对准父节点原点（即鼠标位置）
+	_apply_icon_size(false)
+	# 使 TextureRect 不拦截鼠标事件，否则右键会被 GUI 消费，_unhandled_input 收不到
 	if _texture_rect:
-		_texture_rect.position = Vector2(-20, -20)
+		_texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _apply_icon_size(following: bool) -> void:
+	if not _texture_rect:
+		return
+	var size := icon_size * (icon_following_scale if following else 1.0)
+	_texture_rect.custom_minimum_size = size
+	_texture_rect.size = size
+	# 使 TextureRect 中心对准父节点原点（即鼠标位置）
+	_texture_rect.position = -size / 2.0
 
 
 func _process(_delta: float) -> void:
@@ -41,6 +55,7 @@ func pick_seed(plant_type: String, texture: Texture2D) -> void:
 	_current_plant_type = plant_type
 	_is_following = true
 	visible = true
+	_apply_icon_size(true)
 	if _texture_rect:
 		_texture_rect.texture = texture
 
@@ -57,6 +72,7 @@ func _cancel_seed() -> void:
 	_is_following = false
 	_current_plant_type = ""
 	visible = false
+	_apply_icon_size(false)
 	if _texture_rect:
 		_texture_rect.texture = null
 

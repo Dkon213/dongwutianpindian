@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dvr5w3nd1juhx" path="res://assets/Maps/field/field_hoe_wave.png" id="8_mbqsv"]
 [ext_resource type="Script" uid="uid://d20fb1coux4yx" path="res://scripts/pot_controller.gd" id="9_potctl"]
 [ext_resource type="Script" uid="uid://cocwpd7ji5hbm" path="res://scripts/hoe_controller.gd" id="10_hoectl"]
-[ext_resource type="Script" uid="uid://cuppeojq83p4o" path="res://scenes/shop_controller.gd" id="16_0b677"]
+[ext_resource type="Script" uid="uid://cuppeojq83p4o" path="res://scripts/shop_controller.gd" id="16_0b677"]
 [ext_resource type="PackedScene" uid="uid://cenbtsvh11dp5" path="res://scenes/character/ji_chi.tscn" id="17_bcppt"]
 [ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
 [ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
@@ -81,19 +81,21 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmw0k"]
 texture = ExtResource("7_ticpy")
 texture_region_size = Vector2i(32, 32)
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
 0:0/0 = 0
-1:0/animation_frame_0/duration = 1.0
-1:0/animation_frame_1/duration = 1.0
-1:0/animation_frame_2/duration = 1.0
-1:0/animation_frame_3/duration = 1.0
-1:0/animation_frame_4/duration = 1.0
-1:0/0 = 0
-6:0/animation_frame_0/duration = 1.0
-6:0/animation_frame_1/duration = 1.0
-6:0/animation_frame_2/duration = 1.0
-6:0/animation_frame_3/duration = 1.0
-6:0/animation_frame_4/duration = 1.0
-6:0/0 = 0
+2:0/animation_frame_0/duration = 1.0
+2:0/animation_frame_1/duration = 1.0
+2:0/animation_frame_2/duration = 1.0
+2:0/animation_frame_3/duration = 1.0
+2:0/animation_frame_4/duration = 1.0
+2:0/0 = 0
+7:0/animation_frame_0/duration = 1.0
+7:0/animation_frame_1/duration = 1.0
+7:0/animation_frame_2/duration = 1.0
+7:0/animation_frame_3/duration = 1.0
+7:0/animation_frame_4/duration = 1.0
+7:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_1otix"]
 tile_size = Vector2i(32, 32)
@@ -634,6 +636,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
 [node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container" unique_id=1405946565]
 position = Vector2(0, 69.000015)
 scale = Vector2(2.13, 2.13)
+tile_map_data = PackedByteArray(0, 0, 47, 0, 8, 0, 3, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_1otix")
 
 [node name="barn" type="Node2D" parent="." unique_id=13575241]
@@ -790,6 +793,7 @@ frame_progress = 0.08037108
 script = ExtResource("20_ol67m")
 
 [node name="seed_cursor_TextureRect" type="TextureRect" parent="UI/seed_cursor" unique_id=781340122]
+texture_filter = 5
 offset_right = 40.0
 offset_bottom = 40.0
 

@@ -47,6 +47,8 @@ var last_mouse_position_x: float = 0.0 # 【鼠标最后位置】用于记录鼠
 @onready var auto_timer: Timer = $AutoActionTimer # 计时器节点，用于待机动作的计时
 @onready var click_timer: Timer = $ClickCountTimer # 计时器节点，用于鼠标连点的计时
 
+# 鼠标点击排除区域：点击这些节点内时不触发角色行为。便于后续增加、修改或删除
+const EXCLUDED_CLICK_NODE_NAMES: Array[String] = ["UI", "shop", "shelf", "pot", "hoe"]
 
 
 #---------------------------------------------开始函数--------------------------------------------------------
@@ -320,17 +322,45 @@ func _is_farming_tool_following_mouse() -> bool:
 	return farming_system.is_pot_following_mouse or farming_system.is_hoe_following_mouse
 
 
-#----------------------------------------------检查是否点击到UI元素---------------------------------------------------------------
-# 检查鼠标点击位置是否有UI元素（按钮等可交互对象）
-func _is_clicking_ui_element(_event: InputEventMouseButton) -> bool:
-	# 获取鼠标的全局位置
+#----------------------------------------------检查点击是否在排除区域内---------------------------------------------------------------
+# 若鼠标点击在排除节点（UI/shop/shelf/pot/hoe 等）内，返回 true，角色不触发行为
+func _is_click_in_excluded_region() -> bool:
 	var mouse_pos = get_global_mouse_position()
-	
-	# 遍历场景树，检查是否有Control节点（UI元素）在鼠标位置
-	var root = get_tree().root
-	return _check_control_at_position(root, mouse_pos)
+	var map_field = get_parent()
+	if map_field == null:
+		return false
 
-# 递归检查指定位置是否有Control节点
+	for node_name in EXCLUDED_CLICK_NODE_NAMES:
+		var node = map_field.get_node_or_null(node_name)
+		if node == null:
+			continue
+		if node is Control:
+			# Control 节点（如 UI）：递归检查该节点及其子节点
+			if _check_control_at_position(node, mouse_pos):
+				return true
+		else:
+			# Node2D 节点（shop/shelf/pot/hoe）：检查其 Area2D 子节点
+			var area = node.get_node_or_null(node_name + "_area")
+			if area != null and area is Area2D:
+				if _is_point_in_area2d(area as Area2D, mouse_pos):
+					return true
+
+	return false
+
+# 检查某点是否在 Area2D 的碰撞形状内
+func _is_point_in_area2d(area: Area2D, point: Vector2) -> bool:
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = point
+	query.collide_with_bodies = false
+	query.collide_with_areas = true
+	var results = space_state.intersect_point(query)
+	for result in results:
+		if result.collider == area:
+			return true
+	return false
+
+# 递归检查指定位置是否有 Control 节点（用于 UI 等）
 func _check_control_at_position(node: Node, global_mouse_pos: Vector2) -> bool:
 	# 如果是Control节点，检查鼠标位置是否在其范围内
 	if node is Control:
@@ -360,9 +390,9 @@ func _input(event: InputEvent):
 		if _is_farming_tool_following_mouse():
 			return
 
-		# 检查点击位置是否有UI元素（按钮等可交互对象）
-		if _is_clicking_ui_element(event):
-			return # 如果点击到了UI元素，不触发角色移动
+		# 检查点击是否在排除区域内（UI/shop/shelf/pot/hoe 等）
+		if _is_click_in_excluded_region():
+			return # 如果点击到了排除节点，不触发角色移动
 		
 		is_mouse_pressed = true # 标记鼠标已按下
 		target_x = get_global_mouse_position().x # 首先获取目标位置，坐标就是鼠标点击的地方

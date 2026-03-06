@@ -52,6 +52,7 @@ animations = [{
 }]
 
 [node name="fruits" type="RigidBody2D" unique_id=919167447]
+z_index = 2
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_iuj4e")
 script = ExtResource("4_fruits")

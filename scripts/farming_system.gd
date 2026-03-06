@@ -2,49 +2,53 @@ extends Node2D
 
 signal fruit_spawned(global_pos: Vector2, fruit_type: String)
 
-enum LandState {
+# 土地状态(NORMAL: 未耕种, TILLED: 已耕种)
+enum LandState { 
 	NORMAL,
 	TILLED,
 }
 
-enum GrowthStage {
+# 生长阶段(NONE: 未种植, SEED: 种子, SPROUT: 幼苗, MATURE: 成熟)
+enum GrowthStage { 
 	NONE,
 	SEED,
 	SPROUT,
 	MATURE,
 }
 
-class FarmPlot:
+# 地块类(land_state: 土地状态, plant_type: 植物类型, growth_stage: 生长阶段)
+class FarmPlot: 
 	var land_state: int
 	var plant_type: String       
 	var growth_stage: int
 
-	func _init() -> void:
+	func _init() -> void: # 初始化地块
 		land_state = LandState.NORMAL
 		plant_type = ""
 		growth_stage = GrowthStage.NONE
 
-const GRID_WIDTH := 41
-const MIN_X := 0
-const MAX_X := GRID_WIDTH - 1
-const LAND_Y := 0
-const PLANT_Y := -1
+const GRID_WIDTH := 41 # 地块宽度		
+const MIN_X := 0 # 地块最小X坐标
+const MAX_X := GRID_WIDTH - 1 # 地块最大X坐标
+const LAND_Y := 0 # 土地行Y坐标
+const PLANT_Y := -1 # 植物行Y坐标
 
-const LAND_SOURCE_ID := 0
+const LAND_SOURCE_ID := 0 # 土地行TileMap图层ID
 
-const PlantDB := {
-	"carrot": 1,
-	"tomato": 2,
-	"wheat": 3,
+const PlantDB := { # 植物数据库(carrot: 萝卜, tomato: 番茄, wheat: 小麦)
+	"carrot": 1, # 萝卜TileMap图层ID
+	"tomato": 2, # 番茄TileMap图层ID
+	"wheat": 3, # 小麦TileMap图层ID
 }
 
+# 引用节点
 @onready var _container: PanelContainer = $farming_tile_map_container
 @onready var _tile_map: TileMapLayer = $farming_tile_map_container/farming_tile_map
 @onready var _pot_controller: Node = $"../pot"
 @onready var _hoe_controller: Node = $"../hoe"
 @onready var _barn: Node2D = $"../barn"
 
-var _plots: Array[FarmPlot] = []
+var _plots: Array[FarmPlot] = [] # 地块数组
 
 # 果实飞向谷仓的吸入动画时长（秒）
 @export var collect_fly_duration: float = 0.4
@@ -279,13 +283,13 @@ func _update_column_tiles(column: int) -> void:
 	var source_id: int = PlantDB[plot.plant_type]
 	var atlas_coords := Vector2i.ZERO
 
-	match plot.growth_stage:
-		GrowthStage.SEED:
-			atlas_coords = Vector2i(0, 0)
-		GrowthStage.SPROUT:
-			atlas_coords = Vector2i(2, 0)
+	match plot.growth_stage: # 根据生长阶段设置植物行TileMap图层ID
+		GrowthStage.SEED: 
+			atlas_coords = Vector2i(0, 0) # 种子TileMap图层ID
+		GrowthStage.SPROUT: 
+			atlas_coords = Vector2i(2, 0) # 幼苗TileMap图层ID
 		GrowthStage.MATURE:
-			atlas_coords = Vector2i(7, 0)
+			atlas_coords = Vector2i(7, 0) # 成熟TileMap图层ID
 		_:
 			# 兜底：清空
 			_tile_map.set_cell(plant_coords, -1)

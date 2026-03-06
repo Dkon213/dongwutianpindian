@@ -3,7 +3,7 @@ extends PanelContainer
 
 signal item_clicked(plant_type: String, texture: Texture2D)
 
-var _pending_texture: Texture2D
+var _pending_texture: Texture2D 
 var _pending_name: String = ""
 var _pending_price: int = 0
 var _pending_plant_type: String = ""
@@ -19,21 +19,21 @@ func setup(texture: Texture2D, item_name: String, price: int, plant_type: String
 
 
 func _ready() -> void:
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	gui_input.connect(_on_gui_input)
-	_apply_pending()
+	mouse_filter = Control.MOUSE_FILTER_STOP # 阻止鼠标点击事件传递到父节点
+	gui_input.connect(_on_gui_input) # 连接鼠标点击信号
+	_apply_pending() # 应用配置内容
 
-
-func _on_gui_input(event: InputEvent) -> void:
-	var mouse_event := event as InputEventMouseButton
+ 
+func _on_gui_input(event: InputEvent) -> void: # 处理鼠标点击事件
+	var mouse_event := event as InputEventMouseButton # 把事件转换为鼠标按钮事件
 	if mouse_event == null or not mouse_event.pressed or mouse_event.button_index != MOUSE_BUTTON_LEFT:
-		return
-	if _pending_plant_type != "" and _pending_texture != null:
+		return # 如果事件不是鼠标左键点击，则返回
+	if _pending_plant_type != "" and _pending_texture != null: # 如果植物类型和图片不为空，则发出信号
 		item_clicked.emit(_pending_plant_type, _pending_texture)
 
 
-func _apply_pending() -> void:
-	if _pending_texture == null:
+func _apply_pending() -> void: # 应用配置内容
+	if _pending_texture == null: 
 		return
 	var texture_rect := get_node_or_null("MarginContainer/VBoxContainer/texture") as TextureRect
 	var label_name := get_node_or_null("MarginContainer/VBoxContainer/Label_name") as Label
