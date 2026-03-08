@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://dk0uipve085r7" path="res://assets/Maps/field/tile_wheat.png" id="7_ticpy"]
 [ext_resource type="Script" uid="uid://bp0eub6cs0a48" path="res://scripts/farming_system.gd" id="8_0i05h"]
 [ext_resource type="Texture2D" uid="uid://dvr5w3nd1juhx" path="res://assets/Maps/field/field_hoe_wave.png" id="8_mbqsv"]
+[ext_resource type="Texture2D" uid="uid://d3hsxgc88edqk" path="res://themes/theme_for_barn.png" id="9_jntf5"]
 [ext_resource type="Script" uid="uid://d20fb1coux4yx" path="res://scripts/pot_controller.gd" id="9_potctl"]
 [ext_resource type="Script" uid="uid://cocwpd7ji5hbm" path="res://scripts/hoe_controller.gd" id="10_hoectl"]
 [ext_resource type="Script" uid="uid://cuppeojq83p4o" path="res://scripts/shop_controller.gd" id="16_0b677"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
 [ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
 [ext_resource type="Script" uid="uid://u1s2oocalovj" path="res://scripts/seed_cursor_controller.gd" id="20_ol67m"]
+[ext_resource type="Script" uid="uid://bqchf4ugmimf2" path="res://scripts/barn_inventory.gd" id="21_barninv"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -118,6 +120,11 @@ animations = [{
 "name": &"barn_default",
 "speed": 5.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ck7ss"]
+size = Vector2(277, 187)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ck7ss"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bcppt"]
 atlas = ExtResource("4_ts0ht")
@@ -641,10 +648,67 @@ tile_set = SubResource("TileSet_1otix")
 
 [node name="barn" type="Node2D" parent="." unique_id=13575241]
 position = Vector2(151.905, 238.55)
+script = ExtResource("21_barninv")
 
-[node name="barn_animation" type="AnimatedSprite2D" parent="barn" unique_id=2049399468]
+[node name="barn_area" type="Area2D" parent="barn" unique_id=193174601]
+
+[node name="barn_animation" type="AnimatedSprite2D" parent="barn/barn_area" unique_id=2049399468]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_lwdav")
 animation = &"barn_default"
+
+[node name="barn_shape" type="CollisionShape2D" parent="barn/barn_area" unique_id=1909574130]
+position = Vector2(6.595001, 51.949997)
+shape = SubResource("RectangleShape2D_ck7ss")
+
+[node name="barn_PanelContainer" type="PanelContainer" parent="barn" unique_id=727528009]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.76
+offset_top = -200.0
+offset_right = 379.24
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ck7ss")
+
+[node name="barn_MarginContainer" type="MarginContainer" parent="barn/barn_PanelContainer" unique_id=2004898592]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="barn_NinePatchRect" type="NinePatchRect" parent="barn/barn_PanelContainer/barn_MarginContainer" unique_id=1587525073]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("9_jntf5")
+region_rect = Rect2(3, 4, 74, 73)
+patch_margin_left = 61
+patch_margin_top = 60
+patch_margin_right = 61
+patch_margin_bottom = 60
+
+[node name="barn_GridContainer" type="GridContainer" parent="barn/barn_PanelContainer/barn_MarginContainer/barn_NinePatchRect" unique_id=40521620]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.99998
+offset_top = -100.00001
+offset_right = 199.99998
+offset_bottom = 100.00001
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
 
 [node name="shelf" type="Node2D" parent="." unique_id=1205715001]
 position = Vector2(3168.011, 313.36)

@@ -306,7 +306,7 @@ func _on_fruit_spawned(global_pos: Vector2, fruit_type: String) -> void:
 	# 设置果实位置（使用全局坐标）
 	fruit_instance.global_position = global_pos
 	
-	# 根据 fruit_type 设置对应的动画
+	# 根据 fruit_type 设置对应的动画，并存储类型供吸入谷仓时使用
 	var anim_sprite: AnimatedSprite2D = fruit_instance.get_node("animation_fruits")
 	if anim_sprite != null:
 		# fruits.tscn 中的动画名称是 "carrot", "tomato", "wheat"
@@ -315,6 +315,7 @@ func _on_fruit_spawned(global_pos: Vector2, fruit_type: String) -> void:
 		else:
 			# 如果动画不存在，使用默认动画
 			print("警告：找不到果实动画类型: ", fruit_type)
+	fruit_instance.set_meta("fruit_type", fruit_type)
 	
 	# 将果实添加到场景树中（添加到 farming_system 节点下）
 	add_child(fruit_instance)
@@ -342,4 +343,12 @@ func _on_fruit_mouse_entered(fruit_node: Node) -> void:
 	tween.set_ease(Tween.EASE_IN)
 	tween.tween_property(fruit_node, "global_position", barn_global_pos, collect_fly_duration)
 	tween.parallel().tween_property(fruit_node, "scale", Vector2(0.5, 0.5), collect_fly_duration)
-	tween.tween_callback(fruit_node.queue_free)
+	tween.tween_callback(_on_fruit_arrived_at_barn.bind(fruit_node))
+
+
+# 果实在飞行动画结束后到达谷仓：增加库存并移除果实节点
+func _on_fruit_arrived_at_barn(fruit_node: Node) -> void:
+	var fruit_type: String = fruit_node.get_meta("fruit_type", "")
+	if fruit_type != "" and _barn != null and _barn.has_method("add_fruit"):
+		_barn.add_fruit(fruit_type)
+	fruit_node.queue_free()

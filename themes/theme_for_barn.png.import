@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmxluk48yxsuy"
-path="res://.godot/imported/fruit_wheat.png-411ce8ab81838fae4ef10dd60d9a1afa.ctex"
+uid="uid://d3hsxgc88edqk"
+path="res://.godot/imported/theme_for_barn.png-5ef4cec316e7c7da29753dfde2660ea7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Maps/field/fruit_wheat.png"
-dest_files=["res://.godot/imported/fruit_wheat.png-411ce8ab81838fae4ef10dd60d9a1afa.ctex"]
+source_file="res://themes/theme_for_barn.png"
+dest_files=["res://.godot/imported/theme_for_barn.png-5ef4cec316e7c7da29753dfde2660ea7.ctex"]
 
 [params]
 
