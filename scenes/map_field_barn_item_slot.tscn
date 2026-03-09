@@ -11,34 +11,34 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -47.0
+offset_left = -49.0
 offset_top = -15.0
-offset_right = 143.0
-offset_bottom = 65.0
+offset_right = 141.0
+offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_s2eu7")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1626648083]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1030959733]
 layout_mode = 2
 
 [node name="barn_icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=5098512]
 texture_filter = 1
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 texture = ExtResource("1_pmddk")
 expand_mode = 4
 
 [node name="barn_lable" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1811046086]
 clip_contents = true
-custom_minimum_size = Vector2(110, 60)
+custom_minimum_size = Vector2(110, 35)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10

@@ -62,10 +62,9 @@ var is_hoe_following_mouse: bool = false
 var is_seed_following_mouse: bool = false
 var following_seed_plant_type: String = ""
 
-# 长按重复：鼠标按住时每隔该秒数执行一次浇水/耕地
+# 线段插值拖动：鼠标按住并拖动时，对路径上的所有地块执行操作（锄头/水壶/种子）
 var _mouse_held_for_farming: bool = false # 标记鼠标是否按住
-var _hold_repeat_timer: Timer # 长按重复计时器
-@export var hold_repeat_interval: float = 0.2 # hoe和pot长按状态下执行浇水/耕地操作的间隔时间（秒）
+var _last_drag_global_pos: Vector2 = Vector2.INF # 上一次拖动时的鼠标位置（用于线段插值）
 
 # 预加载果实场景
 const FRUIT_SCENE = preload("res://scenes/fruits.tscn")
@@ -78,13 +77,6 @@ func _ready() -> void:
 	_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# 连接信号，当果实被收获时自动实例化
 	fruit_spawned.connect(_on_fruit_spawned)
-
-	# 长按重复计时器：单次 0.5 秒，超时后执行一次操作并再次启动
-	_hold_repeat_timer = Timer.new() #创建计时器
-	_hold_repeat_timer.one_shot = true #单次模式
-	_hold_repeat_timer.wait_time = hold_repeat_interval #设置间隔时间
-	_hold_repeat_timer.timeout.connect(_on_hold_repeat_timeout) #连接超时信号
-	add_child(_hold_repeat_timer) #添加到场景树
 
 # 当未持工具时，用物理检测鼠标下的果实并触发“吸入”（解决 Control 遮挡导致 mouse_entered 不触发的问题）
 func _process(_delta: float) -> void:
@@ -123,22 +115,34 @@ func _input(event: InputEvent) -> void:
 	if not is_pot_following_mouse and not is_hoe_following_mouse and not is_seed_following_mouse:
 		return
 
-	var mouse_event := event as InputEventMouseButton # 把事件转换为鼠标按钮事件
-	if mouse_event == null or mouse_event.button_index != MOUSE_BUTTON_LEFT: # 如果事件为空或者按钮不是左键，则返回
+	# 处理鼠标移动：按住左键拖动时，对路径上的所有地块执行线段插值操作（锄头/水壶/种子）
+	var motion_event := event as InputEventMouseMotion
+	if motion_event != null:
+		if _mouse_held_for_farming and (motion_event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+			var current_pos: Vector2 = motion_event.global_position
+			if _last_drag_global_pos.is_finite():
+				var affected := _do_farming_action_along_line(_last_drag_global_pos, current_pos)
+				if affected > 0:
+					_play_tool_animation()
+			_last_drag_global_pos = current_pos
 		return
 
-	# 左键松开：停止长按重复
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event == null or mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	# 左键松开：停止拖动
 	if not mouse_event.pressed:
-		_mouse_held_for_farming = false # 停止长按重复
-		_hold_repeat_timer.stop() # 停止计时器
+		_mouse_held_for_farming = false
+		_last_drag_global_pos = Vector2.INF
 		return
 
-	# 左键按下：在当前鼠标位置执行一次浇水/耕地，并开启长按每 0.5 秒重复
-	if not _do_farming_action_at_mouse(): # 如果执行失败，则返回
+	# 左键按下：在当前鼠标位置执行一次操作，并记录位置供拖动线段插值使用
+	if not _do_farming_action_at_mouse():
 		return
-	get_viewport().set_input_as_handled() # 设置输入为已处理
-	_mouse_held_for_farming = true # 开启长按重复
-	_hold_repeat_timer.start(hold_repeat_interval) # 启动计时器
+	get_viewport().set_input_as_handled()
+	_mouse_held_for_farming = true
+	_last_drag_global_pos = get_global_mouse_position()
 
 
 # 在当前鼠标位置执行一次浇水（pot）或耕地（hoe），若位置无效则返回 false
@@ -149,11 +153,7 @@ func _do_farming_action_at_mouse() -> bool:
 		return false # 如果鼠标位置不在地块范围内，则返回false
 
 	# 根据当前跟随的工具播放使用动画（种子无动画）
-	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
-		_pot_controller.play_use_animation()
-	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
-		_hoe_controller.play_use_animation()
-	# is_seed_following_mouse 不播放动画
+	_play_tool_animation()
 
 	var local_on_tilemap := _tile_map.to_local(global_pos)
 	var cell: Vector2i = _tile_map.local_to_map(local_on_tilemap)
@@ -164,12 +164,62 @@ func _do_farming_action_at_mouse() -> bool:
 	return true # 如果鼠标位置在地块范围内，则返回true
 
 
-func _on_hold_repeat_timeout() -> void:
-	if not _mouse_held_for_farming: # 如果鼠标没有按住，则返回
-		return
-	# 长按期间仍用当前鼠标位置执行一次操作
-	_do_farming_action_at_mouse()
-	_hold_repeat_timer.start(hold_repeat_interval)
+# 使用 Bresenham 线段算法，获取两点间路径所经过的地块列号（含起点终点，去重）
+func _get_columns_along_line(global_start: Vector2, global_end: Vector2) -> Array[int]:
+	var local_start: Vector2 = _tile_map.to_local(global_start)
+	var local_end: Vector2 = _tile_map.to_local(global_end)
+	var cell_start: Vector2i = _tile_map.local_to_map(local_start)
+	var cell_end: Vector2i = _tile_map.local_to_map(local_end)
+	var cols: Array[int] = []
+	var x0: int = cell_start.x
+	var y0: int = cell_start.y
+	var x1: int = cell_end.x
+	var y1: int = cell_end.y
+	var dx: int = abs(x1 - x0)
+	var dy: int = -abs(y1 - y0)
+	var sx: int = 1 if x0 < x1 else -1
+	var sy: int = 1 if y0 < y1 else -1
+	var err: int = dx + dy
+	while true:
+		if x0 >= MIN_X and x0 <= MAX_X and y0 >= PLANT_Y and y0 <= LAND_Y:
+			cols.append(x0)
+		if x0 == x1 and y0 == y1:
+			break
+		var e2: int = 2 * err
+		if e2 >= dy:
+			err += dy
+			x0 += sx
+		if e2 <= dx:
+			err += dx
+			y0 += sy
+	var seen: Dictionary = {}
+	var result: Array[int] = []
+	for c: int in cols:
+		if not seen.has(c):
+			seen[c] = true
+			result.append(c)
+	return result
+
+
+# 对线段路径上的所有有效地块执行耕作操作，返回受影响的地块数量
+func _do_farming_action_along_line(global_start: Vector2, global_end: Vector2) -> int:
+	var rect: Rect2 = _container.get_global_rect()
+	if not rect.has_point(global_start) and not rect.has_point(global_end):
+		return 0
+	var columns: Array[int] = _get_columns_along_line(global_start, global_end)
+	var count: int = 0
+	for col: int in columns:
+		if col >= MIN_X and col <= MAX_X:
+			_on_column_clicked(col)
+			count += 1
+	return count
+
+
+func _play_tool_animation() -> void:
+	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
+		_pot_controller.play_use_animation()
+	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
+		_hoe_controller.play_use_animation()
 
 
 func _on_column_clicked(column: int) -> void:
