@@ -645,6 +645,8 @@ scale = Vector2(2.13, 2.13)
 tile_map_data = PackedByteArray(0, 0, 47, 0, 8, 0, 3, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_1otix")
 
+[node name="watering_ready_icons" type="Node2D" parent="farming_system" unique_id=1165256443]
+
 [node name="barn" type="Node2D" parent="." unique_id=13575241]
 position = Vector2(151.905, 238.55)
 script = ExtResource("21_barninv")

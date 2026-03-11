@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c07a02ak3ti51"]
+
+[ext_resource type="Texture2D" uid="uid://bln7smdw4ribl" path="res://assets/Maps/field/water_ready.png" id="1_tp86w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dkk60"]
+atlas = ExtResource("1_tp86w")
+region = Rect2(0, 0, 178, 162)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c58i6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dkk60")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="watering_ready_icon" type="AnimatedSprite2D" unique_id=1664328114]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_c58i6")
