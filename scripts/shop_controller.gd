@@ -1,6 +1,6 @@
 extends Node2D
 
-const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/map_field_shop_item_slot.tscn")
+const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_shop_item_slot.tscn")
 
 const SHOP_ITEMS: Array[Dictionary] = [
 	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-CARROTI.png", "name": "萝卜种子", "price": 50, "plant_type": "carrot"},

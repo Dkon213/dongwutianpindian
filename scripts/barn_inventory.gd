@@ -16,7 +16,7 @@ const FRUIT_ORDER := ["carrot", "tomato", "wheat"]
 @onready var _barn_panel: PanelContainer = $barn_PanelContainer
 @onready var _grid: GridContainer = $barn_PanelContainer/barn_MarginContainer/barn_NinePatchRect/barn_GridContainer
 
-const ITEM_SLOT_SCENE := preload("res://scenes/map_field_barn_item_slot.tscn")
+const ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_barn_item_slot.tscn")
 
 var _inventory: Dictionary = {}
 

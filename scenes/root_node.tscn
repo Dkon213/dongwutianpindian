@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bvx5xobt1mbos"]
 
 [ext_resource type="Script" uid="uid://7y23aqm45dwe" path="res://scripts/root_node.gd" id="1_ynfbw"]
-[ext_resource type="PackedScene" uid="uid://snquxgay4etk" path="res://scenes/map_field.tscn" id="2_vhsfa"]
+[ext_resource type="PackedScene" uid="uid://snquxgay4etk" path="res://scenes/field/map_field.tscn" id="2_vhsfa"]
 [ext_resource type="Texture2D" uid="uid://subdd5os2xsx" path="res://assets/Menu_cloud/cloud_1.png" id="3_j38m8"]
 [ext_resource type="Texture2D" uid="uid://d22g1oyd6etqi" path="res://assets/Menu_cloud/cloud_2.png" id="4_ldoum"]
 [ext_resource type="Texture2D" uid="uid://p3nrfx4hte13" path="res://assets/Menu_cloud/cloud_3.png" id="5_jfjke"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://c1spcv8lrmwny" path="res://assets/Menu_cloud/cloud_x.png" id="7_l3gbx"]
 [ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="8_gwtxu"]
 [ext_resource type="PackedScene" uid="uid://p7xg2b3fodxu" path="res://scenes/menu_guide.tscn" id="9_vhsfa"]
+[ext_resource type="Texture2D" uid="uid://d3hsxgc88edqk" path="res://themes/theme_for_barn.png" id="10_gwtxu"]
+[ext_resource type="Texture2D" uid="uid://dql1tnmcadf3n" path="res://assets/Maps/field/coin.png" id="11_t75in"]
+[ext_resource type="Script" uid="uid://bqrthqanyro24" path="res://scripts/money_system.gd" id="12_moneysys"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l3gbx"]
 
@@ -434,6 +437,21 @@ animations = [{
 "speed": 2.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd5j6"]
+atlas = ExtResource("11_t75in")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ol6ib"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yd5j6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="RootNode" type="Node2D" unique_id=1320791067]
 script = ExtResource("1_ynfbw")
 
@@ -541,6 +559,58 @@ flat = true
 texture_filter = 1
 position = Vector2(3170, 138)
 scale = Vector2(0.25, 0.25)
+
+[node name="money_system" type="Node2D" parent="." unique_id=2142648755]
+script = ExtResource("12_moneysys")
+initial_coins = 200
+
+[node name="money_panel" type="PanelContainer" parent="money_system" unique_id=1445248727]
+offset_left = 3387.0
+offset_top = 11.0
+offset_right = 3639.0
+offset_bottom = 81.0
+
+[node name="money_margin" type="MarginContainer" parent="money_system/money_panel" unique_id=1064561601]
+layout_mode = 2
+
+[node name="money_NinePatchRect" type="NinePatchRect" parent="money_system/money_panel/money_margin" unique_id=1599903718]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("10_gwtxu")
+region_rect = Rect2(0, 0, 80, 80)
+patch_margin_left = 16
+patch_margin_top = 17
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="coin_anime" type="AnimatedSprite2D" parent="money_system/money_panel/money_margin/money_NinePatchRect" unique_id=792659240]
+texture_filter = 1
+position = Vector2(37.99996, 36)
+scale = Vector2(2.8124952, 2.8124952)
+sprite_frames = SubResource("SpriteFrames_ol6ib")
+
+[node name="money_count" type="Label" parent="money_system/money_panel/money_margin/money_NinePatchRect" unique_id=422274315]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.591
+anchor_top = 0.5
+anchor_right = 0.591
+anchor_bottom = 0.5
+offset_left = -84.93201
+offset_top = -25.0
+offset_right = 85.06799
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.87058824, 0.10980392, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_gwtxu")
+theme_override_font_sizes/font_size = 50
+text = "999999"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="menu_right/x/Button" to="." method="_show_menu"]
 [connection signal="pressed" from="menu_right/6/exit_button" to="." method="_quit_game"]

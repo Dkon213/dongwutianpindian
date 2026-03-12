@@ -647,6 +647,8 @@ tile_set = SubResource("TileSet_1otix")
 
 [node name="watering_ready_icons" type="Node2D" parent="farming_system" unique_id=1165256443]
 
+[node name="coin_plus_icons" type="Node2D" parent="farming_system" unique_id=1355965712]
+
 [node name="barn" type="Node2D" parent="." unique_id=13575241]
 position = Vector2(151.905, 238.55)
 script = ExtResource("21_barninv")
