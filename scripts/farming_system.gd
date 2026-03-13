@@ -55,6 +55,8 @@ var _money_system: Node = null # 根节点下的金币系统
 
 # 浇水冷却时长（秒），冷却结束后显示可浇水图标
 @export var water_cooldown_duration: float = 5.0
+# 刚播种后延迟（秒），延迟结束后显示可浇水图标提示玩家浇水
+@export var seed_planted_watering_icon_delay: float = 0.5
 
 # 果实飞向谷仓的吸入动画时长（秒）
 @export var collect_fly_duration: float = 0.4
@@ -199,6 +201,19 @@ func _on_water_cooldown_ended(column: int) -> void:
 		_show_watering_icon(column)
 
 
+# 播种后延迟显示浇水图标（刚种下的种子需要等一段时间才提示浇水）
+func _start_seed_planted_icon_delay(column: int) -> void:
+	var timer := get_tree().create_timer(seed_planted_watering_icon_delay)
+	timer.timeout.connect(_on_seed_planted_icon_delay_ended.bind(column))
+
+
+func _on_seed_planted_icon_delay_ended(column: int) -> void:
+	var plot := _plots[column]
+	# 仅当种子仍处于 SEED 阶段（尚未被浇水）时显示图标
+	if plot.land_state == LandState.TILLED and plot.growth_stage == GrowthStage.SEED and plot.plant_type != "":
+		_show_watering_icon(column)
+
+
 #处理输入事件（使用 _input 而不是 _unhandled_input，因为 PanelContainer 会拦截事件）
 func _input(event: InputEvent) -> void:
 	# 只有当有工具或种子在跟随鼠标时，才允许处理地块输入
@@ -324,6 +339,7 @@ func _on_column_clicked(column: int) -> void:
 			if PlantDB.has(following_seed_plant_type):
 				plot.plant_type = following_seed_plant_type
 				plot.growth_stage = GrowthStage.SEED
+				_start_seed_planted_icon_delay(column)
 		_update_column_tiles(column)
 		return
 
