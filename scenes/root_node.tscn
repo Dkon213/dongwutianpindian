@@ -437,6 +437,8 @@ animations = [{
 "speed": 2.0
 }]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b33qr"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_yd5j6"]
 atlas = ExtResource("11_t75in")
 region = Rect2(0, 0, 16, 16)
@@ -569,6 +571,7 @@ offset_left = 3387.0
 offset_top = 11.0
 offset_right = 3639.0
 offset_bottom = 81.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_b33qr")
 
 [node name="money_margin" type="MarginContainer" parent="money_system/money_panel" unique_id=1064561601]
 layout_mode = 2
@@ -592,14 +595,14 @@ sprite_frames = SubResource("SpriteFrames_ol6ib")
 [node name="money_count" type="Label" parent="money_system/money_panel/money_margin/money_NinePatchRect" unique_id=422274315]
 texture_filter = 1
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.591
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 0.591
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -84.93201
+offset_left = -60.0
 offset_top = -25.0
-offset_right = 85.06799
+offset_right = 115.0
 offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -608,7 +611,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("8_gwtxu")
 theme_override_font_sizes/font_size = 50
-text = "999999"
+text = "9999999"
 horizontal_alignment = 1
 vertical_alignment = 1
 

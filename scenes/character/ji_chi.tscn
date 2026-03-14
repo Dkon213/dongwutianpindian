@@ -1,4 +1,4 @@
-[gd_scene load_steps=138 format=3 uid="uid://cenbtsvh11dp5"]
+[gd_scene format=3 uid="uid://cenbtsvh11dp5"]
 
 [ext_resource type="Script" uid="uid://cxvd4l5rtlnmu" path="res://scripts/ji_chi.gd" id="1_apvqh"]
 [ext_resource type="Texture2D" uid="uid://bci6u2m7efnjl" path="res://assets/Characters/JiChi/jichi-xiao-idel1.png" id="1_iwkqx"]
@@ -936,7 +936,8 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="JiChi" type="CharacterBody2D"]
+[node name="JiChi" type="CharacterBody2D" unique_id=888626970]
+collision_layer = 2
 script = ExtResource("1_apvqh")
 walk_small_speed = 100.0
 walk_big_speed = 200.0
@@ -949,11 +950,11 @@ rest_scale = Vector2(0.32, 0.32)
 rest_position = Vector2(85, -45)
 default_position = Vector2(0, 7)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=663345045]
 position = Vector2(0, 6.75)
 shape = SubResource("RectangleShape2D_iwkqx")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=626326403]
 texture_filter = 1
 position = Vector2(0, 7)
 scale = Vector2(0.3272727, 0.3272728)
@@ -961,9 +962,9 @@ sprite_frames = SubResource("SpriteFrames_8hpvm")
 animation = &"walk_small"
 autoplay = "idel_front"
 
-[node name="AutoActionTimer" type="Timer" parent="."]
+[node name="AutoActionTimer" type="Timer" parent="." unique_id=1758185899]
 
-[node name="ClickCountTimer" type="Timer" parent="."]
+[node name="ClickCountTimer" type="Timer" parent="." unique_id=1579135593]
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="AutoActionTimer" to="." method="_on_auto_action_timer_timeout"]
