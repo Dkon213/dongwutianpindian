@@ -35,12 +35,6 @@ const PLANT_Y := -1 # 植物行Y坐标
 
 const LAND_SOURCE_ID := 0 # 土地行TileMap图层ID
 
-const PlantDB := { # 植物数据库(carrot: 萝卜, tomato: 番茄, wheat: 小麦)
-	"carrot": 1, # 萝卜TileMap图层ID
-	"tomato": 2, # 番茄TileMap图层ID
-	"wheat": 3, # 小麦TileMap图层ID
-}
-
 # 引用节点
 @onready var _container: PanelContainer = $farming_tile_map_container
 @onready var _tile_map: TileMapLayer = $farming_tile_map_container/farming_tile_map
@@ -77,9 +71,6 @@ var following_seed_plant_type: String = ""
 # 线段插值拖动：鼠标按住并拖动时，对路径上的所有地块执行操作（锄头/水壶/种子）
 var _mouse_held_for_farming: bool = false # 标记鼠标是否按住
 var _last_drag_global_pos: Vector2 = Vector2.INF # 上一次拖动时的鼠标位置（用于线段插值）
-
-# 作物价格：胡萝卜 5、西红柿 10、小麦 2
-const FruitPrices := {"carrot": 5, "tomato": 10, "wheat": 2}
 
 # 预加载果实场景
 const FRUIT_SCENE = preload("res://scenes/field/fruits.tscn")
@@ -336,7 +327,7 @@ func _on_column_clicked(column: int) -> void:
 	# 当种子跟随鼠标时：在已耕地块上播种
 	if is_seed_following_mouse:
 		if plot.land_state == LandState.TILLED and plot.growth_stage == GrowthStage.NONE and plot.plant_type == "":
-			if PlantDB.has(following_seed_plant_type):
+			if CropDB.has_crop(following_seed_plant_type):
 				plot.plant_type = following_seed_plant_type
 				plot.growth_stage = GrowthStage.SEED
 				_start_seed_planted_icon_delay(column)
@@ -443,12 +434,12 @@ func _update_column_tiles(column: int) -> void:
 		_tile_map.set_cell(plant_coords, -1)
 		return
 
-	if not PlantDB.has(plot.plant_type):
+	if not CropDB.has_crop(plot.plant_type):
 		# 未知植物类型，安全起见直接清空
 		_tile_map.set_cell(plant_coords, -1)
 		return
 
-	var source_id: int = PlantDB[plot.plant_type]
+	var source_id: int = CropDB.get_tile_source_id(plot.plant_type)
 	var atlas_coords := Vector2i.ZERO
 
 	match plot.growth_stage: # 根据生长阶段设置植物行TileMap图层ID
@@ -521,7 +512,7 @@ func _on_fruit_arrived_at_barn(fruit_node: Node) -> void:
 		_barn.add_fruit(fruit_type)
 
 	# 生成 "+金额" 浮动图标并增加金币（先设置位置再 add_child，确保 _ready 中 tween 使用正确起点）
-	var price: int = FruitPrices.get(fruit_type, 0)
+	var price: int = CropDB.get_fruit_price(fruit_type)
 	if price > 0:
 		var icon: Node2D = COIN_PLUS_ICON_SCENE.instantiate()
 		icon.setup(price)

@@ -8,6 +8,7 @@ var screen_height : int # 屏幕高度变量
 var viewport_width : int # 视口宽度
 var viewport_height : int # 视口高度
 var window_position : Vector2i # 游戏窗口的显示坐标，单位像素
+@export var always_on_top: bool = true
 
 	# 管理菜单的
 var menu_show : bool # 菜单移动指令开关
@@ -23,7 +24,9 @@ func _ready() -> void:
 	# 【独立功能，不涉及外部交互】用来设置窗口缩放模式的模块
 	get_window().set_content_scale_mode(Window.CONTENT_SCALE_MODE_VIEWPORT) #窗口大小跟着视口走，让窗口缩放与视口大小之间产生绑定关系。
 	get_window().set_content_scale_aspect(Window.CONTENT_SCALE_ASPECT_EXPAND) #窗口始终会显示视口里看到的全部画面，如果尺寸极端，则会横向或纵向拓展
-	# 【暂时弃用】 get_window().set_flag(Window.FLAG_ALWAYS_ON_TOP,true) # 窗口始终在最上层显示
+	
+	if always_on_top: # 如果开启始终在最上层显示
+		get_window().set_flag(Window.FLAG_ALWAYS_ON_TOP,true) # 窗口始终在最上层显示
 
 	# 【独立功能，不涉及外部交互】用来把游戏背景变透明的模块。需在项目设置中同步开启：窗口透明、像素级透明、根视口透明
 	get_viewport().transparent_bg = true #在游戏过程中，把【视口】变成透明背景。视口涵盖当前节点（根节点）下的各场景。

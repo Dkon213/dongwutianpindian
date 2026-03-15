@@ -2,12 +2,6 @@ extends Node2D
 
 const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_shop_item_slot.tscn")
 
-const SHOP_ITEMS: Array[Dictionary] = [
-	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-CARROTI.png", "name": "萝卜种子", "price": 50, "plant_type": "carrot"},
-	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-TOMATOI.png", "name": "番茄种子", "price": 50, "plant_type": "tomato"},
-	{"texture_path": "res://assets/Things/field/shop/ZHONGZ-WHEAT.png", "name": "小麦种子", "price": 50, "plant_type": "wheat"},
-]
-
 @onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
 @onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer"
@@ -24,7 +18,7 @@ func _ready() -> void:
 
 
 func _populate_shop_grid() -> void:
-	for item_data in SHOP_ITEMS:
+	for item_data in CropDB.get_shop_items():
 		var texture := load(item_data.texture_path) as Texture2D
 		if texture == null:
 			push_warning("商店商品图片加载失败: %s" % item_data.texture_path)
