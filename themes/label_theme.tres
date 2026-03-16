@@ -1,0 +1,11 @@
+[gd_resource type="Theme" format=3 uid="uid://dge6356gahmep"]
+
+[ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="1_6ait1"]
+
+[resource]
+Label/colors/font_color = Color(0.6934321, 0.48205215, 0.2632242, 1)
+Label/colors/font_outline_color = Color(0.39990744, 0.26609784, 0.12532622, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/constants/outline_size = 6
+Label/font_sizes/font_size = 35
+Label/fonts/font = ExtResource("1_6ait1")

@@ -42,7 +42,6 @@ const LAND_SOURCE_ID := 0 # 土地行TileMap图层ID
 @onready var _hoe_controller: Node = $"../hoe"
 @onready var _barn: Node2D = $"../barn"
 @onready var _watering_icons_container: Node2D = $watering_ready_icons
-@onready var _coin_plus_icons: Node2D = $coin_plus_icons
 
 var _plots: Array[FarmPlot] = [] # 地块数组
 var _money_system: Node = null # 根节点下的金币系统

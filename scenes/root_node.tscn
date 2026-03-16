@@ -10,8 +10,11 @@
 [ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="8_gwtxu"]
 [ext_resource type="PackedScene" uid="uid://p7xg2b3fodxu" path="res://scenes/menu_guide.tscn" id="9_vhsfa"]
 [ext_resource type="Texture2D" uid="uid://d3hsxgc88edqk" path="res://themes/theme_for_barn.png" id="10_gwtxu"]
+[ext_resource type="Theme" uid="uid://dge6356gahmep" path="res://themes/label_theme.tres" id="10_i6oe7"]
 [ext_resource type="Texture2D" uid="uid://dql1tnmcadf3n" path="res://assets/Maps/field/coin.png" id="11_t75in"]
+[ext_resource type="Texture2D" uid="uid://cioxtv6jqe0xw" path="res://themes/jiantou_left.png" id="11_vpben"]
 [ext_resource type="Script" uid="uid://bqrthqanyro24" path="res://scripts/money_system.gd" id="12_moneysys"]
+[ext_resource type="Texture2D" uid="uid://cnimgr47yjaru" path="res://themes/jiantou_right.png" id="12_wwi2v"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l3gbx"]
 
@@ -373,6 +376,8 @@ animations = [{
 "speed": 2.0
 }]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i6oe7"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_t4yja"]
 atlas = ExtResource("4_ldoum")
 region = Rect2(0, 0, 600, 320)
@@ -535,6 +540,154 @@ scale = Vector2(0.393765, 0.351562)
 sprite_frames = SubResource("SpriteFrames_jipf2")
 autoplay = "default"
 frame_progress = 0.176488
+
+[node name="audio_button" type="Button" parent="menu_right/5" unique_id=1084255001]
+texture_filter = 1
+offset_left = -271.73566
+offset_top = -147.91138
+offset_right = 281.89398
+offset_bottom = 150.75568
+theme_override_colors/font_color = Color(0.3264042, 0.54004896, 0.92995733, 1)
+theme_override_colors/font_pressed_color = Color(0.6901961, 0.9254902, 0.9882353, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("8_gwtxu")
+theme_override_font_sizes/font_size = 60
+text = "声音设置"
+flat = true
+
+[node name="audio_panel" type="PanelContainer" parent="menu_right/5" unique_id=226124353]
+z_index = 5
+z_as_relative = false
+offset_left = 126.979294
+offset_top = -412.44507
+offset_right = 876.9793
+offset_bottom = 15.554932
+
+[node name="NinePatchRect" type="NinePatchRect" parent="menu_right/5/audio_panel" unique_id=895313221]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("10_gwtxu")
+region_rect = Rect2(0, 0, 80, 80)
+patch_margin_left = 16
+patch_margin_top = 17
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="audio_margin_up" type="MarginContainer" parent="menu_right/5/audio_panel" unique_id=443772917]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 350
+
+[node name="audio_hbox1" type="HBoxContainer" parent="menu_right/5/audio_panel/audio_margin_up" unique_id=1524945876]
+layout_mode = 2
+
+[node name="audio_close_button" type="Button" parent="menu_right/5/audio_panel/audio_margin_up/audio_hbox1" unique_id=20700468]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5681523, 0.3272752, 0.025864214, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_gwtxu")
+theme_override_font_sizes/font_size = 50
+text = "X"
+flat = true
+
+[node name="Label" type="Label" parent="menu_right/5/audio_panel/audio_margin_up/audio_hbox1" unique_id=1137246050]
+texture_filter = 1
+custom_minimum_size = Vector2(650, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5686275, 0.32941177, 0.023529412, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_gwtxu")
+theme_override_font_sizes/font_size = 38
+text = "声音设置"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="audio_margin_down" type="MarginContainer" parent="menu_right/5/audio_panel" unique_id=2091845630]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="audio_hbox2" type="HBoxContainer" parent="menu_right/5/audio_panel/audio_margin_down" unique_id=148699495]
+layout_mode = 2
+
+[node name="audio_vbox1" type="VBoxContainer" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2" unique_id=9287110]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="label_sound_volum" type="Label" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox1" unique_id=851121385]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+text = "音效音量"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="label_music_volum" type="Label" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox1" unique_id=1951704471]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+text = "音乐音量"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="label_chooseBGM" type="Label" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox1" unique_id=1180771503]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+text = "背景音乐"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="audio_vbox2" type="VBoxContainer" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2" unique_id=3354368]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="HSlider_sound_volum" type="HSlider" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2" unique_id=307656559]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="HSlider_music_volum" type="HSlider" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2" unique_id=1665402428]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="BGM_choose_panel" type="PanelContainer" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2" unique_id=1097577529]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_i6oe7")
+
+[node name="audio_hbox3" type="HBoxContainer" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2/BGM_choose_panel" unique_id=1278280772]
+layout_mode = 2
+
+[node name="choose_left" type="Button" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2/BGM_choose_panel/audio_hbox3" unique_id=1440254247]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+icon = ExtResource("11_vpben")
+flat = true
+icon_alignment = 1
+
+[node name="BGM_name" type="Label" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2/BGM_choose_panel/audio_hbox3" unique_id=834318233]
+custom_minimum_size = Vector2(240, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="choose_right" type="Button" parent="menu_right/5/audio_panel/audio_margin_down/audio_hbox2/audio_vbox2/BGM_choose_panel/audio_hbox3" unique_id=1837126529]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme = ExtResource("10_i6oe7")
+icon = ExtResource("12_wwi2v")
+flat = true
+icon_alignment = 1
 
 [node name="6" type="AnimatedSprite2D" parent="menu_right" unique_id=1430103936]
 texture_filter = 1

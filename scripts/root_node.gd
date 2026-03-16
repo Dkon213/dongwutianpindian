@@ -17,6 +17,18 @@ var menu_right : Node # 左菜单节点
 #var menu_left_middle_x : Node #左菜单剧中时候的横坐标位置，避免每次都帧运算
 #var menu_right_middle_x : Node #右菜单剧中时候的横坐标位置，避免每次都帧运算
 
+	# 声音设置面板（通过 /root 获取 Autoload，避免解析器报未声明）
+var _audio_mgr : Node
+var _audio_panel : Control
+var _audio_button : Button
+var _audio_close_button : Button
+var _slider_music : HSlider
+var _slider_sound : HSlider
+var _bgm_choose_left : Button
+var _bgm_choose_right : Button
+var _bgm_name_label : Label
+var _audio_modal_overlay : Control  # 点击面板外关闭用
+
 func _ready() -> void:
 	
 	var aspect_ratio : float # 用来表示宽高比的内部变量，主要目的是为了让窗口宽高比和视口保持一致，后面会用到
@@ -60,7 +72,9 @@ func _ready() -> void:
 	
 	# 初始设定不展示菜单
 	menu_show = false
-	
+
+	# 声音设置面板：延后一帧执行，确保 Autoload 已挂到 /root 再取引用
+	call_deferred("_setup_audio_panel")
 
 # 每帧运行的函数大类
 func _process(_delta: float) -> void:
@@ -99,3 +113,98 @@ func _show_menu() -> void:
 # 退出游戏函数，点击退出按钮后调用
 func _quit_game() -> void:
 	get_tree().quit()
+
+
+# --- 声音设置面板 ---
+
+func _setup_audio_panel() -> void:
+	_audio_mgr = get_tree().root.get_node_or_null("AudioManager")
+	if _audio_mgr == null:
+		push_error("root_node: 未找到 /root/AudioManager，请确认 project.godot 中已添加 Autoload。")
+		return
+	var menu_5: Node = get_node("menu_right/5")
+	_audio_panel = menu_5.get_node("audio_panel")
+	_audio_button = menu_5.get_node("audio_button")
+	_audio_close_button = _audio_panel.get_node("audio_margin_up/audio_hbox1/audio_close_button")
+	var vbox2: Control = _audio_panel.get_node("audio_margin_down/audio_hbox2/audio_vbox2")
+	_slider_music = vbox2.get_node("HSlider_music_volum")
+	_slider_sound = vbox2.get_node("HSlider_sound_volum")
+	var bgm_panel: Control = vbox2.get_node("BGM_choose_panel/audio_hbox3")
+	_bgm_choose_left = bgm_panel.get_node("choose_left")
+	_bgm_choose_right = bgm_panel.get_node("choose_right")
+	_bgm_name_label = bgm_panel.get_node("BGM_name")
+
+	_audio_panel.visible = false
+
+	# 遮罩：全屏透明，点击后关闭面板（置于底层 CanvasLayer）
+	var layer := CanvasLayer.new()
+	layer.layer = -1
+	_audio_modal_overlay = ColorRect.new()
+	_audio_modal_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_audio_modal_overlay.set_offsets_preset(Control.PRESET_FULL_RECT)
+	_audio_modal_overlay.color = Color(0, 0, 0, 0)
+	_audio_modal_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_audio_modal_overlay.visible = false
+	layer.add_child(_audio_modal_overlay)
+	add_child(layer)
+
+	# 从 AudioManager 同步到 UI（步进 0.01 便于平滑调节）
+	_slider_music.min_value = 0.0
+	_slider_music.max_value = 1.0
+	_slider_music.step = 0.01
+	_slider_music.value = _audio_mgr.get_bgm_volume_linear()
+	_slider_sound.min_value = 0.0
+	_slider_sound.max_value = 1.0
+	_slider_sound.step = 0.01
+	_slider_sound.value = _audio_mgr.get_sfx_volume_linear()
+	_bgm_name_label.text = _audio_mgr.get_current_bgm_display_name()
+
+	_audio_button.pressed.connect(_toggle_audio_panel)
+	_audio_close_button.pressed.connect(_close_audio_panel)
+	_audio_modal_overlay.gui_input.connect(_on_audio_overlay_input)
+	_slider_music.value_changed.connect(_on_bgm_volume_changed)
+	_slider_sound.value_changed.connect(_on_sfx_volume_changed)
+	_bgm_choose_left.pressed.connect(_on_bgm_prev)
+	_bgm_choose_right.pressed.connect(_on_bgm_next)
+
+
+func _toggle_audio_panel() -> void:
+	if _audio_panel.visible:
+		_close_audio_panel()
+	else:
+		_audio_panel.visible = true
+		_audio_modal_overlay.visible = true
+
+
+func _close_audio_panel() -> void:
+	_audio_panel.visible = false
+	_audio_modal_overlay.visible = false
+
+
+func _on_audio_overlay_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var e := event as InputEventMouseButton
+		if e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+			_close_audio_panel()
+
+
+func _on_bgm_volume_changed(value: float) -> void:
+	_audio_mgr.set_bgm_volume_linear(value)
+
+
+func _on_sfx_volume_changed(value: float) -> void:
+	_audio_mgr.set_sfx_volume_linear(value)
+
+
+func _on_bgm_prev() -> void:
+	var n: int = _audio_mgr.get_bgm_count()
+	var idx: int = (_audio_mgr.get_current_bgm_index() - 1 + n) % n
+	_audio_mgr.play_bgm(idx)
+	_bgm_name_label.text = _audio_mgr.get_current_bgm_display_name()
+
+
+func _on_bgm_next() -> void:
+	var n: int = _audio_mgr.get_bgm_count()
+	var idx: int = (_audio_mgr.get_current_bgm_index() + 1) % n
+	_audio_mgr.play_bgm(idx)
+	_bgm_name_label.text = _audio_mgr.get_current_bgm_display_name()

@@ -8,10 +8,6 @@
 
 config_version=5
 
-[autoload]
-
-CropDB="*res://scripts/crop_data.gd"
-
 [animation]
 
 compatibility/default_parent_skeleton_in_mesh_instance_3d=true
@@ -24,6 +20,11 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+CropDB="*res://scripts/crop_data.gd"
+AudioManager="*uid://26dam6kx2pci"
+
 [display]
 
 window/size/viewport_width=3650
@@ -34,6 +35,10 @@ window/subwindows/embed_subwindows=false
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
 window/per_pixel_transparency/allowed=true
+
+[editor]
+
+version_control/autoload_on_startup=true
 
 [file_customization]
 
