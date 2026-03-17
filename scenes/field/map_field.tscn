@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://dp7260thxh5og" path="res://themes/theme_for_background.png" id="18_0sa83"]
 [ext_resource type="Texture2D" uid="uid://b1uny8e4i134m" path="res://themes/top_cat.png" id="19_n31ce"]
 [ext_resource type="Script" uid="uid://u1s2oocalovj" path="res://scripts/seed_cursor_controller.gd" id="20_ol67m"]
+[ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="21_4nh8r"]
 [ext_resource type="Script" uid="uid://bqchf4ugmimf2" path="res://scripts/barn_inventory.gd" id="21_barninv"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
@@ -463,6 +464,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lwdav"]
 size = Vector2(365, 255)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hmmec"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_kggy2"]
 atlas = ExtResource("19_n31ce")
 region = Rect2(0, 0, 82, 64)
@@ -630,6 +633,7 @@ shape = SubResource("WorldBoundaryShape2D_hinbh")
 
 [node name="farming_system" type="Node2D" parent="." unique_id=1355085591]
 script = ExtResource("8_0i05h")
+metadata/_edit_lock_ = true
 
 [node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
 clip_contents = true
@@ -790,21 +794,14 @@ transparent_bg = true
 oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(750, 600)
-visible = false
 borderless = true
 transparent = true
 
 [node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -361.5
-offset_top = -491.0
-offset_right = 361.5
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = 2.0
+offset_top = 101.0
+offset_right = 744.0
+offset_bottom = 589.0
 texture = ExtResource("18_0sa83")
 region_rect = Rect2(0, 0, 319, 321)
 patch_margin_left = 60
@@ -814,43 +811,44 @@ patch_margin_bottom = 60
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="shop_menu_VScrollBar" type="VScrollBar" parent="UI/shop_menu_window/shop_menu_background" unique_id=1566748857]
+[node name="TabContainer_seeds" type="TabContainer" parent="UI/shop_menu_window" unique_id=298138454]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.90200007
-anchor_top = 0.5
-anchor_right = 0.90200007
-anchor_bottom = 0.5
-offset_left = -13.646057
-offset_top = -194.5
-offset_right = 14.353943
-offset_bottom = 200.5
-grow_horizontal = 0
-grow_vertical = 2
-size_flags_horizontal = 8
-theme_override_constants/padding_left = 10
-theme_override_constants/padding_right = 10
+offset_left = 48.0
+offset_top = 45.0
+offset_right = 708.0
+offset_bottom = 547.0
+theme_override_constants/side_margin = 15
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("21_4nh8r")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/panel = SubResource("StyleBoxEmpty_hmmec")
+current_tab = 0
+tab_0/title = "种子"
 
-[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_menu_background" unique_id=1015575566]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.46
-anchor_top = 0.5
-anchor_right = 0.46
-anchor_bottom = 0.5
-offset_left = -279.08002
-offset_top = -193.5
-offset_right = 280.91998
-offset_bottom = 196.5
+[node name="MarginContainer" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=1014363969]
+layout_mode = 2
+theme_override_constants/margin_top = 50
+metadata/_tab_index = 0
+metadata/_tab_name = "种子"
+
+[node name="shop_menu_ScrollContainer" type="ScrollContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer" unique_id=2095747508]
+layout_mode = 2
+theme_override_colors/scroll_hint_vertical_color = Color(0, 0, 0, 1)
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+scroll_hint_mode = 3
+
+[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer/shop_menu_ScrollContainer" unique_id=1015575566]
+custom_minimum_size = Vector2(620, 500)
+layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
 texture_filter = 1
-position = Vector2(375.00003, 67)
+position = Vector2(587, 58.999996)
 scale = Vector2(3.6591558, 3.6816409)
 sprite_frames = SubResource("SpriteFrames_ghsr4")
 autoplay = "default"
@@ -865,6 +863,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="JiChi" parent="." unique_id=1429305371 instance=ExtResource("17_bcppt")]
-position = Vector2(1570, 305)
+position = Vector2(1568, 285)
 
 [connection signal="input_event" from="shop/shop_area" to="shop" method="_on_shop_area_input_event"]

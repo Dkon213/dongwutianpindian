@@ -27,8 +27,8 @@ func _ready() -> void:
 	_bgm_player.finished.connect(_on_bgm_finished)
 	_load_config()
 	_apply_bgm_volume()
-	# 启动时默认单曲循环播放第一首
-	play_bgm(0)
+	# 启动时默认单曲循环播放第二首
+	play_bgm(1)
 
 
 func _load_config() -> void:

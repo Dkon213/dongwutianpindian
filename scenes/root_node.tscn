@@ -501,7 +501,6 @@ autoplay = "default"
 frame_progress = 0.28904
 
 [node name="menu_right" type="PanelContainer" parent="." unique_id=1146074822]
-clip_contents = true
 custom_minimum_size = Vector2(1300, 250)
 offset_right = 1395.0
 offset_bottom = 300.0
@@ -550,19 +549,21 @@ offset_bottom = 150.75568
 theme_override_colors/font_color = Color(0.3264042, 0.54004896, 0.92995733, 1)
 theme_override_colors/font_pressed_color = Color(0.6901961, 0.9254902, 0.9882353, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
+theme_override_constants/outline_size = 20
 theme_override_fonts/font = ExtResource("8_gwtxu")
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 100
 text = "声音设置"
 flat = true
 
 [node name="audio_panel" type="PanelContainer" parent="menu_right/5" unique_id=226124353]
+visible = false
 z_index = 5
 z_as_relative = false
 offset_left = 126.979294
 offset_top = -412.44507
 offset_right = 876.9793
 offset_bottom = 15.554932
+scale = Vector2(2, 2)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="menu_right/5/audio_panel" unique_id=895313221]
 texture_filter = 1
@@ -602,7 +603,7 @@ theme_override_colors/font_color = Color(0.5686275, 0.32941177, 0.023529412, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("8_gwtxu")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 60
 text = "声音设置"
 horizontal_alignment = 1
 vertical_alignment = 1

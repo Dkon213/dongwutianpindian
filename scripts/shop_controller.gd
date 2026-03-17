@@ -4,7 +4,7 @@ const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_shop_item_sl
 
 @onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
-@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/shop_menu_background/shop_menu_GridContainer"
+@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/TabContainer_seeds/MarginContainer/shop_menu_ScrollContainer/shop_menu_GridContainer"
 @onready var _seed_cursor: Node = $"../UI/seed_cursor"
 
 

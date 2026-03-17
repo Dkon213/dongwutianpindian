@@ -937,6 +937,7 @@ animations = [{
 }]
 
 [node name="JiChi" type="CharacterBody2D" unique_id=888626970]
+scale = Vector2(1.2, 1.2)
 collision_layer = 2
 script = ExtResource("1_apvqh")
 walk_small_speed = 100.0
