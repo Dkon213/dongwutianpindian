@@ -45,7 +45,8 @@ version_control/autoload_on_startup=true
 folder_colors={
 "res://assets/": "orange",
 "res://scenes/": "blue",
-"res://scripts/": "red"
+"res://scripts/": "red",
+"res://themes/": "purple"
 }
 
 [layer_names]

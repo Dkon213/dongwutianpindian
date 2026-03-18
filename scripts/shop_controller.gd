@@ -4,7 +4,7 @@ const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_shop_item_sl
 
 @onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
-@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/TabContainer_seeds/MarginContainer/shop_menu_ScrollContainer/shop_menu_GridContainer"
+@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer/shop_menu_GridContainer"
 @onready var _seed_cursor: Node = $"../UI/seed_cursor"
 
 
@@ -24,7 +24,7 @@ func _populate_shop_grid() -> void:
 			push_warning("商店商品图片加载失败: %s" % item_data.texture_path)
 			continue
 		var plant_type: String = item_data.get("plant_type", "")
-		var slot: PanelContainer = SHOP_ITEM_SLOT_SCENE.instantiate()
+		var slot: TextureButton = SHOP_ITEM_SLOT_SCENE.instantiate()
 		slot.setup(texture, item_data.name, item_data.price, plant_type)
 		if slot.has_signal("item_clicked"):
 			slot.item_clicked.connect(_on_shop_item_clicked)

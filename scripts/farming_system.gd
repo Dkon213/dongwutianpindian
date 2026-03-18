@@ -313,8 +313,10 @@ func _do_farming_action_along_line(global_start: Vector2, global_end: Vector2) -
 func _play_tool_animation() -> void:
 	if is_pot_following_mouse and _pot_controller and _pot_controller.has_method("play_use_animation"):
 		_pot_controller.play_use_animation()
+		AudioManager.play_sfx_once("watering")
 	elif is_hoe_following_mouse and _hoe_controller and _hoe_controller.has_method("play_use_animation"):
 		_hoe_controller.play_use_animation()
+		AudioManager.play_sfx_once("waving_hoe")
 
 
 func _on_column_clicked(column: int) -> void:

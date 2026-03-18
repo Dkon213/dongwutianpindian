@@ -33,6 +33,7 @@ func _ready() -> void:
 	if _coin_anime != null:
 		_coin_anime.play("default")
 		_coin_anime.animation_finished.connect(_on_animation_finished)
+		AudioManager.play_sfx_once("get_coin")
 
 	# 延后一帧启动 tween，确保 add_child 后的位置已完全应用
 	call_deferred("_start_float_tween")

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://snquxgay4etk"]
 
 [ext_resource type="Texture2D" uid="uid://j6r3555ortn8" path="res://assets/Maps/field/field_ground.png" id="1_d4hxt"]
+[ext_resource type="Texture2D" uid="uid://pg8n4slr4b58" path="res://assets/Maps/field/field_montain_near.png" id="1_t88ea"]
 [ext_resource type="Texture2D" uid="uid://bm8ojucyfe3fl" path="res://assets/Maps/field/field_trees.png" id="2_n6xbp"]
 [ext_resource type="Texture2D" uid="uid://g7r6n5lj7lrb" path="res://assets/Maps/field/field_warehouse.png" id="3_ticpy"]
 [ext_resource type="Texture2D" uid="uid://d3rjd3yxo1bi0" path="res://assets/Maps/field/field_ground_tileset.png" id="4_hinbh"]
@@ -589,7 +590,12 @@ animations = [{
 [node name="map_field" type="Node2D" unique_id=1120339112]
 
 [node name="background&wall" type="Node2D" parent="." unique_id=144467476]
-metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="background&wall" unique_id=1467044464]
+texture_filter = 1
+position = Vector2(1893.5, 199.75)
+scale = Vector2(2.8710938, 2.8710938)
+texture = ExtResource("1_t88ea")
 
 [node name="field_groung1" type="Sprite2D" parent="background&wall" unique_id=1297601942]
 texture_filter = 1
@@ -794,6 +800,7 @@ transparent_bg = true
 oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(750, 600)
+visible = false
 borderless = true
 transparent = true
 
@@ -824,14 +831,15 @@ theme_override_font_sizes/font_size = 50
 theme_override_styles/panel = SubResource("StyleBoxEmpty_hmmec")
 current_tab = 0
 tab_0/title = "种子"
+tab_1/title = "摆件"
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=1014363969]
+[node name="MarginContainer_seed" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=1014363969]
 layout_mode = 2
 theme_override_constants/margin_top = 50
 metadata/_tab_index = 0
 metadata/_tab_name = "种子"
 
-[node name="shop_menu_ScrollContainer" type="ScrollContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer" unique_id=2095747508]
+[node name="shop_menu_ScrollContainer" type="ScrollContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed" unique_id=2095747508]
 layout_mode = 2
 theme_override_colors/scroll_hint_vertical_color = Color(0, 0, 0, 1)
 follow_focus = true
@@ -839,12 +847,18 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 scroll_hint_mode = 3
 
-[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer/shop_menu_ScrollContainer" unique_id=1015575566]
+[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer" unique_id=1015575566]
 custom_minimum_size = Vector2(620, 500)
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 4
+
+[node name="MarginContainer_ornament‌" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=308204752]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "摆件"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
 texture_filter = 1

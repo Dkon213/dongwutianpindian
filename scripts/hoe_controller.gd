@@ -12,6 +12,9 @@ var _start_position: Vector2
 var _default_scale: Vector2
 var _follow_scale: Vector2
 var _idle_light_timer: float = 0.0  # 用于每 5 秒播放 hoe_light 待机动画
+var _left_pressed: bool = false
+var _left_press_time: float = 0.0
+var _hoe_loop_playing: bool = false
 
 
 func _ready() -> void:
@@ -36,6 +39,12 @@ func _process(delta: float) -> void:
 	if _is_following_mouse:
 		global_position = get_global_mouse_position()
 		_idle_light_timer = 0.0  # 被持有时不累计，放下后重新计 5 秒
+		# 处理长按 0.5 秒触发的挥锄循环音效
+		if _left_pressed:
+			_left_press_time += delta
+			if not _hoe_loop_playing and _left_press_time >= 0.5:
+				AudioManager.play_sfx_loop("waving_hoe")
+				_hoe_loop_playing = true
 	else:
 		# 待机时每 5 秒自动播放一次 hoe_light
 		_idle_light_timer += delta
@@ -55,6 +64,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 仅在锄头跟随鼠标时才处理右键复位
 	if _is_following_mouse and mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_RIGHT:
 		_reset_hoe()
+
+	# 当锄头跟随鼠标时，处理左键点击/长按的音效逻辑
+	if _is_following_mouse and mouse_event.button_index == MOUSE_BUTTON_LEFT:
+		if mouse_event.pressed:
+			_left_pressed = true
+			_left_press_time = 0.0
+			_hoe_loop_playing = false
+		else:
+			if _left_pressed:
+				if _hoe_loop_playing:
+					AudioManager.stop_all_sfx("waving_hoe")
+				else:
+					AudioManager.play_sfx_once("waving_hoe")
+			_left_pressed = false
+			_left_press_time = 0.0
+			_hoe_loop_playing = false
 
 
 func _on_hoe_area_input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
@@ -91,6 +116,10 @@ func _reset_hoe() -> void:
 	_is_following_mouse = false
 	position = _start_position
 	_set_hoe_following(false)
+	_left_pressed = false
+	_left_press_time = 0.0
+	_hoe_loop_playing = false
+	AudioManager.stop_all_sfx("waving_hoe")
 
 
 func is_following() -> bool:
