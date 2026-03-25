@@ -12,10 +12,12 @@ const BGM_PATHS: Array[String] = [
 # - "get_coin"     -> 收集到金币时播放
 # - "watering"     -> 浇水时播放
 # - "waving_hoe"   -> 耕地（挥锄头）时播放
+# - "grow_finish"  -> 植物成熟结出果实（生成 fruit 场景）时播放，可多路叠加
 const SFX_PATHS := {
 	"get_coin": "res://assets/SFX/get_coin.wav",
 	"watering": "res://assets/SFX/watering.wav",
 	"waving_hoe": "res://assets/SFX/waving_hoe.wav",
+	"grow_finish": "res://assets/SFX/grow_finish.wav",
 }
 
 const CONFIG_PATH: String = "user://audio_settings.cfg"
@@ -125,6 +127,29 @@ func play_sfx_once(id: String) -> void:
 	p.volume_db = _linear_to_db(_sfx_volume_linear)
 	p.pitch_scale = 1.0
 	p.play()
+
+
+## 每次调用单独挂一个 AudioStreamPlayer，播完自动释放，允许多段同一音效同时播放
+func play_sfx_overlap(id: String) -> void:
+	if not SFX_PATHS.has(id):
+		return
+	var stream: AudioStream = load(SFX_PATHS[id]) as AudioStream
+	if stream == null:
+		return
+	var p := AudioStreamPlayer.new()
+	if AudioServer.get_bus_index("SFX") != -1:
+		p.bus = "SFX"
+	p.stream = stream
+	p.volume_db = _linear_to_db(_sfx_volume_linear)
+	p.pitch_scale = 1.0
+	p.finished.connect(_on_overlap_sfx_finished.bind(p))
+	add_child(p)
+	p.play()
+
+
+func _on_overlap_sfx_finished(player: AudioStreamPlayer) -> void:
+	if is_instance_valid(player):
+		player.queue_free()
 
 
 func play_sfx_loop(id: String) -> void:

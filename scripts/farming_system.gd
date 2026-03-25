@@ -462,6 +462,7 @@ func _update_column_tiles(column: int) -> void:
 func _on_fruit_spawned(global_pos: Vector2, fruit_type: String) -> void:
 	# 实例化果实场景
 	var fruit_instance = FRUIT_SCENE.instantiate()
+	AudioManager.play_sfx_overlap("grow_finish")
 	
 	# 设置果实位置（使用全局坐标）
 	fruit_instance.global_position = global_pos
