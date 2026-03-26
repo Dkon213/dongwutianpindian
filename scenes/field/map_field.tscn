@@ -643,16 +643,15 @@ metadata/_edit_lock_ = true
 
 [node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
 clip_contents = true
-offset_left = 316.0
+offset_left = 476.0
 offset_top = 315.0
-offset_right = 3111.0
+offset_right = 2828.0
 offset_bottom = 452.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
 
 [node name="farming_tile_map" type="TileMapLayer" parent="farming_system/farming_tile_map_container" unique_id=1405946565]
 position = Vector2(0, 69.000015)
-scale = Vector2(2.13, 2.13)
-tile_map_data = PackedByteArray(0, 0, 47, 0, 8, 0, 3, 0, 0, 0, 0, 0, 0, 0)
+scale = Vector2(2.1, 2.1)
 tile_set = SubResource("TileSet_1otix")
 
 [node name="watering_ready_icons" type="Node2D" parent="farming_system" unique_id=1165256443]
@@ -664,6 +663,8 @@ position = Vector2(151.905, 238.55)
 script = ExtResource("21_barninv")
 
 [node name="barn_area" type="Area2D" parent="barn" unique_id=193174601]
+position = Vector2(63, -75)
+scale = Vector2(1.5, 1.5)
 
 [node name="barn_animation" type="AnimatedSprite2D" parent="barn/barn_area" unique_id=2049399468]
 texture_filter = 1
@@ -681,10 +682,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -70.76
-offset_top = -200.0
-offset_right = 379.24
-offset_bottom = 60.0
+offset_left = 94.09501
+offset_top = -226.55
+offset_right = 544.09503
+offset_bottom = 33.449997
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ck7ss")
@@ -724,7 +725,7 @@ theme_override_constants/v_separation = 20
 columns = 2
 
 [node name="shelf" type="Node2D" parent="." unique_id=1205715001]
-position = Vector2(3168.011, 313.36)
+position = Vector2(3130, 310)
 scale = Vector2(1.5, 1.5)
 
 [node name="shelf_animation" type="AnimatedSprite2D" parent="shelf" unique_id=802725598]
@@ -739,8 +740,8 @@ position = Vector2(-3.8676758, 17.577026)
 shape = SubResource("RectangleShape2D_mbqsv")
 
 [node name="pot" type="Node2D" parent="." unique_id=431672944]
-position = Vector2(3135.686, 310.705)
-scale = Vector2(2.0774999, 2.0774999)
+position = Vector2(3084.0002, 305.00003)
+scale = Vector2(2.5, 2.5)
 script = ExtResource("9_potctl")
 
 [node name="pot_animation" type="AnimatedSprite2D" parent="pot" unique_id=268863143]
@@ -756,7 +757,7 @@ autoplay = "pot_default"
 shape = SubResource("CircleShape2D_mbqsv")
 
 [node name="hoe" type="Node2D" parent="." unique_id=177539916]
-position = Vector2(3208.307, 304.103)
+position = Vector2(3176, 305)
 scale = Vector2(1.5, 1.5)
 script = ExtResource("10_hoectl")
 

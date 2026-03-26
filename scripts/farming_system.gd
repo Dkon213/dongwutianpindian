@@ -21,13 +21,21 @@ class FarmPlot:
 	var land_state: int
 	var plant_type: String       
 	var growth_stage: int
+	var growth_stage_token: int
+	var growth_timer: SceneTreeTimer
+	var water_unlock_timer: SceneTreeTimer
+	var can_water_current_stage: bool
 
 	func _init() -> void: # 初始化地块
 		land_state = LandState.NORMAL
 		plant_type = ""
 		growth_stage = GrowthStage.NONE
+		growth_stage_token = 0
+		growth_timer = null
+		water_unlock_timer = null
+		can_water_current_stage = false
 
-const GRID_WIDTH := 41 # 地块宽度		
+const GRID_WIDTH := 35 # 地块宽度		
 const MIN_X := 0 # 地块最小X坐标
 const MAX_X := GRID_WIDTH - 1 # 地块最大X坐标
 const LAND_Y := 0 # 土地行Y坐标
@@ -45,11 +53,6 @@ const LAND_SOURCE_ID := 0 # 土地行TileMap图层ID
 
 var _plots: Array[FarmPlot] = [] # 地块数组
 var _money_system: Node = null # 根节点下的金币系统
-
-# 浇水冷却时长（秒），冷却结束后显示可浇水图标
-@export var water_cooldown_duration: float = 5.0
-# 刚播种后延迟（秒），延迟结束后显示可浇水图标提示玩家浇水
-@export var seed_planted_watering_icon_delay: float = 0.5
 
 # 果实飞向谷仓的吸入动画时长（秒）
 @export var collect_fly_duration: float = 0.4
@@ -78,8 +81,6 @@ const WATERING_ICON_SCENE = preload("res://scenes/field/watering_ready_icon.tscn
 # 预加载金币浮动图标场景
 const COIN_PLUS_ICON_SCENE = preload("res://scenes/field/coin_plus_icon.tscn")
 
-# 浇水冷却：正在进行冷却的列（冷却期间不可再次浇水）
-var _columns_on_cooldown: Dictionary = {}  # column -> true
 # 浇水图标：列号 -> 图标节点
 var _column_to_watering_icon: Dictionary = {}
 # 可复用的空闲图标池
@@ -87,6 +88,7 @@ var _watering_icon_pool: Array = []
 
 #开始函数
 func _ready() -> void:
+	randomize()
 	_init_plots() #先初始化地块
 	_refresh_all_tiles() #再刷新所有地块
 	# 设置 PanelContainer 不拦截鼠标事件，让事件能传递到 _input 函数
@@ -177,31 +179,107 @@ func _hide_watering_icon(column: int) -> void:
 	icon.visible = false
 	_watering_icon_pool.append(icon)
 
-#开始浇水冷却
-func _start_water_cooldown(column: int) -> void:
-	_columns_on_cooldown[column] = true
-	var timer := get_tree().create_timer(water_cooldown_duration)
-	timer.timeout.connect(_on_water_cooldown_ended.bind(column))
-
-#浇水冷却结束
-func _on_water_cooldown_ended(column: int) -> void:
-	_columns_on_cooldown.erase(column)
+func _clear_stage_timers(column: int, invalidate_stage: bool = false) -> void:
+	if column < MIN_X or column > MAX_X:
+		return
 	var plot := _plots[column]
-	if plot.land_state == LandState.TILLED and plot.growth_stage != GrowthStage.NONE and plot.plant_type != "":
-		_show_watering_icon(column)
+	if invalidate_stage:
+		plot.growth_stage_token += 1
+	plot.growth_timer = null
+	plot.water_unlock_timer = null
+	plot.can_water_current_stage = false
+	_hide_watering_icon(column)
 
 
-# 播种后延迟显示浇水图标（刚种下的种子需要等一段时间才提示浇水）
-func _start_seed_planted_icon_delay(column: int) -> void:
-	var timer := get_tree().create_timer(seed_planted_watering_icon_delay)
-	timer.timeout.connect(_on_seed_planted_icon_delay_ended.bind(column))
-
-
-func _on_seed_planted_icon_delay_ended(column: int) -> void:
+func _start_stage_timers(column: int) -> void:
+	if column < MIN_X or column > MAX_X:
+		return
 	var plot := _plots[column]
-	# 仅当种子仍处于 SEED 阶段（尚未被浇水）时显示图标
-	if plot.land_state == LandState.TILLED and plot.growth_stage == GrowthStage.SEED and plot.plant_type != "":
-		_show_watering_icon(column)
+	if plot.land_state != LandState.TILLED:
+		return
+	if plot.growth_stage == GrowthStage.NONE or plot.plant_type == "":
+		return
+	if not CropDB.has_crop(plot.plant_type):
+		return
+
+	_clear_stage_timers(column, true)
+	var token: int = plot.growth_stage_token
+
+	var grow_range: Vector2 = CropDB.get_grow_time_range(plot.plant_type)
+	var grow_time: float = randf_range(grow_range.x, grow_range.y)
+	var grow_timer := get_tree().create_timer(maxf(0.01, grow_time))
+	plot.growth_timer = grow_timer
+	grow_timer.timeout.connect(_on_stage_growth_timeout.bind(column, token))
+
+	var water_time: float = CropDB.get_water_time(plot.plant_type)
+	if water_time <= 0.0:
+		_unlock_stage_watering(column, token)
+	else:
+		var water_timer := get_tree().create_timer(water_time)
+		plot.water_unlock_timer = water_timer
+		water_timer.timeout.connect(_on_stage_water_unlock_timeout.bind(column, token))
+
+
+func _on_stage_growth_timeout(column: int, token: int) -> void:
+	if column < MIN_X or column > MAX_X:
+		return
+	var plot := _plots[column]
+	if plot.growth_stage_token != token:
+		return
+	if plot.land_state != LandState.TILLED or plot.growth_stage == GrowthStage.NONE or plot.plant_type == "":
+		return
+	_advance_growth_stage(column)
+
+
+func _on_stage_water_unlock_timeout(column: int, token: int) -> void:
+	_unlock_stage_watering(column, token)
+
+
+func _unlock_stage_watering(column: int, token: int) -> void:
+	if column < MIN_X or column > MAX_X:
+		return
+	var plot := _plots[column]
+	if plot.growth_stage_token != token:
+		return
+	if plot.land_state != LandState.TILLED or plot.growth_stage == GrowthStage.NONE or plot.plant_type == "":
+		return
+	plot.water_unlock_timer = null
+	plot.can_water_current_stage = true
+	_show_watering_icon(column)
+
+
+func _advance_growth_stage(column: int) -> void:
+	if column < MIN_X or column > MAX_X:
+		return
+	var plot := _plots[column]
+	if plot.land_state != LandState.TILLED or plot.growth_stage == GrowthStage.NONE or plot.plant_type == "":
+		return
+
+	_clear_stage_timers(column, false)
+
+	if plot.growth_stage == GrowthStage.SEED:
+		plot.growth_stage = GrowthStage.SPROUT
+		_update_column_tiles(column)
+		_start_stage_timers(column)
+		return
+
+	if plot.growth_stage == GrowthStage.SPROUT:
+		plot.growth_stage = GrowthStage.MATURE
+		_update_column_tiles(column)
+		_start_stage_timers(column)
+		return
+
+	if plot.growth_stage == GrowthStage.MATURE:
+		var plant_type: String = plot.plant_type
+		if plant_type != "":
+			var plant_global_pos := _get_plant_global_center(column)
+			fruit_spawned.emit(plant_global_pos, plant_type)
+		plot.plant_type = ""
+		plot.growth_stage = GrowthStage.NONE
+		plot.land_state = LandState.NORMAL
+		_clear_stage_timers(column, true)
+		_update_column_tiles(column)
+		return
 
 
 #处理输入事件（使用 _input 而不是 _unhandled_input，因为 PanelContainer 会拦截事件）
@@ -331,7 +409,7 @@ func _on_column_clicked(column: int) -> void:
 			if CropDB.has_crop(following_seed_plant_type):
 				plot.plant_type = following_seed_plant_type
 				plot.growth_stage = GrowthStage.SEED
-				_start_seed_planted_icon_delay(column)
+				_start_stage_timers(column)
 		_update_column_tiles(column)
 		return
 
@@ -344,9 +422,8 @@ func _on_column_clicked(column: int) -> void:
 			# 锄头只负责把地从 NORMAL 变为 TILLED，不处理后续生长
 
 	# 当水壶跟随鼠标时：
-	# - 只负责在已耕地的基础上处理：TILLED → SEED → SPROUT → MATURE
-	# - 如果再点击 MATURE，则直接结成果实，并把地块重置为 NORMAL & NONE
-	# - 浇水有冷却：每次浇水只能成长一步，冷却期间不可再次浇水
+	# - 仅在当前阶段解锁浇水后，允许立即跳过当前阶段并进入下一阶段
+	# - MATURE 阶段被推进时会自动结果并重置地块
 	if is_pot_following_mouse:
 		# 只有已经被锄头耕过的土地才响应水壶
 		if plot.land_state != LandState.TILLED:
@@ -358,32 +435,12 @@ func _on_column_clicked(column: int) -> void:
 			_update_column_tiles(column)
 			return
 
-		# 冷却期间不可浇水（SEED→SPROUT、SPROUT→MATURE、MATURE→收获 均需等待冷却）
-		if _columns_on_cooldown.has(column):
+		# 每个阶段都要等待 water_time 解锁后才能浇水跳阶段
+		if not plot.can_water_current_stage:
 			_update_column_tiles(column)
 			return
 
-		# 浇水时若该列有可浇水图标，先隐藏
-		_hide_watering_icon(column)
-
-		if plot.growth_stage == GrowthStage.SEED:
-			# SEED → SPROUT
-			plot.growth_stage = GrowthStage.SPROUT
-			_start_water_cooldown(column)
-		elif plot.growth_stage == GrowthStage.SPROUT:
-			# SPROUT → MATURE
-			plot.growth_stage = GrowthStage.MATURE
-			_start_water_cooldown(column)
-		elif plot.growth_stage == GrowthStage.MATURE:
-			# MATURE 再次被水壶点击：结出果实并清空该地块，同样进入冷却
-			if plot.plant_type != "":
-				var plant_global_pos := _get_plant_global_center(column)
-				fruit_spawned.emit(plant_global_pos, plot.plant_type)
-
-			plot.plant_type = ""
-			plot.growth_stage = GrowthStage.NONE
-			plot.land_state = LandState.NORMAL
-			_start_water_cooldown(column)
+		_advance_growth_stage(column)
 
 	_update_column_tiles(column)
 

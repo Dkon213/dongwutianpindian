@@ -713,8 +713,8 @@ flat = true
 
 [node name="menu_guide" parent="." unique_id=1640993150 instance=ExtResource("9_vhsfa")]
 texture_filter = 1
-position = Vector2(3170, 138)
-scale = Vector2(0.25, 0.25)
+position = Vector2(3150, 86)
+scale = Vector2(0.3, 0.3)
 
 [node name="money_system" type="Node2D" parent="." unique_id=2142648755]
 script = ExtResource("12_moneysys")
