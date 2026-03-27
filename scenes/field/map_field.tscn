@@ -643,9 +643,9 @@ metadata/_edit_lock_ = true
 
 [node name="farming_tile_map_container" type="PanelContainer" parent="farming_system" unique_id=1165423113]
 clip_contents = true
-offset_left = 476.0
+offset_left = 594.0
 offset_top = 315.0
-offset_right = 2828.0
+offset_right = 2946.0
 offset_bottom = 452.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ts0ht")
 
@@ -757,8 +757,8 @@ autoplay = "pot_default"
 shape = SubResource("CircleShape2D_mbqsv")
 
 [node name="hoe" type="Node2D" parent="." unique_id=177539916]
-position = Vector2(3176, 305)
-scale = Vector2(1.5, 1.5)
+position = Vector2(3177.0002, 304)
+scale = Vector2(1.8, 1.8)
 script = ExtResource("10_hoectl")
 
 [node name="hoe_animation" type="AnimatedSprite2D" parent="hoe" unique_id=1212205021]
@@ -800,10 +800,11 @@ offset_bottom = 89.0
 transparent_bg = true
 oversampling_override = 1.0
 position = Vector2i(0, 36)
-size = Vector2i(750, 600)
-visible = false
+size = Vector2i(752, 600)
 borderless = true
 transparent = true
+popup_window = true
+accessibility_name = "shop_menu"
 
 [node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
 offset_left = 2.0
