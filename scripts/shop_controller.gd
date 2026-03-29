@@ -4,7 +4,7 @@ const SHOP_ITEM_SLOT_SCENE := preload("res://scenes/field/map_field_shop_item_sl
 
 @onready var _shop_menu: Window = $"../UI/shop_menu_window"
 @onready var _shop_area: Area2D = $shop_area
-@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer/shop_menu_GridContainer"
+@onready var _shop_grid: GridContainer = $"../UI/shop_menu_window/shop_content_scaled_root/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer/shop_menu_GridContainer"
 @onready var _seed_cursor: Node = $"../UI/seed_cursor"
 
 
@@ -47,6 +47,8 @@ func _on_shop_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: i
 func _open_shop_menu_at_mouse() -> void:
 	# 使用屏幕坐标（当 popup_window=true 且 embed_subwindows=false 时，Window 为原生弹出窗口）
 	var mouse_pos: Vector2 = DisplayServer.mouse_get_position()
+	if _shop_menu.has_method("prepare_for_popup_at_global_pos"):
+		_shop_menu.prepare_for_popup_at_global_pos(mouse_pos)
 	var sz: Vector2i = _shop_menu.size
 	# 让窗口右下角落在点击位置
 	var pos := Vector2i(int(mouse_pos.x - sz.x), int(mouse_pos.y - sz.y))

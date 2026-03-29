@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://u1s2oocalovj" path="res://scripts/seed_cursor_controller.gd" id="20_ol67m"]
 [ext_resource type="FontFile" uid="uid://b86wx7eamo74q" path="res://assets/Fonts/Uranus_Pixel_11Px.ttf" id="21_4nh8r"]
 [ext_resource type="Script" uid="uid://bqchf4ugmimf2" path="res://scripts/barn_inventory.gd" id="21_barninv"]
+[ext_resource type="Script" uid="uid://cgkbpcj05lfki" path="res://scripts/shop_menu_window.gd" id="22_shopmw"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rrqhf"]
 distance = 6.1382966
@@ -801,12 +802,21 @@ transparent_bg = true
 oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(752, 600)
+visible = false
 borderless = true
 transparent = true
 popup_window = true
 accessibility_name = "shop_menu"
+script = ExtResource("22_shopmw")
 
-[node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window" unique_id=1701411490]
+[node name="shop_content_scaled_root" type="Control" parent="UI/shop_menu_window" unique_id=2000100100]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 752.0
+offset_bottom = 600.0
+
+[node name="shop_menu_background" type="NinePatchRect" parent="UI/shop_menu_window/shop_content_scaled_root" unique_id=1701411490]
+layout_mode = 0
 offset_left = 2.0
 offset_top = 101.0
 offset_right = 744.0
@@ -820,8 +830,9 @@ patch_margin_bottom = 60
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="TabContainer_seeds" type="TabContainer" parent="UI/shop_menu_window" unique_id=298138454]
+[node name="TabContainer_seeds" type="TabContainer" parent="UI/shop_menu_window/shop_content_scaled_root" unique_id=298138454]
 texture_filter = 1
+layout_mode = 0
 offset_left = 48.0
 offset_top = 45.0
 offset_right = 708.0
@@ -835,13 +846,13 @@ current_tab = 0
 tab_0/title = "种子"
 tab_1/title = "摆件"
 
-[node name="MarginContainer_seed" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=1014363969]
+[node name="MarginContainer_seed" type="MarginContainer" parent="UI/shop_menu_window/shop_content_scaled_root/TabContainer_seeds" unique_id=1014363969]
 layout_mode = 2
 theme_override_constants/margin_top = 50
 metadata/_tab_index = 0
 metadata/_tab_name = "种子"
 
-[node name="shop_menu_ScrollContainer" type="ScrollContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed" unique_id=2095747508]
+[node name="shop_menu_ScrollContainer" type="ScrollContainer" parent="UI/shop_menu_window/shop_content_scaled_root/TabContainer_seeds/MarginContainer_seed" unique_id=2095747508]
 layout_mode = 2
 theme_override_colors/scroll_hint_vertical_color = Color(0, 0, 0, 1)
 follow_focus = true
@@ -849,26 +860,52 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 scroll_hint_mode = 3
 
-[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer" unique_id=1015575566]
+[node name="shop_menu_GridContainer" type="GridContainer" parent="UI/shop_menu_window/shop_content_scaled_root/TabContainer_seeds/MarginContainer_seed/shop_menu_ScrollContainer" unique_id=1015575566]
 custom_minimum_size = Vector2(620, 500)
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 4
 
-[node name="MarginContainer_ornament‌" type="MarginContainer" parent="UI/shop_menu_window/TabContainer_seeds" unique_id=308204752]
+[node name="MarginContainer_ornament‌" type="MarginContainer" parent="UI/shop_menu_window/shop_content_scaled_root/TabContainer_seeds" unique_id=308204752]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 metadata/_tab_name = "摆件"
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window" unique_id=825108889]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UI/shop_menu_window/shop_content_scaled_root" unique_id=825108889]
 texture_filter = 1
 position = Vector2(587, 58.999996)
 scale = Vector2(3.6591558, 3.6816409)
 sprite_frames = SubResource("SpriteFrames_ghsr4")
 autoplay = "default"
 frame_progress = 0.08037108
+
+[node name="shop_size_toolbar" type="MarginContainer" parent="UI/shop_menu_window" unique_id=2000100101]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = 42.0
+grow_horizontal = 0
+mouse_filter = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/shop_menu_window/shop_size_toolbar" unique_id=2000100102]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="size_option" type="OptionButton" parent="UI/shop_menu_window/shop_size_toolbar/HBoxContainer" unique_id=2000100103]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("21_4nh8r")
+theme_override_font_sizes/font_size = 18
 
 [node name="seed_cursor" type="Node2D" parent="UI" unique_id=560012882]
 script = ExtResource("20_ol67m")
